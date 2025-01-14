@@ -1,0 +1,27 @@
+TalentFlow
+- frontend
+-- public
+--- pictures
+-- src
+--- app
+---- components
+----- employee
+------ employee-card-component
+------ employee-list-component
+----- mission
+------ mission-card-component
+------ mission-list-component
+----- skill
+------ skill-card-component
+------ skill-list-component
+----- shared
+------ search-bar
+backend
+- src
+-- config
+-- functions
+--- employees.js
+--- missions.js
+--- skills.js
+- app.js
+- server.js
