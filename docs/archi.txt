@@ -6,16 +6,19 @@ TalentFlow
 --- app
 ---- components
 ----- employee
------- employee-card-component
------- employee-list-component
+------ employee-card.component
+------ employee-list.component
+------ employee-page
 ----- mission
------- mission-card-component
------- mission-list-component
+------ mission-card.component
+------ mission-list.component
 ----- skill
------- skill-card-component
------- skill-list-component
+------ skill-card.component
+------ skill-list.component
+------ skill-page.component
 ----- shared
------- search-bar
+------ search-bar.component
+------ repliable-container.component
 backend
 - src
 -- config

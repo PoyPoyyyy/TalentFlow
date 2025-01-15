@@ -1,0 +1,11 @@
+<div class="repliable-container" [class.open]="isOpen">
+    <div class="repliable-header" (click)="toggleContent()">
+      {{ title }}
+    </div>
+    <div class="repliable-content">
+      @if (isOpen) {
+        <ng-content></ng-content>
+      }
+    </div>
+</div>
+  
