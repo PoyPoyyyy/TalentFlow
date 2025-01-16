@@ -1,0 +1,66 @@
+.employee-card {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  margin: 8px;
+  flex: 1;
+  max-width: 300px;
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.employee-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+.employee-card h3 {
+  color: #333;
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+}
+
+.employee-card p {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 12px;
+}
+
+.employee-card h4 {
+  font-size: 1rem;
+  color: #444;
+  margin-bottom: 8px;
+}
+
+.employee-card ul {
+  list-style: none;
+  padding: 0;
+}
+
+.employee-card ul li {
+  background-color: #e7f5ff;
+  border: 1px solid #bbe1fa;
+  border-radius: 4px;
+  color: #0077b6;
+  font-size: 0.85rem;
+  margin: 4px 0;
+  padding: 6px;
+}
+
+.employee-card button {
+  background-color: #0077b6;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  font-size: 0.85rem;
+  margin: 8px 4px;
+  padding: 8px 16px;
+  transition: background-color 0.3s;
+}
+
+.employee-card button:hover {
+  background-color: #023e8a;
+}

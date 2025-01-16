@@ -1,1 +1,12 @@
-<p>employee-card works!</p>
+<div class="employee-card">
+  <h3>{{ employee.firstName }} {{ employee.lastName }}</h3>
+  <p>Date d'embauche : {{ employee.hireDate | date }}</p>
+  <h4>Compétences :</h4>
+  <ul>
+    @for (skill of employee.skills; track skill.id) {
+      <li>{{ skill.description }}</li>
+    }
+  </ul>
+  <button>Supprimer</button>
+  <button>Modifier</button>
+</div>

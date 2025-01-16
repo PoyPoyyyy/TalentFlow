@@ -1,0 +1,26 @@
+.employee-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start; /* Aligne les cartes à gauche */
+  gap: 16px; /* Espace entre les cartes */
+  padding: 16px;
+}
+
+.employee-list .employee-card {
+  flex: 1 1 calc(33.33% - 16px); /* Trois colonnes */
+  max-width: calc(33.33% - 16px); /* Empêche les cartes de dépasser */
+}
+
+@media screen and (max-width: 768px) {
+  .employee-list .employee-card {
+    flex: 1 1 calc(50% - 16px); /* Deux colonnes */
+    max-width: calc(50% - 16px);
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .employee-list .employee-card {
+    flex: 1 1 100%; /* Une seule colonne */
+    max-width: 100%;
+  }
+}

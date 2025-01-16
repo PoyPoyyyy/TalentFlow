@@ -1,11 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-employee-card',
-  imports: [],
+  imports: [
+    DatePipe
+  ],
   templateUrl: './employee-card.component.html',
-  styleUrl: './employee-card.component.css'
+  styleUrls: ['./employee-card.component.css']
 })
 export class EmployeeCardComponent {
-
+  @Input() employee: any;
 }
