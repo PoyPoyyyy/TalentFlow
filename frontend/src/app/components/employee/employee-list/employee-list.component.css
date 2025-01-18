@@ -10,6 +10,14 @@
   max-width: calc(33.33% - 16px);
 }
 
+.no-employees-message {
+  text-align: center;
+  color: #ff6666;
+  font-weight: bold;
+  margin-top: 20px;
+  font-size: 1.2em;
+}
+
 @media screen and (max-width: 768px) {
   .employee-list .employee-card {
     flex: 1 1 calc(50% - 16px);

@@ -34,5 +34,13 @@ export class EmployeeListComponent implements OnInit {
       );
     }
   }
+  reloadEmployees(): void {
+    this.http.get<Employee[]>('http://localhost:3000/api/employees')
+      .subscribe((employees: Employee[]) => {
+        this.employees = employees;
+        this.filteredEmployees = [...this.employees];
+      });
+  }
+
 
 }

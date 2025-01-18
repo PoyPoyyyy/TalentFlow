@@ -18,14 +18,41 @@ router.get('/employees', async (req, res) => {
             FROM EMPLOYEE e, EMPLOYEE_SKILL es, SKILL s
             WHERE e.id = es.employee_id
             AND es.skill_code = s.code
-            GROUP BY e.id;
+            GROUP BY e.id
+            ORDER BY e.last_name;
             `;
         const result = await client.query(query);
         client.release();
         res.json(result.rows);
     } catch (err) {
-        console.error('Erreur lors de la récupération des employés et de leurs compétences:', err);  // Corrigé ici
+        console.error('Erreur lors de la récupération des employés et de leurs compétences:', err);
         res.status(500).send('Erreur serveur');
+    }
+});
+
+router.post('/employees', async (req, res) => {
+    const { firstName, lastName, hireDate, skills } = req.body;
+    if (!firstName || !lastName || !hireDate || !Array.isArray(skills)) {
+        return res.status(400).json({ message: 'Données invalides' });
+    }
+    try {
+        const client = await pool.connect();
+        const result = await client.query(
+            'INSERT INTO EMPLOYEE (first_name, last_name, hire_date) VALUES ($1, $2, $3) RETURNING id',
+            [firstName, lastName, hireDate]
+        );
+        const employeeId = result.rows[0].id;
+        for (const skill of skills) {
+            await client.query(
+                'INSERT INTO EMPLOYEE_SKILL (employee_id, skill_code) VALUES ($1, $2)',
+                [employeeId, skill]
+            );
+        }
+        client.release();
+        res.status(201).json({ message: 'Employé créé avec succès', employeeId });
+    } catch (err) {
+        console.error('Erreur lors de l\'ajout de l\'employé:', err);
+        res.status(500).json({ message: 'Erreur serveur' });
     }
 });
 

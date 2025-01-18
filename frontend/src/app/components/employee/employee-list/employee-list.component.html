@@ -2,6 +2,6 @@
   @for (employee of filteredEmployees; track employee.first_name) {
     <app-employee-card [employee]="employee"></app-employee-card>
   } @empty {
-    <li>There are no employees.</li>
+    <h2 class="no-employees-message">There are no employees.</h2>
   }
 </div>

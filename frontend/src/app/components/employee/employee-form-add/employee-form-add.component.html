@@ -1,0 +1,32 @@
+<form class="employee-form" [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+  <div class="form-row">
+    <div>
+      <label for="firstName">First name</label>
+      <input id="firstName" type="text" formControlName="firstName" />
+    </div>
+    <div>
+      <label for="lastName">Last Name</label>
+      <input id="lastName" type="text" formControlName="lastName" />
+    </div>
+    <div>
+      <label for="hireDate">Hire date</label>
+      <input id="hireDate" type="date" formControlName="hireDate" />
+    </div>
+  </div>
+  <div>
+    <label>Skills</label>
+    <div class="skill-list">
+      @for (skill of skills; track skill.code) {
+        <div class="skill-item">
+          <input
+            type="checkbox"
+            [value]="skill.code"
+            (change)="onSkillChange(skill.code, $event)"
+          />
+          {{ skill.description }}
+        </div>
+      }
+    </div>
+  </div>
+  <button type="submit">Add employee</button>
+</form>
