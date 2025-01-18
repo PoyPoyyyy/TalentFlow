@@ -14,5 +14,8 @@ import {SearchBarComponent} from '../../shared/search-bar/search-bar.component';
   styleUrl: './employee-page.component.css'
 })
 export class EmployeePageComponent {
-
+  searchQuery: string = '';
+  onSearch(query: string) {
+    this.searchQuery = query;
+  }
 }

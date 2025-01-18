@@ -1,8 +1,12 @@
 <app-repliable-container title="Add Employee">
 
 </app-repliable-container>
+
 <app-repliable-container title="Employee List">
-  <app-search-bar placeholder="Looking for an employee"></app-search-bar>
+  <app-search-bar
+    placeholder="Looking for an employee"
+    (search)="onSearch($event)">
+  </app-search-bar>
   <br>
-  <app-employee-list></app-employee-list>
+  <app-employee-list [searchQuery]="searchQuery"></app-employee-list>
 </app-repliable-container>

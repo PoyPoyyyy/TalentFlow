@@ -1,12 +1,14 @@
 <div class="employee-card">
-  <h3>{{ employee.firstName }} {{ employee.lastName }}</h3>
-  <p>Date d'embauche : {{ employee.hireDate | date }}</p>
+  <img class="employee-picture" src="user-picture.png" alt="Employee Picture">
+  <h3>{{ employee.first_name }} {{ employee.last_name }}</h3>
   <h4>Compétences :</h4>
-  <ul>
-    @for (skill of employee.skills; track skill.id) {
-      <li>{{ skill.description }}</li>
-    }
-  </ul>
+  <div class="employee-skills">
+    <ul class="employee-skill">
+      @for (skill of employee.skills; track skill.code) {
+        <li title="{{ skill.description }}">{{ skill.code }}</li>
+      }
+    </ul>
+  </div>
   <button>Supprimer</button>
   <button>Modifier</button>
 </div>

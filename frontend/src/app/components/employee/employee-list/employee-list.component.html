@@ -1,5 +1,5 @@
 <div class="employee-list">
-  @for (employee of employees; track employee.firstName) {
+  @for (employee of filteredEmployees; track employee.first_name) {
     <app-employee-card [employee]="employee"></app-employee-card>
   } @empty {
     <li>There are no employees.</li>

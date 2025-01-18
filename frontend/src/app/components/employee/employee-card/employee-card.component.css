@@ -9,6 +9,27 @@
   max-width: 300px;
   text-align: center;
   transition: transform 0.2s, box-shadow 0.2s;
+
+}
+.employee-picture {
+  max-width: 100%;
+  max-height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 16px;
+}
+
+.employee-skill {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.employee-skills {
+  height: 100px;
+  max-height: 100px;
+  overflow: hidden;
 }
 
 .employee-card:hover {
