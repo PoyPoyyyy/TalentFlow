@@ -1,6 +1,10 @@
 <div class="employee-list">
   @for (employee of filteredEmployees; track employee.first_name) {
-    <app-employee-card [employee]="employee"></app-employee-card>
+    <app-employee-card
+      [employee]="employee"
+      (employeeDeleted)="onEmployeeDeleted()"
+    >
+    </app-employee-card>
   } @empty {
     <h2 class="no-employees-message">There are no employees.</h2>
   }

@@ -56,4 +56,18 @@ router.post('/employees', async (req, res) => {
     }
 });
 
+router.delete('/employees/:id', async (req, res) => {
+    const employeeId = req.params.id;
+    try {
+        const client = await pool.connect();
+        await client.query('DELETE FROM EMPLOYEE_SKILL WHERE employee_id = $1', [employeeId]);
+        await client.query('DELETE FROM EMPLOYEE WHERE id = $1', [employeeId]);
+        client.release();
+        res.status(200).send('Employé supprimé avec succès');
+    } catch (err) {
+        console.error('Erreur lors de la suppression de l\'employé:', err);
+        res.status(500).send('Erreur serveur');
+    }
+});
+
 module.exports = router;

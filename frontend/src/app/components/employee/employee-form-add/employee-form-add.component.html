@@ -17,12 +17,11 @@
     <label>Skills</label>
     <div class="skill-list">
       @for (skill of skills; track skill.code) {
-        <div class="skill-item">
-          <input
-            type="checkbox"
-            [value]="skill.code"
-            (change)="onSkillChange(skill.code, $event)"
-          />
+        <div
+          class="skill-item"
+          [class.selected]="selectedSkills.includes(skill.code)"
+          (click)="toggleSkill(skill.code)"
+        >
           {{ skill.description }}
         </div>
       }

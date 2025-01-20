@@ -48,4 +48,11 @@ export class EmployeeFormAddComponent implements OnInit {
       });
   }
 
+  toggleSkill(skillCode: string): void {
+    if (this.selectedSkills.includes(skillCode)) {
+      this.selectedSkills = this.selectedSkills.filter((code) => code !== skillCode);
+    } else {
+      this.selectedSkills.push(skillCode);
+    }
+  }
 }

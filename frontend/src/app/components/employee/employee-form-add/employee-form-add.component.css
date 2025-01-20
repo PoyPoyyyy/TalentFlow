@@ -37,6 +37,8 @@
 }
 
 .employee-form button[type="submit"] {
+  width: 20%;
+  align-self: center;
   background-color: #0077b6;
   color: white;
   border: none;
@@ -59,7 +61,7 @@
 }
 
 .skill-item {
-  flex: 1 1 30%;
+  flex: 1 1 15%;
   min-width: 200px;
   border: 1px solid #ccc;
   border-radius: 6px;
@@ -69,6 +71,7 @@
   align-items: center;
   background-color: #f9f9f9;
   transition: background-color 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
 }
 
 .skill-item:hover {
@@ -76,15 +79,10 @@
   transform: scale(1.05);
 }
 
-.skill-item input[type="checkbox"] {
-  flex: 0 0 10%;
-  margin-right: 10px;
-}
-
-.skill-item span {
-  flex: 1 1 auto;
-  font-size: 0.9rem;
-  text-align: left;
+.skill-item.selected {
+  background-color: #0077b6;
+  color: white;
+  border-color: #005f8a;
 }
 
 @media (max-width: 900px) {

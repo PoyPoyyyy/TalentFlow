@@ -6,12 +6,7 @@ import {EmployeeFormAddComponent} from '../employee-form-add/employee-form-add.c
 
 @Component({
   selector: 'app-employee-page',
-  imports: [
-    EmployeeListComponent,
-    RepliableContainerComponent,
-    SearchBarComponent,
-    EmployeeFormAddComponent
-  ],
+  imports: [EmployeeListComponent, RepliableContainerComponent, SearchBarComponent, EmployeeFormAddComponent],
   templateUrl: './employee-page.component.html',
   styleUrl: './employee-page.component.css'
 })
@@ -22,6 +17,6 @@ export class EmployeePageComponent {
     this.searchQuery = query;
   }
   onEmployeeAdded(): void {
-    this.employeeList.reloadEmployees();
+    this.employeeList.loadEmployees();
   }
 }
