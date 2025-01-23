@@ -14,6 +14,7 @@ export class EmployeeListComponent implements OnInit {
   @Input() searchQuery: string = '';
   employees: Employee[] = [];
   filteredEmployees: Employee[] = [];
+  isDeleted: boolean = false;
 
   constructor(private http: HttpClient) {}
 
@@ -43,5 +44,9 @@ export class EmployeeListComponent implements OnInit {
 
   onEmployeeDeleted(): void {
     this.loadEmployees();
+    this.isDeleted = true;
+    setTimeout(() => {
+      this.isDeleted = false;
+    }, 3000);
   }
 }

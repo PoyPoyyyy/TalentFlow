@@ -17,6 +17,11 @@
   margin-top: 20px;
   font-size: 1.2em;
 }
+.employee-deleted {
+  font-weight: bold ;
+  text-align: center;
+  color: green;
+}
 
 @media screen and (max-width: 768px) {
   .employee-list .employee-card {
