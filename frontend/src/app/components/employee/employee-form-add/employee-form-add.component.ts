@@ -2,6 +2,7 @@ import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Skill } from '../../../models/employees.model';
+import {timeout} from 'rxjs';
 
 @Component({
   selector: 'app-employee-form-add',
@@ -14,6 +15,7 @@ export class EmployeeFormAddComponent implements OnInit {
   employeeForm: FormGroup;
   skills: Skill[] = [];
   selectedSkills: string[] = [];
+  isSubmitting = false;
   @Output() employeeAdded = new EventEmitter<unknown>();
 
   constructor(private formBuilder: FormBuilder, private http: HttpClient) {
@@ -45,7 +47,12 @@ export class EmployeeFormAddComponent implements OnInit {
         this.employeeForm.reset();
         this.selectedSkills = [];
         this.employeeAdded.emit();
+        this.isSubmitting = true;
+        setTimeout(() => {
+          this.isSubmitting = false;
+        }, 3000);
       });
+
   }
 
   toggleSkill(skillCode: string): void {

@@ -71,7 +71,6 @@
 }
 
 .employee-card button {
-  background-color: #0077b6;
   border: none;
   border-radius: 4px;
   color: white;
@@ -84,4 +83,21 @@
 
 .employee-card button:hover {
   background-color: #023e8a;
+}
+
+
+.button-cancel {
+  background-color: #ff6b6b;
+}
+
+.button-confirm {
+  background-color: #4caf50;
+}
+
+.button-delete {
+  background-color: #ff6b6b;
+}
+
+.button-edit {
+  background-color: #f39c12;
 }

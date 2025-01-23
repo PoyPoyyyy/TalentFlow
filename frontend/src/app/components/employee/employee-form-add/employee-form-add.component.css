@@ -99,3 +99,9 @@
     flex: 1 1 100%;
   }
 }
+
+.employee-added {
+  font-weight: bold ;
+  text-align: center;
+  color: green;
+}
