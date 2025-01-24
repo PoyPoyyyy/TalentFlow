@@ -41,7 +41,6 @@ export class EmployeeListComponent implements OnInit {
 
   onEmployeeDeleted(): void {
     this.loadEmployees();
-    this.searchQuery = '';
     this.isDeleted = true;
     setTimeout(() => {
       this.isDeleted = false;

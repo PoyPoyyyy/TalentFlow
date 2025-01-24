@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { Pool } = require('pg');
+const multer = require('multer');
+const upload = multer({ storage: multer.memoryStorage() });
 
 const pool = new Pool({
     user: 'postgres',
@@ -14,16 +16,16 @@ router.get('/employees', async (req, res) => {
     try {
         const client = await pool.connect();
         const query = `
-            SELECT 
-                e.id, 
-                e.first_name, 
-                e.last_name, 
-                e.hire_date, 
-                encode(e.profile_picture, 'base64') AS profile_picture, 
+            SELECT
+                e.id,
+                e.first_name,
+                e.last_name,
+                e.hire_date,
+                encode(e.profile_picture, 'base64') AS profile_picture,
                 json_agg(json_build_object('code', s.code, 'description', s.description)) AS skills
-            FROM EMPLOYEE e
-            LEFT JOIN EMPLOYEE_SKILL es ON e.id = es.employee_id
-            LEFT JOIN SKILL s ON es.skill_code = s.code
+            FROM EMPLOYEE e, EMPLOYEE_SKILL es, SKILL s
+            WHERE e.id = es.employee_id
+              AND es.skill_code = s.code
             GROUP BY e.id
             ORDER BY e.last_name;
         `;
@@ -31,34 +33,46 @@ router.get('/employees', async (req, res) => {
         client.release();
         res.json(result.rows);
     } catch (err) {
-        console.error('Erreur lors de la récupération des employés et de leurs compétences:', err);
+        console.error(err);
         res.status(500).send('Erreur serveur');
     }
 });
 
-
-router.post('/employees', async (req, res) => {
+router.post('/employees', upload.single('profilePicture'), async (req, res) => {
     const { firstName, lastName, hireDate, skills } = req.body;
-    if (!firstName || !lastName || !hireDate || !Array.isArray(skills)) {
-        return res.status(400).json({ message: 'Données invalides' });
+    const profilePicture = req.file ? req.file.buffer : null;
+
+    if (!firstName || !lastName || !hireDate || !skills) {
+        return res.status(400).json({ message: 'Données invalides.' });
     }
+
+    let parsedSkills = [];
+    try {
+        parsedSkills = JSON.parse(skills);
+        if (!Array.isArray(parsedSkills)) throw new Error('Skills doit être un tableau');
+    } catch (error) {
+        return res.status(400).json({ message: 'Les compétences sont mal formatées.' });
+    }
+
     try {
         const client = await pool.connect();
         const result = await client.query(
-            'INSERT INTO EMPLOYEE (first_name, last_name, hire_date) VALUES ($1, $2, $3) RETURNING id',
-            [firstName, lastName, hireDate]
+            'INSERT INTO EMPLOYEE (first_name, last_name, hire_date, profile_picture) VALUES ($1, $2, $3, $4) RETURNING id',
+            [firstName, lastName, hireDate, profilePicture]
         );
         const employeeId = result.rows[0].id;
-        for (const skill of skills) {
+
+        for (const skill of parsedSkills) {
             await client.query(
                 'INSERT INTO EMPLOYEE_SKILL (employee_id, skill_code) VALUES ($1, $2)',
                 [employeeId, skill]
             );
         }
+
         client.release();
         res.status(201).json({ message: 'Employé créé avec succès', employeeId });
     } catch (err) {
-        console.error('Erreur lors de l\'ajout de l\'employé:', err);
+        console.error(err);
         res.status(500).json({ message: 'Erreur serveur' });
     }
 });
@@ -72,7 +86,7 @@ router.delete('/employees/:id', async (req, res) => {
         client.release();
         res.status(200).send('Employé supprimé avec succès');
     } catch (err) {
-        console.error('Erreur lors de la suppression de l\'employé:', err);
+        console.error(err);
         res.status(500).send('Erreur serveur');
     }
 });
