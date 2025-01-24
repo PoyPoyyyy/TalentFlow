@@ -1,6 +1,12 @@
 <div class="employee-card">
-  <img class="employee-picture" src="user-picture.png" alt="Employee Picture">
+  <img
+    [src]="employee.profile_picture ? 'data:image/svg+xml;base64,' + employee.profile_picture : '../user-picture.png'"
+    alt="Photo de profil"
+    class="profile-picture"
+  />
+
   <h3>{{ employee.first_name }} {{ employee.last_name }}</h3>
+  <h4>{{ employee.hire_date | date }}</h4>
   <h4>Compétences :</h4>
   <div class="employee-skills">
     <ul class="employee-skill">

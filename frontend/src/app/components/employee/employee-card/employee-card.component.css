@@ -101,3 +101,10 @@
 .button-edit {
   background-color: #f39c12;
 }
+.profile-picture {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+

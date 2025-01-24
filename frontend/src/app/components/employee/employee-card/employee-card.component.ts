@@ -3,18 +3,18 @@ import { HttpClient } from '@angular/common/http';
 import { Employee } from '../../../models/employees.model';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent} from '../../shared/dialog/dialog.component';
+import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-employee-card',
+  imports: [CommonModule],
   templateUrl: './employee-card.component.html',
   styleUrls: ['./employee-card.component.css'],
 })
 export class EmployeeCardComponent {
   @Input() employee!: Employee;
   @Output() employeeDeleted = new EventEmitter<void>();
-
   constructor(private http: HttpClient, private dialog: MatDialog) {}
-
   onDelete(): void {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '500px',
@@ -25,7 +25,6 @@ export class EmployeeCardComponent {
         cancelButtonText: 'Cancel',
       },
     });
-
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.confirmDelete();

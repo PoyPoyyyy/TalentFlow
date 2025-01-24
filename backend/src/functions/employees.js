@@ -14,13 +14,19 @@ router.get('/employees', async (req, res) => {
     try {
         const client = await pool.connect();
         const query = `
-            SELECT e.id, e.first_name, e.last_name, e.hire_date, json_agg(json_build_object('code', s.code, 'description', s.description)) AS skills
-            FROM EMPLOYEE e, EMPLOYEE_SKILL es, SKILL s
-            WHERE e.id = es.employee_id
-            AND es.skill_code = s.code
+            SELECT 
+                e.id, 
+                e.first_name, 
+                e.last_name, 
+                e.hire_date, 
+                encode(e.profile_picture, 'base64') AS profile_picture, 
+                json_agg(json_build_object('code', s.code, 'description', s.description)) AS skills
+            FROM EMPLOYEE e
+            LEFT JOIN EMPLOYEE_SKILL es ON e.id = es.employee_id
+            LEFT JOIN SKILL s ON es.skill_code = s.code
             GROUP BY e.id
             ORDER BY e.last_name;
-            `;
+        `;
         const result = await client.query(query);
         client.release();
         res.json(result.rows);
@@ -29,6 +35,7 @@ router.get('/employees', async (req, res) => {
         res.status(500).send('Erreur serveur');
     }
 });
+
 
 router.post('/employees', async (req, res) => {
     const { firstName, lastName, hireDate, skills } = req.body;
