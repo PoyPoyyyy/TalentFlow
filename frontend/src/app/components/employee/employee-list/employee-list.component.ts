@@ -1,19 +1,20 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { EmployeeCardComponent } from '../employee-card/employee-card.component';
 import { CommonModule } from '@angular/common';
 import { Employee } from '../../../models/employees.model';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-employee-list',
-  imports: [EmployeeCardComponent, CommonModule],
+  imports: [EmployeeCardComponent, CommonModule, FormsModule],
   templateUrl: './employee-list.component.html',
   styleUrls: ['./employee-list.component.css'],
 })
 export class EmployeeListComponent implements OnInit {
-  @Input() searchQuery: string = '';
   employees: Employee[] = [];
   filteredEmployees: Employee[] = [];
+  searchQuery: string = '';
   isDeleted: boolean = false;
 
   constructor(private http: HttpClient) {}
@@ -21,11 +22,7 @@ export class EmployeeListComponent implements OnInit {
   ngOnInit(): void {
     this.loadEmployees();
   }
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['searchQuery']) {
-      this.filterEmployees();
-    }
-  }
+
   loadEmployees(): void {
     this.http.get<Employee[]>('http://localhost:3000/api/employees')
       .subscribe((employees: Employee[]) => {
@@ -36,7 +33,7 @@ export class EmployeeListComponent implements OnInit {
 
   filterEmployees(): void {
     const query = this.searchQuery.toLowerCase();
-    this.filteredEmployees = this.employees.filter(employee =>
+    this.filteredEmployees = this.employees.filter((employee) =>
       employee.first_name.toLowerCase().includes(query) ||
       employee.last_name.toLowerCase().includes(query)
     );
@@ -44,6 +41,7 @@ export class EmployeeListComponent implements OnInit {
 
   onEmployeeDeleted(): void {
     this.loadEmployees();
+    this.searchQuery = '';
     this.isDeleted = true;
     setTimeout(() => {
       this.isDeleted = false;

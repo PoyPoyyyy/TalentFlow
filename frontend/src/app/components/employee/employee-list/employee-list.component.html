@@ -1,6 +1,17 @@
+<div class="search-bar">
+  <input
+    type="text"
+    [(ngModel)]="searchQuery"
+    (input)="filterEmployees()"
+    placeholder="Search employees..."
+    class="search-input"
+  />
+</div>
+
 @if (isDeleted) {
   <h2 class="employee-deleted">Employee deleted</h2>
 }
+
 <div class="employee-list">
   @for (employee of filteredEmployees; track employee.first_name) {
     <app-employee-card
@@ -9,6 +20,6 @@
     >
     </app-employee-card>
   } @empty {
-    <h2 class="no-employees-message">There are no employees.</h2>
+    <h2 class="no-employees-message">No employees match your search.</h2>
   }
 </div>

@@ -1,11 +1,5 @@
 <app-repliable-container title="Add Employee">
   <app-employee-form-add (employeeAdded)="onEmployeeAdded()"></app-employee-form-add>
 </app-repliable-container>
-<app-repliable-container title="Show employees">
-  <app-search-bar
-    placeholder="Looking for an employee"
-    (search)="onSearch($event)">
-  </app-search-bar>
-  <br>
-  <app-employee-list [searchQuery]="searchQuery"></app-employee-list>
-</app-repliable-container>
+
+<app-employee-list></app-employee-list>
