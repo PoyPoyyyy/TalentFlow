@@ -6,8 +6,10 @@
     placeholder="Search employees..."
     class="search-input"
   />
+  @if (searchQuery) {
+    <button class="clear-btn" (click)="clearSearch()">&#10006;</button>
+  }
 </div>
-
 @if (isDeleted) {
   <h2 class="employee-deleted">Employee deleted</h2>
 }

@@ -9,5 +9,5 @@ import {MenuComponent} from './components/shared/menu/menu.component';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'frontend';
+  title = 'TalentFlow';
 }

@@ -6,5 +6,6 @@ import {SkillPageComponent} from './components/skill/skill-page/skill-page.compo
 export const routes: Routes = [
   {path: 'employee-page', component: EmployeePageComponent},
   {path: 'mission-page', component: MissionPageComponent},
-  {path: 'skill-page', component: SkillPageComponent}
+  {path: 'skill-page', component: SkillPageComponent},
+  {path: 'index', redirectTo: '/', pathMatch: 'full'},
 ];

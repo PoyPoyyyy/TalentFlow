@@ -1,110 +1,85 @@
 .employee-card {
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
+  background-color: #fff;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 16px;
-  margin: 8px;
-  flex: 1;
-  max-width: 300px;
-  text-align: center;
-  transition: transform 0.2s, box-shadow 0.2s;
-
-}
-.employee-picture {
-  max-width: 100%;
-  max-height: 100px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 16px;
-}
-
-.employee-skill {
+  padding: 1.5rem;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 16px;
-}
-
-.employee-skills {
-  height: 100px;
-  max-height: 100px;
-  overflow: hidden;
+  align-items: center;
+  gap: 1.5rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
 }
 
 .employee-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  transform: translateY(-5px);
 }
 
-.employee-card h3 {
-  color: #333;
+.profile-picture {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.employee-details {
+  flex: 1;
+}
+
+h3 {
   font-size: 1.2rem;
-  margin-bottom: 8px;
+  margin-bottom: 0.5rem;
 }
 
-.employee-card p {
-  color: #666;
-  font-size: 0.9rem;
-  margin-bottom: 12px;
+.hire-date {
+  color: #777;
+  font-size: 0.875rem;
+  margin-bottom: 0.75rem;
 }
 
-.employee-card h4 {
-  font-size: 1rem;
-  color: #444;
-  margin-bottom: 8px;
-}
-
-.employee-card ul {
+.employee-skills {
   list-style: none;
   padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
-.employee-card ul li {
-  background-color: #e7f5ff;
-  border: 1px solid #bbe1fa;
-  border-radius: 4px;
-  color: #0077b6;
-  font-size: 0.85rem;
-  margin: 4px 0;
-  padding: 6px;
+.employee-skills li {
+  background-color: #e0e0e0;
+  padding: 0.3rem 0.7rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
 }
 
-.employee-card button {
-  border: none;
-  border-radius: 4px;
-  color: white;
-  cursor: pointer;
-  font-size: 0.85rem;
-  margin: 8px 4px;
-  padding: 8px 16px;
-  transition: background-color 0.3s;
+.employee-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
 }
 
-.employee-card button:hover {
-  background-color: #023e8a;
-}
-
-
-.button-cancel {
-  background-color: #ff6b6b;
-}
-
-.button-confirm {
-  background-color: #4caf50;
-}
-
+.button-edit,
 .button-delete {
-  background-color: #ff6b6b;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 25px;
+  font-size: 0.875rem;
+  transition: background-color 0.3s ease;
 }
 
 .button-edit {
-  background-color: #f39c12;
-}
-.profile-picture {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 50%;
+  background-color: #4caf50;
+  color: white;
 }
 
+.button-edit:hover {
+  background-color: #45a049;
+}
+
+.button-delete {
+  background-color: #f44336;
+  color: white;
+}
+
+.button-delete:hover {
+  background-color: #e53935;
+}

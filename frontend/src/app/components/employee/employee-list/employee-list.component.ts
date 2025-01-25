@@ -16,6 +16,7 @@ export class EmployeeListComponent implements OnInit {
   filteredEmployees: Employee[] = [];
   searchQuery: string = '';
   isDeleted: boolean = false;
+  private saveQuery: string = '';
 
   constructor(private http: HttpClient) {}
 
@@ -40,10 +41,21 @@ export class EmployeeListComponent implements OnInit {
   }
 
   onEmployeeDeleted(): void {
+    this.saveQuery = this.searchQuery;
     this.loadEmployees();
-    this.isDeleted = true;
+    setTimeout(() => {
+      this.searchQuery = this.saveQuery;
+      this.filterEmployees();
+
+    }, 150);
     setTimeout(() => {
       this.isDeleted = false;
     }, 3000);
+
+  }
+
+  clearSearch(): void {
+    this.searchQuery = '';
+    this.filterEmployees();
   }
 }

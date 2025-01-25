@@ -1,20 +1,21 @@
 <div class="employee-card">
   <img
     [src]="employee.profile_picture ? 'data:image/svg+xml;base64,' + employee.profile_picture : '../user-picture.png'"
-    alt="Photo de profil"
+    alt="Profil picture"
     class="profile-picture"
   />
-
-  <h3>{{ employee.first_name }} {{ employee.last_name }}</h3>
-  <h4>{{ employee.hire_date | date }}</h4>
-  <h4>Compétences :</h4>
-  <div class="employee-skills">
-    <ul class="employee-skill">
+  <div class="employee-details">
+    <h3>{{ employee.first_name }} {{ employee.last_name }}</h3>
+    <p class="hire-date">{{ employee.hire_date | date }}</p>
+    <h4>Compétences :</h4>
+    <ul class="employee-skills">
       @for (skill of employee.skills; track skill.code) {
         <li title="{{ skill.description }}">{{ skill.code }}</li>
       }
     </ul>
+    <div class="employee-actions">
+      <button class="button-edit">Edit</button>
+      <button class="button-delete" (click)="onDelete()">Delete</button>
+    </div>
   </div>
-  <button class="button-delete" (click)="onDelete()">Delete</button>
-  <button class="button-edit">Edit</button>
 </div>

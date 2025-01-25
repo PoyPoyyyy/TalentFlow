@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import {Component, EventEmitter, input, OnInit, Output} from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Skill } from '../../../models/employees.model';
@@ -15,6 +15,7 @@ export class EmployeeFormAddComponent implements OnInit {
   selectedSkills: string[] = [];
   isSubmitting = false;
   @Output() employeeAdded = new EventEmitter<unknown>();
+  selectedFileName = '';
 
   constructor(private formBuilder: FormBuilder, private http: HttpClient) {
     this.employeeForm = this.formBuilder.group({
@@ -33,6 +34,7 @@ export class EmployeeFormAddComponent implements OnInit {
     const file = event.target.files[0];
     if (file) {
       this.employeeForm.patchValue({ profilePicture: file });
+      this.selectedFileName = file.name;
     }
   }
 
@@ -59,6 +61,7 @@ export class EmployeeFormAddComponent implements OnInit {
     this.http.post('http://localhost:3000/api/employees', formData).subscribe({
       next: (response) => {
         this.employeeForm.reset();
+        this.selectedFileName = '';
         this.selectedSkills = [];
         this.employeeAdded.emit();
         this.isSubmitting = true;
