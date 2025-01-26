@@ -1,0 +1,8 @@
+Affichage de popups de notification
+    1. Injecter le service dans un composant via le constructeur.
+    constructor(private toastMessageService: ToastMessageService) {}
+    2. Importer le service dans le fichier du composant.
+    import { ToastMessageService } from '../../../services/toast-message.service';
+    3. Appeler le service dans le composant.
+    this.toastMessageService.showToast('Votre message', 'type')
+    Types possibles : 'success', 'info', 'warning', 'error'.

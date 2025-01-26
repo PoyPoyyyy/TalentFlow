@@ -10,9 +10,6 @@
     <button class="clear-btn" (click)="clearSearch()">&#10006;</button>
   }
 </div>
-@if (isDeleted) {
-  <h2 class="employee-deleted">Employee deleted</h2>
-}
 
 <div class="employee-list">
   @for (employee of filteredEmployees; track employee.first_name) {

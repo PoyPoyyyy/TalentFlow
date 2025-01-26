@@ -3,7 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { EmployeeCardComponent } from '../employee-card/employee-card.component';
 import { CommonModule } from '@angular/common';
 import { Employee } from '../../../models/employees.model';
-import {FormsModule} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
+import { ToastMessageService } from '../../../services/toast-message.service';
 
 @Component({
   selector: 'app-employee-list',
@@ -15,10 +16,9 @@ export class EmployeeListComponent implements OnInit {
   employees: Employee[] = [];
   filteredEmployees: Employee[] = [];
   searchQuery: string = '';
-  isDeleted: boolean = false;
   private saveQuery: string = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private toastMessageService: ToastMessageService) {}  // Injection du service
 
   ngOnInit(): void {
     this.loadEmployees();
@@ -46,12 +46,8 @@ export class EmployeeListComponent implements OnInit {
     setTimeout(() => {
       this.searchQuery = this.saveQuery;
       this.filterEmployees();
-
     }, 150);
-    setTimeout(() => {
-      this.isDeleted = false;
-    }, 3000);
-
+    this.toastMessageService.showToast('Employee deleted successfully!', 'success');
   }
 
   clearSearch(): void {

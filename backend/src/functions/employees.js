@@ -91,4 +91,42 @@ router.delete('/employees/:id', async (req, res) => {
     }
 });
 
+router.put('/employees/:id', upload.single('profilePicture'), async (req, res) => {
+    const { id } = req.params;
+    const { firstName, lastName, hireDate, skills } = req.body;
+    const profilePicture = req.file ? req.file.buffer : null;
+
+    if (!firstName || !lastName || !hireDate || !skills) {
+        return res.status(400).json({ message: 'Données invalides.' });
+    }
+
+    let parsedSkills;
+    try {
+        parsedSkills = JSON.parse(skills);
+        if (!Array.isArray(parsedSkills)) throw new Error('Skills doit être un tableau');
+    } catch (error) {
+        return res.status(400).json({ message: 'Les compétences sont mal formatées.' });
+    }
+    try {
+        const client = await pool.connect();
+        await client.query(
+            'UPDATE EMPLOYEE SET first_name = $1, last_name = $2, hire_date = $3, profile_picture = $4 WHERE id = $5',
+            [firstName, lastName, hireDate, profilePicture, id]
+        );
+        await client.query('DELETE FROM EMPLOYEE_SKILL WHERE employee_id = $1', [id]);
+        for (const skill of parsedSkills) {
+            await client.query(
+                'INSERT INTO EMPLOYEE_SKILL (employee_id, skill_code) VALUES ($1, $2)',
+                [id, skill]
+            );
+        }
+
+        client.release();
+        res.status(200).json({ message: 'Employé mis à jour avec succès' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Erreur serveur' });
+    }
+});
+
 module.exports = router;

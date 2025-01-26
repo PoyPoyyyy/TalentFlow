@@ -1,7 +1,8 @@
-import {Component, EventEmitter, input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Skill } from '../../../models/employees.model';
+import {ToastMessageService} from '../../../services/toast-message.service';
 
 @Component({
   selector: 'app-employee-form-add',
@@ -17,7 +18,7 @@ export class EmployeeFormAddComponent implements OnInit {
   @Output() employeeAdded = new EventEmitter<unknown>();
   selectedFileName = '';
 
-  constructor(private formBuilder: FormBuilder, private http: HttpClient) {
+  constructor(private formBuilder: FormBuilder, private http: HttpClient, private toastMessageService: ToastMessageService) {
     this.employeeForm = this.formBuilder.group({
       firstName: '',
       lastName: '',
@@ -64,14 +65,11 @@ export class EmployeeFormAddComponent implements OnInit {
         this.selectedFileName = '';
         this.selectedSkills = [];
         this.employeeAdded.emit();
-        this.isSubmitting = true;
-        setTimeout(() => {
-          this.isSubmitting = false;
-        }, 3000);
+        this.toastMessageService.showToast('Employee added successfully!', 'success');
       },
       error: (err) => {
         console.error(err);
-        alert('Erreur de soumission de formulaire. Vérifiez les champs.');
+        this.toastMessageService.showToast('this.toastMessageService.showToast(\'Employee deleted successfully!\', \'success\');', 'error');
       }
     });
   }
