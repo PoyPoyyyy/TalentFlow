@@ -6,7 +6,7 @@
   />
   <div class="employee-details">
     <h3>{{ employee.first_name }} {{ employee.last_name }}</h3>
-    <p class="hire-date">{{ employee.hire_date | date }}</p>
+    <p class="hire-date">Hired :{{ employee.hire_date | date }}</p>
     <h4>Skills :</h4>
     <ul class="employee-skills">
       @for (skill of employee.skills; track skill.code) {
@@ -14,7 +14,7 @@
       }
     </ul>
     <div class="employee-actions">
-      <button class="button-edit">Edit</button>
+      <a class="button-edit" [routerLink]="['/employee/edit', employee.id]">Edit</a>
       <button class="button-delete" (click)="onDelete()">Delete</button>
     </div>
   </div>

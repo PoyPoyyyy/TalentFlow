@@ -12,8 +12,8 @@ export class SweetMessageService {
     message: string,
     type: 'success' | 'error' | 'warning' | 'info',
     showCancelButton: boolean = false,
-    cancelButtonText: string = 'Cancel',
     confirmButtonText: string = 'OK',
+    cancelButtonText: string = 'Cancel',
     timer: number = 0
   ): Promise<any> {
     return Swal.fire({
@@ -21,8 +21,8 @@ export class SweetMessageService {
       text: message,
       icon: type,
       showCancelButton: showCancelButton,
-      confirmButtonColor: "#406380",
-      cancelButtonColor: "#d33",
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#68d3c9",
       cancelButtonText: cancelButtonText,
       confirmButtonText: confirmButtonText,
       timer: timer,

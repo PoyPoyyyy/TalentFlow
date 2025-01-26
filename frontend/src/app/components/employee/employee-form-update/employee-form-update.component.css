@@ -1,3 +1,16 @@
+.container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: max-height 0.3s ease;
+  overflow: hidden;
+  min-height: 500px;
+}
+
 .employee-form {
   display: flex;
   flex-direction: column;
@@ -5,16 +18,15 @@
 }
 
 .form-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
-  flex-wrap: wrap;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  flex: 1 1 calc(33% - 1.5rem);
+  gap: 0.75rem;
 }
 
 .form-group label {
@@ -33,39 +45,6 @@
 
 .form-control:focus {
   border-color: #4CAF50;
-}
-
-.file-label {
-  font-weight: bold;
-  color: #333;
-}
-
-.file-input-wrapper {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.75rem;
-  background-color: #f1f1f1;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: border-color 0.3s ease;
-}
-
-.file-input-wrapper:hover {
-  border-color: #4CAF50;
-}
-
-.file-input-wrapper span {
-  color: #333;
-  font-size: 1rem;
-  padding-left: 0.5rem;
-  flex-grow: 1;
-  word-wrap: break-word;
-}
-
-.file-input {
-  display: none;
 }
 
 .skill-list {
@@ -97,7 +76,7 @@
 }
 
 .submit-button {
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 1.5rem;
   background-color: #4CAF50;
   color: white;
   border: none;
@@ -116,30 +95,23 @@
   font-weight: bold;
   margin-top: 1rem;
   text-align: center;
-  border: black;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
   .form-row {
-    flex-direction: column;
-  }
-
-  .form-group {
-    flex: 1 1 100%;
+    grid-template-columns: 1fr;
   }
 
   .submit-button {
-    width: auto;
+    width: 100%;
+  }
+
+  .employee-form {
+    gap: 2rem;
   }
 }
 
 @media (max-width: 480px) {
-  .repliable-header {
-    font-size: 0.875rem;
-    padding: 0.75rem 1rem;
-  }
-
   .form-control {
     font-size: 0.875rem;
   }
@@ -148,4 +120,5 @@
     font-size: 0.875rem;
     padding: 0.5rem 1rem;
   }
+
 }
