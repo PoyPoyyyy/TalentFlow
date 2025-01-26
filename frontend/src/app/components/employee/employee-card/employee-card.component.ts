@@ -1,32 +1,27 @@
 import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Employee } from '../../../models/employees.model';
-import { MatDialog } from '@angular/material/dialog';
-import { DialogComponent} from '../../shared/dialog/dialog.component';
-import {CommonModule} from '@angular/common';
+import { SweetMessageService } from '../../../services/sweet-message.service';
+import {DatePipe} from '@angular/common';  // Importer le service
 
 @Component({
   selector: 'app-employee-card',
-  imports: [CommonModule],
   templateUrl: './employee-card.component.html',
   styleUrls: ['./employee-card.component.css'],
+  imports: [
+    DatePipe
+  ]
 })
 export class EmployeeCardComponent {
   @Input() employee!: Employee;
   @Output() employeeDeleted = new EventEmitter<void>();
-  constructor(private http: HttpClient, private dialog: MatDialog) {}
+
+  constructor(private http: HttpClient, private sweetMessageService: SweetMessageService) {}
+
   onDelete(): void {
-    const dialogRef = this.dialog.open(DialogComponent, {
-      width: '500px',
-      data: {
-        title: 'Confirm Deletion',
-        message: `Are you sure you want to delete ?`,
-        confirmButtonText: 'Delete',
-        cancelButtonText: 'Cancel',
-      },
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
+    this.sweetMessageService.showAlert('Confirm Deletion', 'Are you sure you want to delete this employee?', 'info', true, 'Delete', 'Cancel'
+    ).then((result) => {
+      if (result.isConfirmed) {
         this.confirmDelete();
       }
     });
@@ -37,9 +32,11 @@ export class EmployeeCardComponent {
       .subscribe({
         next: () => {
           this.employeeDeleted.emit();
+          this.sweetMessageService.showToast('Employee deleted successfully.', 'success');
         },
         error: (error) => {
-          console.error('Erreur lors de la suppression de l\'employé:', error);
+          console.error('Error deleting employee:', error);
+          this.sweetMessageService.showToast('An error occurred while deleting the employee.', 'error');
         },
       });
   }
