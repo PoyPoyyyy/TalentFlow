@@ -11,3 +11,13 @@ export interface Employee {
   profile_picture: string;
   skills: Skill[];
 }
+
+export interface Mission {
+  id: number;
+  name: string;
+  description: string;
+  start_date: Date;
+  duration: number;
+  status: string;
+  skills: Skill[];
+}

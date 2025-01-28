@@ -1,0 +1,118 @@
+
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding-inline: 40px;
+    padding-bottom: 40px;
+    padding-top: 10px;
+    background-color: rgb(245, 245, 245);
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 10px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+}
+
+.header h2 {
+    font-size: 1.5rem;
+}
+
+.header input {
+    height: fit-content;
+    padding: 5px;
+    border: 1.25px solid #ddd;
+    border-radius: 4px;
+    outline: none;
+    transition: border 0.2s;
+}
+
+.header input:hover {
+    border: 1.25px solid #b5b5b5;
+}
+
+.header input:focus {
+    border: 1.25px solid rgb(25, 25, 25);
+}
+
+.mission-description {
+    font-size: 0.9rem;
+}
+
+.missions-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.missions-table thead, .mission-start-date, .mission-duration, .mission-status {
+    text-align: center;
+}
+
+.missions-table thead {
+    background: #f1f1f1;
+}
+
+.missions-table tr {
+    border-block: 1px solid #ddd;
+    transition: background-color 0.2s;
+}
+
+.missions-table td, th {
+    padding: 15px;
+}
+
+.missions-table td {
+    color: rgb(60, 60, 60);
+}
+
+.mission-edit div {
+    display: flex;
+    gap: 5px;
+}
+
+.mission-edit button {
+    border: 1.25px solid rgb(25, 25, 25);
+    border-radius: 4px;
+    background: rgb(245, 245, 245);
+    cursor: pointer;
+    transition: background-color 0.2s;
+    padding-block: 5px;
+    padding-inline: 8px;
+    font-size: 0.9rem;
+}
+
+.mission-edit button:hover {
+    background-color: #ddd;
+}
+
+.missions-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.mission-status span {
+    padding-block: 10px;
+    padding-inline: 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}
+
+.preparation {
+    background: rgb(0, 247, 255);
+}
+.planned {
+    background: rgb(124, 255, 124);
+}
+.ongoing {
+    background: rgb(236, 231, 87);
+}
+.completed {
+    background: rgb(236, 129, 87);
+}

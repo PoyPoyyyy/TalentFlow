@@ -1,1 +1,40 @@
-<p>mission-list works!</p>
+<div class="container">
+    <div class="header">
+        <h2>Missions</h2>
+        <input type="text" placeholder="Search missions..." [(ngModel)]="searchQuery" (ngModelChange)="getMissionsSelected()">
+    </div>
+    
+    <table class="missions-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Description</th>
+                <th>Starting Date</th>
+                <th>Duration</th>
+                <th>Skills required</th>
+                <th>Edit</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (mission of missionsSelected; track mission.id) {
+            <tr>
+                <td class="mission-name">{{ mission.name }}</td>
+                <td class="mission-status">
+                    <span class="{{ mission.status }}">{{ mission.status }}</span>
+                </td>
+                <td class="mission-description">{{ mission.description }}</td>
+                <td class="mission-start-date">{{ mission.start_date | date:'dd/MM/yyyy' }}</td>
+                <td class="mission-duration">{{ mission.duration }}</td>
+                <td class="mission-skills"></td>
+                <td class="mission-edit">
+                    <div>
+                        <button id="update" type="button">Update</button>
+                        <button id="delete" type="button" (click)="onDelete(mission)">Delete</button>
+                    </div>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>

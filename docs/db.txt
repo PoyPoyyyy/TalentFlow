@@ -16,7 +16,7 @@ CREATE TABLE MISSION (
     description TEXT,
     start_date DATE NOT NULL,
     duration INT NOT NULL,
-    status VARCHAR(20) NOT NULL CHECK (status IN ('pending', 'ongoing', 'completed'))
+    status VARCHAR(20) NOT NULL CHECK (status IN ('preparation', 'planned', 'ongoing', 'completed'))
 );
 
 CREATE TABLE EMPLOYEE_SKILL (
