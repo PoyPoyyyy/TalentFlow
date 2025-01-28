@@ -13,9 +13,9 @@
         <li title="{{ skill.description }}">{{ skill.code }}</li>
       }
     </ul>
-    <div class="employee-actions">
-      <a class="button-edit" [routerLink]="['/employee/edit', employee.id]">Edit</a>
-      <button class="button-delete" (click)="onDelete()">Delete</button>
-    </div>
+  </div>
+  <div class="employee-actions">
+    <button class="button-edit" [routerLink]="['/employee/edit', employee.id]">Edit</button>
+    <button class="button-delete" (click)="onDelete()">Delete</button>
   </div>
 </div>

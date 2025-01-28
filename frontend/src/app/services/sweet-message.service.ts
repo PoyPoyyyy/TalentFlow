@@ -19,7 +19,7 @@ export class SweetMessageService {
     return Swal.fire({
       title: title,
       text: message,
-      icon: type,
+      // icon: type,
       showCancelButton: showCancelButton,
       confirmButtonColor: "#d33",
       cancelButtonColor: "#68d3c9",
