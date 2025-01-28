@@ -1,0 +1,20 @@
+<form [formGroup]="missionForm" (ngSubmit)="onSubmit()" class="form">
+    <div>
+      <label for="name">Name</label>
+      <input id="name" formControlName="name" type="text" placeholder="Mission name" />
+    </div>
+    <div>
+      <label for="description">Description</label>
+      <input id="description" formControlName="description" type="text" placeholder="Mission description" />
+    </div>
+    <div>
+      <label for="start_date">Starting Date</label>
+      <input id="start_date" formControlName="start_date" type="date" />
+    </div>
+    <div>
+      <label for="duration">Duration</label>
+      <input id="duration" formControlName="duration" type="number" placeholder="Duration in days" />
+    </div>
+    <button type="submit" [disabled]="missionForm.invalid">Add Mission</button>
+  </form>
+  

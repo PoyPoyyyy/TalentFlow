@@ -20,11 +20,13 @@ export class EmployeeListComponent implements OnInit {
   ngOnInit(): void {
     this.loadEmployees();
   }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['searchQuery']) {
       this.filterEmployees();
     }
   }
+  
   loadEmployees(): void {
     this.http.get<Employee[]>('http://localhost:3000/api/employees')
       .subscribe((employees: Employee[]) => {

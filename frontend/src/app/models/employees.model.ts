@@ -9,3 +9,13 @@ export interface Employee {
   last_name: string;
   skills: Skill[];
 }
+
+export interface Mission {
+  id: number;
+  name: string;
+  description: string;
+  start_date: Date;
+  duration: number;
+  status: string;
+  skills: Skill[];
+}
