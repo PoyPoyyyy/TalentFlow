@@ -1,1 +1,33 @@
-<p>skill-list works!</p>
+<div class="container">
+  <div class="header">
+    <h2>Skills</h2>
+    <input type="text" placeholder="Search skills..." [(ngModel)]="searchQuery" (ngModelChange)="filterSkills()">
+    <select [(ngModel)]="filterType" (change)="filterSkills()">
+      <option value="all">All</option>
+      <option value="code">Code</option>
+      <option value="description">Description</option>
+    </select>
+  </div>
+
+  <table class="skills-table">
+    <thead>
+    <tr>
+      <th>Code</th>
+      <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+      @for (skill of filteredSkills; track skill.code) {
+        <tr>
+          <td class="skill-code">{{ skill.code }}</td>
+          <td class="skill-description">{{ skill.description }}</td>
+        </tr>
+
+      } @empty {
+        <td class="no-skill-message">
+          No skill match your search.
+        </td>
+      }
+    </tbody>
+  </table>
+</div>

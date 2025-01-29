@@ -1,0 +1,69 @@
+.container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 10px 40px 40px;
+  background-color: rgb(245, 245, 245);
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}
+
+.header h2 {
+  font-size: 1.5rem;
+}
+
+.header input {
+  padding: 5px;
+  border: 1.25px solid #ddd;
+  border-radius: 4px;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.header input:hover {
+  border-color: #b5b5b5;
+}
+
+.header input:focus {
+  border-color: rgb(25, 25, 25);
+}
+
+.skills-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.skills-table thead {
+  background: #f1f1f1;
+  text-align: left;
+}
+
+.skills-table tr {
+  border-bottom: 1px solid #ddd;
+  transition: background-color 0.2s;
+}
+
+.skills-table td, th {
+  padding: 15px;
+  text-align: left;
+}
+
+.skills-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.no-skill-message {
+  text-align: center;
+  font-size: 1rem;
+  color: #777;
+  padding: 20px;
+}
