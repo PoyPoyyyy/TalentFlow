@@ -1,124 +1,112 @@
 .container {
-  max-width: 1200px;
-  margin: 2rem auto;
-  padding: 2rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #fff;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  transition: max-height 0.3s ease;
-  overflow: hidden;
-  min-height: 500px;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
 }
 
 .employee-form {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 40px;
+  background-color: rgb(245, 245, 245);
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 20px;
+  align-items: flex-start;
 }
 
-.form-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
+.employee-form .form-row {
+  display: flex;
+  gap: 20px;
+  width: 100%;
 }
 
-.form-group {
+.employee-form .form-group {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 5px;
+  width: 100%;
 }
 
-.form-group label {
-  font-weight: bold;
-  color: #333;
-}
-
-.form-control {
-  padding: 0.75rem;
+.employee-form label {
   font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  color: rgb(60, 60, 60);
+}
+
+.employee-form input.form-control {
+  height: 40px;
+  padding: 5px 10px;
+  border: 1.25px solid #ddd;
+  border-radius: 4px;
   outline: none;
-  transition: border-color 0.3s ease;
+  transition: border 0.2s;
 }
 
-.form-control:focus {
-  border-color: #4CAF50;
+.employee-form input.form-control:hover {
+  border: 1.25px solid #b5b5b5;
 }
 
-.skill-list {
+.employee-form input.form-control:focus {
+  border: 1.25px solid rgb(25, 25, 25);
+}
+
+.employee-form .skill-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-.skill-item {
-  padding: 0.75rem 1rem;
-  background-color: #f1f1f1;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.skill-item:hover {
-  background-color: #e0e0e0;
-}
-
-.skill-item.selected {
-  background-color: #4d4c4c;
-  color: #fff;
-}
-
-.button-group {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.submit-button {
-  padding: 0.75rem 1.5rem;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 5px;
+  gap: 10px;
   font-size: 1rem;
+  justify-content: flex-start;
+}
+
+.employee-form .skill-item {
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  padding: 5px 10px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  transition: background-color 0.2s, border-color 0.2s;
 }
 
-.submit-button:hover {
-  background-color: #45a049;
+.employee-form .skill-item:hover {
+  background-color: #f0f0f0;
 }
 
-.employee-added {
-  color: #4CAF50;
-  font-weight: bold;
-  margin-top: 1rem;
+.employee-form .skill-item.selected {
+  background-color: rgb(200, 220, 240);
+  border-color: rgb(25, 25, 25);
+}
+
+.employee-form .button-group {
+  display: flex;
+  justify-content: center;
+}
+
+.employee-form .submit-button {
+  padding: 8px 20px;
+  font-size: 1rem;
+  border: 1.25px solid rgb(25, 25, 25);
+  background-color: rgb(245, 245, 245);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+  align-self: center;
+}
+
+.employee-form .submit-button:hover {
+  background-color: #ddd;
+}
+
+.employee-form .submit-button:disabled {
+  background-color: #f1f1f1;
+  cursor: not-allowed;
+  border: 1.25px solid #ddd;
+}
+
+.employee-form .employee-added {
+  padding: 10px;
+  background-color: #d4edda;
+  color: #155724;
+  border-radius: 4px;
   text-align: center;
-}
-
-@media (max-width: 768px) {
-  .form-row {
-    grid-template-columns: 1fr;
-  }
-
-  .submit-button {
-    width: 100%;
-  }
-
-  .employee-form {
-    gap: 2rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .form-control {
-    font-size: 0.875rem;
-  }
-
-  .submit-button {
-    font-size: 0.875rem;
-    padding: 0.5rem 1rem;
-  }
-
 }

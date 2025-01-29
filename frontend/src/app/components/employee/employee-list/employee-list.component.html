@@ -1,24 +1,55 @@
-<div class="search-bar">
-  <input
-    type="text"
-    [(ngModel)]="searchQuery"
-    (input)="filterEmployees()"
-    placeholder="Search employees..."
-    class="search-input"
-  />
-  @if (searchQuery) {
-    <button class="clear-btn" (click)="clearSearch()">&#10006;</button>
-  }
-</div>
-
-<div class="employee-list">
-  @for (employee of filteredEmployees; track employee.first_name) {
-    <app-employee-card
-      [employee]="employee"
-      (employeeDeleted)="onEmployeeDeleted()"
-    >
-    </app-employee-card>
-  } @empty {
-    <h2 class="no-employees-message">No employees match your search.</h2>
-  }
+<div class="container">
+  <div class="header">
+    <h2>Employees</h2>
+    <input type="text" placeholder="Search employees..." [(ngModel)]="searchQuery" (ngModelChange)="filterEmployees()"/>
+  </div>
+  <table class="employees-table">
+    <thead>
+    <tr>
+      <th>Profile Picture</th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Hire Date</th>
+      <th>Skills</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+      @for (employee of filteredEmployees; track employee.id) {
+        <tr>
+          <td class="profile-picture-cell">
+            <img
+              [src]="employee.profile_picture ? 'data:image/svg+xml;base64,' + employee.profile_picture : '../user-picture.png'"
+              alt="Profile Picture"
+              class="profile-picture"
+            />
+          </td>
+          <td>{{ employee.first_name }}</td>
+          <td>{{ employee.last_name }}</td>
+          <td>{{ employee.hire_date | date: 'dd/MM/yyyy' }}</td>
+          <td class="skills-cell">
+            @for (skill of employee.skills; track skill.code) {
+              <span
+                class="skill-item"
+                title="{{ skill.description }}"
+              >
+              {{ skill.code }}
+              </span>
+            }
+          </td>
+          <td class="actions-cell">
+            <button class="button-edit" [routerLink]="['/employee/edit', employee.id]">Edit</button>
+            <button class="button-delete" (click)="onDelete(employee)">Delete</button>
+          </td>
+        </tr>
+      }
+      @empty {
+        <tr>
+          <td colspan="6" class="no-employees-message">
+            No employees match your search.
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
 </div>

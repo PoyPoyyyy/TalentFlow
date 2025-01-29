@@ -13,7 +13,6 @@
       <input id="hireDate" type="date" formControlName="hireDate" class="form-control" />
     </div>
   </div>
-
   <div class="form-group">
     <label for="profilePicture" class="file-label">Profile Picture</label>
     <div class="file-input-wrapper" (click)="fileInput.click()">
@@ -43,10 +42,8 @@
       }
     </div>
   </div>
+  <button type="submit" class="submit-button">Add employee</button>
 
-  <div class="form-group button-group">
-    <button type="submit" class="submit-button">Add employee</button>
-  </div>
   @if (isSubmitting) {
     <div class="employee-added">New employee added</div>
   }
