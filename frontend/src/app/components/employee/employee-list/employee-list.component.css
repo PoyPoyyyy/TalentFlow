@@ -98,3 +98,7 @@
   color: #777;
   padding: 20px;
 }
+
+.button-sort {
+  cursor: pointer;
+}

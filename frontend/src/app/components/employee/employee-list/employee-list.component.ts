@@ -17,6 +17,9 @@ export class EmployeeListComponent implements OnInit {
   filteredEmployees: Employee[] = [];
   searchQuery: string = '';
   saveQuery: string = '';
+  filterType: string = 'all';
+  sortColumn: string = 'last_name';
+  sortDirection: number = 1;
 
   constructor(
     private http: HttpClient,
@@ -32,7 +35,7 @@ export class EmployeeListComponent implements OnInit {
       next: (employees: Employee[]) => {
         this.employees = employees;
         this.filteredEmployees = [...this.employees];
-        this.filterEmployees();
+        this.sortEmployees('last_name');
       },
       error: (error) => {
         console.error('Error loading employees:', error);
@@ -42,11 +45,41 @@ export class EmployeeListComponent implements OnInit {
 
   filterEmployees(): void {
     const query = this.searchQuery.toLowerCase();
-    this.filteredEmployees = this.employees.filter(
-      (employee) =>
-        employee.first_name.toLowerCase().includes(query) ||
-        employee.last_name.toLowerCase().includes(query)
-    );
+    this.filteredEmployees = this.employees.filter((employee) => {
+      if (this.filterType === 'first-name') {
+        return employee.first_name.toLowerCase().includes(query);
+      } else if (this.filterType === 'last-name') {
+        return employee.last_name.toLowerCase().includes(query);
+      } else {
+        return (
+          employee.first_name.toLowerCase().includes(query) ||
+          employee.last_name.toLowerCase().includes(query)
+        );
+      }
+    });
+    this.sortEmployees(this.sortColumn, false);
+  }
+
+  sortEmployees(column: string, toggle: boolean = true): void {
+    if (!Object.keys(this.employees[0] ?? {}).includes(column)) return;
+    const key = column as keyof Employee;
+
+    if (toggle) {
+      this.sortDirection = this.sortColumn === key ? -this.sortDirection : 1;
+    }
+    this.sortColumn = key;
+
+    this.filteredEmployees.sort((a, b) => {
+      let valueA = a[key] as string | number;
+      let valueB = b[key] as string | number;
+
+      if (typeof valueA === 'string') valueA = valueA.toLowerCase();
+      if (typeof valueB === 'string') valueB = valueB.toLowerCase();
+
+      if (valueA < valueB) return -1 * this.sortDirection;
+      if (valueA > valueB) return 1 * this.sortDirection;
+      return 0;
+    });
   }
 
   onDelete(employee: Employee): void {

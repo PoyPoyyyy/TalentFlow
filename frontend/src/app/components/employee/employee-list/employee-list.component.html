@@ -2,14 +2,19 @@
   <div class="header">
     <h2>Employees</h2>
     <input type="text" placeholder="Search employees..." [(ngModel)]="searchQuery" (ngModelChange)="filterEmployees()"/>
+    <select [(ngModel)]="filterType" (change)="filterEmployees()">
+      <option value="all">All</option>
+      <option value="first-name">First Name</option>
+      <option value="last-name">Last Name</option>
+    </select>
   </div>
   <table class="employees-table">
     <thead>
     <tr>
       <th>Profile Picture</th>
-      <th>First Name</th>
-      <th>Last Name</th>
-      <th>Hire Date</th>
+      <th  class="button-sort" (click)="sortEmployees('first_name')">First Name</th>
+      <th  class="button-sort" (click)="sortEmployees('last_name')">Last Name</th>
+      <th class="button-sort" (click)="sortEmployees('hire_date')">Hire Date</th>
       <th>Skills</th>
       <th>Actions</th>
     </tr>
