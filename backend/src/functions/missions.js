@@ -17,7 +17,7 @@ router.get('/missions', async (req, res) => {
             SELECT m.id, m.name, m.description, m.start_date, m.duration, m.status
             FROM MISSION m;
             `;
-            // ,json_agg(json_build_object('code', s.code, 'description', s.description)) AS skills || , MISSION_SKILL ms, SKILL s WHERE m.id = ms.mission_id AND ms.skill_code = s.code
+            //,json_agg(json_build_object('code', s.code, 'description', s.description)) AS skills || , MISSION_SKILL ms, SKILL s WHERE m.id = ms.mission_id AND ms.skill_code = s.code
         const result = await client.query(query);
         client.release();
         res.json(result.rows);

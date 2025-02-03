@@ -1,19 +1,23 @@
 <form [formGroup]="missionForm" (ngSubmit)="onSubmit()" class="form">
-    <div>
+    <div class="container-input">
       <label for="name">Name</label>
-      <input id="name" formControlName="name" type="text" placeholder="Mission name" />
+      <input id="name" formControlName="name" type="text" placeholder="Mission name" required/>
     </div>
-    <div>
+    <div class="container-input">
       <label for="description">Description</label>
       <input id="description" formControlName="description" type="text" placeholder="Mission description" />
     </div>
-    <div>
+    <div class="container-input">
       <label for="start_date">Starting Date</label>
       <input id="start_date" formControlName="start_date" type="date" />
     </div>
-    <div>
+    <div class="container-input">
       <label for="duration">Duration</label>
       <input id="duration" formControlName="duration" type="number" placeholder="Duration in days" />
+    </div>
+    <div class="container-input">
+      <label for="skills">Skills</label>
+      <app-multi-select (selectedSkillsChange)="onSkillsChange($event)"></app-multi-select>
     </div>
     <button type="submit" [disabled]="missionForm.invalid">Add Mission</button>
   </form>
