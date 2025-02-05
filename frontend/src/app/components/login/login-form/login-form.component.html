@@ -1,1 +1,14 @@
-<p>login-form works!</p>
+<div class="login-container">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div>
+      <input placeholder="Username" class="input" id="username" formControlName="username" required />
+    </div>
+    <div>
+      <input placeholder="Password" class="input" id="password" type="password" formControlName="password" required />
+    </div>
+    <button class="submit" type="submit">Login</button>
+  </form>
+  @if (loginError) {
+      <p>Username or password is incorrect.</p>
+    }
+</div>
