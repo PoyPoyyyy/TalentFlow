@@ -130,9 +130,7 @@
     background: rgb(236, 231, 87);
 }
 .completed {
-<<<<<<< Updated upstream
-    background: rgb(236, 129, 87);
-=======
+
     background: rgba(195, 185, 185, 0.75);
 }
 
@@ -150,5 +148,5 @@
 
 #quantity {
     font-size: 0.8rem;
->>>>>>> Stashed changes
+
 }
