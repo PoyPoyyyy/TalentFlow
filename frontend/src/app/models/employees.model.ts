@@ -17,5 +17,5 @@ export interface Mission {
   start_date: Date;
   duration: number;
   status: string;
-  skills: Skill[];
+  skills: {code: number, description: string, quantity: number}[];
 }

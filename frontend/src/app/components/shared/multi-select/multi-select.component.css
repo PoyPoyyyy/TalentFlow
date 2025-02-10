@@ -1,0 +1,150 @@
+* {
+    box-sizing: border-box;
+    color: #454545;
+  }
+  
+.container {
+    position: relative;
+    user-select: none;
+}
+
+#selected-skills {
+    position: relative;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    height: 40px;
+    width: 100%;
+    padding: 5px 10px;
+    background: white;
+    border-radius: 4px;
+    border: 1.25px solid #ddd;
+    cursor: pointer;
+    gap: 5px;
+    overflow: hidden;
+    transition: border 0.2s;
+}
+
+#search {
+    color: #808080;
+}
+
+#icon-dropdown::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: white;
+    padding-inline: 10px;
+    padding-block: 12px;
+    content: '▼';
+    font-size: 0.75rem;
+    color: #808080;
+}
+
+#selected-skills:hover {
+    border: 1.25px solid #b5b5b5;
+}
+
+#selected-skills.dropped-down {
+    border: 1.25px solid rgb(25, 25, 25);
+}
+
+.container-skills {
+    background: white;
+    border: 1.25px solid #ddd;
+    position: absolute;
+    width: 100%;
+    border-radius: 4px;
+    margin-top: 5px;
+    padding: 0 3px 3px 3px;
+    z-index: 90;
+    max-height: 300px;
+    overflow-y: auto;
+    scrollbar-color: #b5b5b5 #ddd;
+}
+
+.filters {
+    position: sticky;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
+    background: white;
+    top: 0;
+}
+
+.filters .search-bar {
+    width: 100%;
+}
+
+.filters .search-bar input {
+    width: 100%;
+    height: fit-content;
+    padding: 5px;
+    border: 1.25px solid #ddd;
+    border-radius: 4px;
+    outline: none;
+    transition: border 0.2s;
+}
+
+.filters .search-bar input:hover {
+    border: 1.25px solid #b5b5b5;
+}
+
+.filters .search-bar input:focus {
+    border: 1.25px solid rgb(25, 25, 25);
+}
+
+.filters {
+    display: flex;
+    transition: background-color 0.2s;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+.left {
+    display: flex;
+    transition: background-color 0.2s;
+    border-radius: 4px;
+    gap: 5px;
+}
+
+.container-skill {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    justify-content: space-between;
+}
+
+.container-skill:hover {
+    background-color: #f1f1f1;
+}
+
+.selected-skill {
+    display: flex;
+    background: #f1f1f1;
+    justify-content: start;
+    padding: 5px;
+    border-radius: 4px;
+    gap: 3px;
+}
+
+.selected-skill button {
+    background: transparent;
+    color: black;
+    border: 0;
+    border-radius: 15px;
+    cursor: pointer;
+    position: relative;
+}
+
+.selected-skill button span {
+    position: relative;
+    top: -0.75px;
+    left: -0.25px;
+}
+
+input[type = "checkbox"] {
+    accent-color: rgb(20, 20, 20);
+}
+

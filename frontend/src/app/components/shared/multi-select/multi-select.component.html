@@ -1,0 +1,50 @@
+
+<div class="container">
+    <div id="selected-skills" (click)="toggleDropDown()" [class.dropped-down]="dropDownOpen">
+        @for (skillInfos of selectedSkills; track skillInfos.skill.code) {
+            <div class="selected-skill">
+                <span>(<span>{{ skillInfos.skill.code }}</span>) x {{ skillInfos.quantity }}</span>
+                <button type="button" (click)="toggleSkillSelection(skillInfos.skill, $event)"><span>x</span></button>
+            </div>
+        }
+        @empty {
+            <span id="search">Select skills</span>
+        }
+        <span id="icon-dropdown"></span>
+    </div>
+        @if (dropDownOpen) {
+            <div class="container-skills">
+                <div class="filters">
+                    <div class="all">
+                        <input type="checkbox" id="all" 
+                        [checked]="allSelected"
+                        (change)="toggleAllSelection($event)">
+                    </div>
+                    <div class="search-bar">
+                        <input placeholder="Search skills" [(ngModel)]="searchQuery" (ngModelChange)="getFilteredSkills()">
+                    </div>
+                </div>
+                <div class="container-slide">
+                    @for (skill of filteredSkills; track skill.code) {
+                        <label class="test" for="{{ skill.code }}">
+                            <div class="container-skill">
+                                <div class="left">
+                                    <div class="skill">
+                                        <input type="checkbox" [id]="skill.code"
+                                        [checked]="isSkillSelected(skill)" 
+                                        (change)="toggleSkillSelection(skill, $event)">
+                                    </div>
+                                    <span>{{ skill.description }}</span>
+                                </div>
+                                <div class="right">
+                                    <input type="number"
+                                    [value]="getSkillQuantity(skill)"
+                                    (change)="toggleSkillSelectionQuantity(skill, $event)">
+                                </div>
+                            </div>
+                        </label>
+                    }
+                </div>
+            </div>
+        }
+</div>
