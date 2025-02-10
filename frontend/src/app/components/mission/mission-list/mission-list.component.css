@@ -62,7 +62,6 @@
 
 .missions-table tr {
     border-block: 1px solid #ddd;
-    transition: background-color 0.2s;
 }
 
 .missions-table td, th {
@@ -79,21 +78,17 @@
 }
 
 .mission-edit button {
-    border: 1.25px solid rgb(25, 25, 25);
+    border: 1.25px solid #b5b5b5;
     border-radius: 4px;
     background: rgb(245, 245, 245);
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background-color 0.1s;
     padding-block: 5px;
     padding-inline: 8px;
     font-size: 0.9rem;
 }
 
 .mission-edit button:hover {
-    background-color: #ddd;
-}
-
-.missions-table tr:hover {
     background-color: #f1f1f1;
 }
 
@@ -104,49 +99,15 @@
     font-size: 0.9rem;
 }
 
-.mission-skills {
-    display: flex;
-    flex: 1 1 calc(50% - 10px);
-}
-
-#container-skills {
-    display: flex;
-    align-items: center;
-}
-
-
-
-#mission-skills-container {
-    display: flex;
-}
-
 .preparation {
-    background: rgb(0, 247, 255);
+    background: rgba(255, 187, 77, 0.75);
 }
 .planned {
-    background: rgb(124, 255, 124);
+    background: rgb(163, 255, 124, 0.75);
 }
 .ongoing {
-    background: rgb(236, 231, 87);
+    background: rgba(255, 231, 73, 0.75);
 }
 .completed {
-
     background: rgba(195, 185, 185, 0.75);
-}
-
-#empty {
-    text-align: center;
-    width: 100%;
-}
-
-#skill-code {
-    background: #b5b5b5;
-    padding: 5px;
-    border-radius: 4px;
-    gap: 3px;
-}
-
-#quantity {
-    font-size: 0.8rem;
-
 }

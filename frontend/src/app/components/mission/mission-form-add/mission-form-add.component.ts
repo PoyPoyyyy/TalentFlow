@@ -14,7 +14,7 @@ export class MissionFormAddComponent implements OnInit {
 
   
   missionForm: FormGroup;
-  skills: Skill[] = [];
+  skills: {skill: Skill, quantity: number}[] = [];
   @Output() missionAdded = new EventEmitter<Mission>();
 
   constructor(private formBuilder: FormBuilder, private http: HttpClient) {
@@ -32,7 +32,7 @@ export class MissionFormAddComponent implements OnInit {
     
   }
 
-  onSkillsChange(skills: Skill[]) {
+  onSkillsChange(skills: {skill: Skill, quantity: number}[]) {
     this.skills = skills;
     this.missionForm.patchValue({ skills: this.skills });
   }
@@ -41,7 +41,7 @@ export class MissionFormAddComponent implements OnInit {
     const missionData = this.missionForm.value;
     console.log(missionData);
 
-  /*this.http.post<Mission>('http://localhost:3000/api/missions', missionData)
+  this.http.post<Mission>('http://localhost:3000/api/missions', missionData)
     .subscribe({
       next: (response: Mission) => {
         this.missionForm.reset();
@@ -51,7 +51,7 @@ export class MissionFormAddComponent implements OnInit {
         console.error('Erreur lors de l\'ajout de la mission :', err);
         alert('Une erreur s\'est produite lors de l\'ajout de la mission.');
       }
-    });*/
+    });
   }
 
   

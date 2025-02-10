@@ -28,7 +28,7 @@
                 <td class="mission-duration">{{ mission.duration }}</td>
                 <td class="mission-skills">
                     <div id="mission-skills-container">
-                        @for (skillInfos of mission.skills; track skillInfos.quantity) {
+                        @for (skillInfos of mission.skills; track skillInfos.code) {
                             <div id="container-skills">
                                 <span id="skill-code">
                                     {{ skillInfos.code }}

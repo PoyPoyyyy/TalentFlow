@@ -16,7 +16,7 @@ export class MultiSelectComponent {
 
   skillsList: Skill[] = [];
 
-  filteredSkills: Skill[] = [];         
+  filteredSkills: Skill[] = [];
   selectedSkills: {skill: Skill, quantity: number}[] = [];
 
   dropDownOpen: boolean = false;

@@ -21,10 +21,7 @@ router.get('/missions', async (req, res) => {
             AND ms.skill_code = s.code
             GROUP BY m.id;
             `;
-<<<<<<< Updated upstream
-            // ,json_agg(json_build_object('code', s.code, 'description', s.description)) AS skills || , MISSION_SKILL ms, SKILL s WHERE m.id = ms.mission_id AND ms.skill_code = s.code
-=======
->>>>>>> Stashed changes
+
         const result = await client.query(query);
         client.release();
         res.json(result.rows);

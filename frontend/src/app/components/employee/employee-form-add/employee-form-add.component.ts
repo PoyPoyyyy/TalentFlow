@@ -27,6 +27,9 @@ export class EmployeeFormAddComponent implements OnInit {
     });
   }
 
+  /*
+
+   */
   ngOnInit(): void {
     this.http.get<Skill[]>('http://localhost:3000/api/skills').subscribe((skills) => this.skills = skills);
   }

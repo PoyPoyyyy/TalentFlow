@@ -35,11 +35,19 @@ export class EmployeeFormUpdateComponent implements OnInit {
     this.employeeId = this.route.snapshot.params['id'];
   }
 
+  /*
+  ngOnInit() permet de charger les compétences et l'employé à modifier quand le composant est lancé
+   */
   ngOnInit(): void {
     this.http.get<Skill[]>('http://localhost:3000/api/skills').subscribe((skills) => this.skills = skills);
     this.loadEmployeeData();
   }
 
+  /*
+  loadEmployeeData() permet charger l'employé qui va potentiellement êtr emodifié
+  @input :
+  @output :
+   */
   loadEmployeeData(): void {
     this.http.get(`http://localhost:3000/api/employees/${this.employeeId}`).subscribe((employee: any) => {
       const hireDate = new Date(employee.hire_date).toISOString().split('T')[0];
@@ -53,6 +61,11 @@ export class EmployeeFormUpdateComponent implements OnInit {
     });
   }
 
+  /*
+  toggleSkill permet la sélection des compétences pour remplir la variable selectedSkills
+  @input :
+  @output :
+  */
   toggleSkill(skillCode: string): void {
     if (this.selectedSkills.includes(skillCode)) {
       this.selectedSkills = this.selectedSkills.filter(code => code !== skillCode);
@@ -61,6 +74,11 @@ export class EmployeeFormUpdateComponent implements OnInit {
     }
   }
 
+  /*
+  onSubmit() permet de récupérer les données du formulaire et de modifier l'employé avec les nouvelles informations
+  @input :
+  @output :
+   */
   onSubmit(): void {
     const employeeData = {
       firstName: this.employeeForm.get('firstName')?.value,
