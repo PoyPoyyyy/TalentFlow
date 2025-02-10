@@ -26,14 +26,34 @@
                 <td class="mission-description">{{ mission.description }}</td>
                 <td class="mission-start-date">{{ mission.start_date | date:'dd/MM/yyyy' }}</td>
                 <td class="mission-duration">{{ mission.duration }}</td>
-                <td class="mission-skills"></td>
+                <td class="mission-skills">
+                    <div id="mission-skills-container">
+                        @for (skillInfos of mission.skills; track skillInfos.quantity) {
+                            <div id="container-skills">
+                                <span id="skill-code">
+                                    {{ skillInfos.code }}
+                                </span>
+                                <span id="quantity">
+                                    x{{ skillInfos.quantity }}
+                                </span>
+                            </div>
+                        }
+                    </div>
+                    
+                </td>
                 <td class="mission-edit">
                     <div>
-                        <button id="update" type="button">Update</button>
+                        <button id="update" type="button" [routerLink]="['/mission/edit', mission.id]">Update</button>
                         <button id="delete" type="button" (click)="onDelete(mission)">Delete</button>
                     </div>
                 </td>
             </tr>
+            } @empty {
+                <tr>
+                    <td id="empty" colspan="7">
+                        No mission match your search.
+                    </td>
+                </tr>
             }
         </tbody>
     </table>

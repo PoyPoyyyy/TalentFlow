@@ -95,25 +95,15 @@
     border: 1.25px solid rgb(25, 25, 25);
 }
 
-.filters {
+.container-skill, .filters {
     display: flex;
     transition: background-color 0.2s;
-    border-radius: 4px;
     padding: 10px;
-}
-
-.left {
-    display: flex;
-    transition: background-color 0.2s;
     border-radius: 4px;
-    gap: 5px;
 }
 
 .container-skill {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    justify-content: space-between;
+    gap: 5px;
 }
 
 .container-skill:hover {
@@ -147,4 +137,3 @@
 input[type = "checkbox"] {
     accent-color: rgb(20, 20, 20);
 }
-

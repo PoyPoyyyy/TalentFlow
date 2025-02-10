@@ -3,10 +3,11 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Mission } from '../../../models/employees.model';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-mission-list',
-  imports: [DatePipe, FormsModule],
+  imports: [DatePipe, FormsModule, RouterLink],
   templateUrl: './mission-list.component.html',
   styleUrl: './mission-list.component.css'
 })
@@ -24,10 +25,12 @@ export class MissionListComponent implements OnInit {
   }
 
   loadMissions(): void {
+    
       this.http.get<Mission[]>('http://localhost:3000/api/missions')
         .subscribe((missions: Mission[]) => {
           this.missionsList = missions;
           this.missionsSelected = [...this.missionsList];
+          console.table(this.missionsList);
         });
   }
     

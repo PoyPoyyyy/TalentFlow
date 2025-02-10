@@ -1,10 +1,10 @@
 
 <div class="container">
     <div id="selected-skills" (click)="toggleDropDown()" [class.dropped-down]="dropDownOpen">
-        @for (skillInfos of selectedSkills; track skillInfos.skill.code) {
+        @for (skill of selectedSkills; track skill.code) {
             <div class="selected-skill">
-                <span>(<span>{{ skillInfos.skill.code }}</span>) x {{ skillInfos.quantity }}</span>
-                <button type="button" (click)="toggleSkillSelection(skillInfos.skill, $event)"><span>x</span></button>
+                <span>{{ skill.code }}</span>
+                <button type="button" (click)="toggleSkillSelection(skill, $event)"><span>x</span></button>
             </div>
         }
         @empty {
@@ -28,19 +28,12 @@
                     @for (skill of filteredSkills; track skill.code) {
                         <label class="test" for="{{ skill.code }}">
                             <div class="container-skill">
-                                <div class="left">
-                                    <div class="skill">
-                                        <input type="checkbox" [id]="skill.code"
-                                        [checked]="isSkillSelected(skill)" 
-                                        (change)="toggleSkillSelection(skill, $event)">
-                                    </div>
-                                    <span>{{ skill.description }}</span>
+                                <div class="skill">
+                                    <input type="checkbox" [id]="skill.code"
+                                    [checked]="isSkillSelected(skill)" 
+                                    (change)="toggleSkillSelection(skill, $event)">
                                 </div>
-                                <div class="right">
-                                    <input type="number"
-                                    [value]="getSkillQuantity(skill)"
-                                    (change)="toggleSkillSelectionQuantity(skill, $event)">
-                                </div>
+                                <span>{{ skill.description }}</span>
                             </div>
                         </label>
                     }
