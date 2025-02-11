@@ -14,6 +14,7 @@
     <tr>
       <th>Code</th>
       <th>Description</th>
+      <th>Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -21,6 +22,10 @@
         <tr>
           <td class="skill-code">{{ skill.code }}</td>
           <td class="skill-description">{{ skill.description }}</td>
+          <td class="actions-cell">
+            <button class="button-edit" [routerLink]="['/skill/edit', skill.code]">Edit</button>
+            <button class="button-delete" (click)="onDelete(skill)">Delete</button>
+          </td>
         </tr>
 
       } @empty {
