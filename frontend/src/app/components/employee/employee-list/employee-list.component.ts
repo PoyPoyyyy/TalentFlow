@@ -26,20 +26,10 @@ export class EmployeeListComponent implements OnInit {
     private sweetMessageService: SweetMessageService
   ) {}
 
-  /*
-  ngOnInit() permet de charger les employés quand le composant est lancé
-  @input :
-  @output :
-   */
   ngOnInit(): void {
     this.loadEmployees();
   }
 
-  /*
-  loadEmployees() permet de charger la liste des employés de la base de donnée
-  @input :
-  @output :
-   */
   loadEmployees(): void {
     this.http.get<Employee[]>('http://localhost:3000/api/employees').subscribe({
       next: (employees: Employee[]) => {
@@ -52,11 +42,7 @@ export class EmployeeListComponent implements OnInit {
       },
     });
   }
-  /*
-  filterEmployees() permet de filtrer les employés en fonction du type de filtre sélectionné
-  @input :
-  @output :
-   */
+
   filterEmployees(): void {
     const query = this.searchQuery.toLowerCase();
     this.filteredEmployees = this.employees.filter((employee) => {
@@ -73,11 +59,7 @@ export class EmployeeListComponent implements OnInit {
     });
     this.sortEmployees(this.sortColumn, false);
   }
-  /*
-  sortEmployees() permet de trier le tableau sur une colonne spécifique
-  @input : string column, boolean toggle
-  @output : number
-   */
+
   sortEmployees(column: string, toggle: boolean = true): void {
     if (!Object.keys(this.employees[0] ?? {}).includes(column)) return;
     const key = column as keyof Employee;
@@ -99,11 +81,7 @@ export class EmployeeListComponent implements OnInit {
       return 0;
     });
   }
-  /*
-  onDelete() permet d'afficher la demande de confirmation pour la suppression, appelle la fonction confirmDelete() si confirmé
-  @input : Employee employee = Objet employé qui va potentiellement être supprimé
-  @output :
-   */
+
   onDelete(employee: Employee): void {
     this.sweetMessageService
       .showAlert('Confirm Deletion', `Are you sure you want to delete ${employee.first_name} ${employee.last_name}?`, 'warning', true, 'Delete', 'Cancel')
@@ -114,11 +92,6 @@ export class EmployeeListComponent implements OnInit {
       });
   }
 
-  /*
-  confirmDelete() permet la suppression d'un employé
-  @input : number employeeId = id l'employé à supprimer
-  @output :
- */
   private confirmDelete(employeeId: number): void {
     this.saveQuery = this.searchQuery;
     this.http

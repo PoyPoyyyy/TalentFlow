@@ -11,11 +11,7 @@ import {EmployeeFormAddComponent} from '../employee-form-add/employee-form-add.c
 })
 export class EmployeePageComponent {
   @ViewChild(EmployeeListComponent) employeeList!: EmployeeListComponent;
-  /*
-   onEmployeeAdded() permet d'actualiser les employés quand un nouvel employé est ajouté.
-   @input :
-   @ output :
-   */
+
   onEmployeeAdded(): void {
     this.employeeList.loadEmployees();
   }
