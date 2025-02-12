@@ -23,6 +23,14 @@
   width: 100%;
 }
 
+/* Cette partie permet de modifier la direction des items de la flex box
+ * qui contient les champs de saisie du formulaire des skills */
+@media screen and (max-width: 600px) {
+  .skill-form .form-row {
+    flex-direction: column;
+  }
+}
+
 .skill-form .form-group {
   display: flex;
   flex-direction: column;

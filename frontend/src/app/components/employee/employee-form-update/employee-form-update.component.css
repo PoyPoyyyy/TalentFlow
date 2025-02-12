@@ -23,6 +23,14 @@
   width: 100%;
 }
 
+/* Cette partie permet de modifier la direction des items de la flex box
+ * qui contient les champs de saisie du formulaire des employees */
+@media screen and (max-width: 600px) {
+  .employee-form .form-row {
+    flex-direction: column;
+  }
+}
+
 .employee-form .form-group {
   display: flex;
   flex-direction: column;
