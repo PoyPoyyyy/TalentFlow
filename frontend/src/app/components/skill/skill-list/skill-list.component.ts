@@ -35,8 +35,9 @@ export class SkillListComponent implements OnInit {
 
   loadSkills(): void {
     this.http.get<any[]>('http://localhost:3000/api/skills')
-      .subscribe((skills: any[]) => {
-        this.skillsList = skills;
+      .subscribe((skill: any[]) => {
+        this.skill = skill;
+        this.skillsList = skill;
         this.filteredSkills = [...this.skillsList];
       });
   }
@@ -54,11 +55,11 @@ export class SkillListComponent implements OnInit {
     });
   }
 
-  onDelete(skills: Skill): void {
+  onDelete(skill: Skill): void {
     this.sweetMessageService
       .showAlert(
         'Confirm Deletion',
-        `Are you sure you want to delete ${skills.code} ${skills.description}?`,
+        `Are you sure you want to delete ${skill.code} ${skill.description}?`,
         'warning',
         true,
         'Delete',
@@ -66,7 +67,7 @@ export class SkillListComponent implements OnInit {
       )
       .then((result) => {
         if (result.isConfirmed) {
-          this.confirmDelete(skills.code);
+          this.confirmDelete(skill.code);
         }
       });
   }
@@ -74,7 +75,7 @@ export class SkillListComponent implements OnInit {
   private confirmDelete(skillCode: string): void {
     this.saveQuery = this.searchQuery;
     this.http
-      .delete(`http://localhost:3000/api/skill/${skillCode}`, {
+      .delete(`http://localhost:3000/api/skills/${skillCode}`, {
         responseType: 'text',
       })
       .subscribe({

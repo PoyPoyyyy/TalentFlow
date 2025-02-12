@@ -25,8 +25,11 @@ export class SkillFormUpdateComponent implements OnInit {
     private router: Router
   ) {
     this.skillForm = this.formBuilder.group({
-      code: [{ value: '', disabled: true }, Validators.required], // Désactivé pour empêcher la modification
-      description: ['', Validators.required]
+      code: '',
+      description: '',
+      /*
+      code: [{ value: '', disabled: false }, Validators.required], // Désactivé pour empêcher la modification
+      description: ['', Validators.required]*/
     });
     this.skillCode = this.route.snapshot.params['code'];
   }
@@ -36,16 +39,13 @@ export class SkillFormUpdateComponent implements OnInit {
   }
 
   loadSkillData(): void {
-    this.http.get(`http://localhost:3000/api/skill/${this.skillCode}`).subscribe((skill: any) => {
+    this.http.get(`http://localhost:3000/api/skills/${this.skillCode}`).subscribe((skill: any) => {
       this.skillForm.patchValue({
         code: skill.code,
         description: skill.description
       });
     });
   }
-
-
-   
 
   onSubmit(): void {
     const skillData = {
