@@ -25,11 +25,11 @@ export class SkillFormUpdateComponent implements OnInit {
     private router: Router
   ) {
     this.skillForm = this.formBuilder.group({
-      code: '',
-      description: '',
-      /*
-      code: [{ value: '', disabled: false }, Validators.required], // Désactivé pour empêcher la modification
-      description: ['', Validators.required]*/
+      /*code: '',
+      description: '',*/
+
+      code: [{ value: '', disabled: true }, Validators.required], // Désactivé pour empêcher la modification
+      description: ['', Validators.required]
     });
     this.skillCode = this.route.snapshot.params['code'];
   }
