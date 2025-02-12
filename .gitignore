@@ -128,3 +128,6 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# truc de webstorm je ne sais pas à quoi sert ce folder
+.idea
