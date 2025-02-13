@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {ActivatedRoute, Router, RouterLink, RouterLinkActive} from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { SweetMessageService } from '../../../services/sweet-message.service';
 import { catchError, throwError } from 'rxjs';
@@ -9,7 +9,9 @@ import { catchError, throwError } from 'rxjs';
   selector: 'app-skill-form-update',
   templateUrl: './skill-form-update.component.html',
   imports: [
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterLink,
+    RouterLinkActive
   ],
   styleUrls: ['./skill-form-update.component.css']
 })
