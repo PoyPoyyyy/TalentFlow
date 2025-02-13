@@ -22,6 +22,26 @@ router.get('/skills', async (req, res) => {
     }
 });
 
+router.post('/skills', async (req, res) => {
+    const { description } = req.body;
+    if (!description) {
+        return res.status(400).json({ message: 'Description ne peut être NULL' });
+    }
+
+    try {
+        const client = await pool.connect();
+        const result = await client.query(
+            'INSERT INTO SKILL (code, description) VALUES ($1, $2) RETURNING *',
+            ['TEMP-' + Math.random().toString(36).substr(2, 9), description]
+        );
+        client.release();
+        res.status(201).json(result.rows[0]);
+    } catch (err) {
+        console.error('Erreur à l\'ajout d\'un skill:', err);
+        res.status(500).send('Erreur serveur');
+    }
+});
+
 router.delete('/skills/:code', async (req, res) => {
     const skillCode = req.params.code;
 
@@ -95,7 +115,6 @@ router.get('/skills/:code', async (req, res) => {
         res.status(500).send('Erreur serveur');
     }
 });
-
 
 
 module.exports = router;
