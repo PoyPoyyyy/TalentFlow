@@ -101,7 +101,7 @@ router.put('/employees/:id', async (req, res) => {
 
     let parsedSkills;
     try {
-        parsedSkills = JSON.parse(skills); // Les skills arrivent sous forme de chaîne JSON
+        parsedSkills = JSON.parse(skills);
         if (!Array.isArray(parsedSkills)) throw new Error('Skills doit être un tableau');
     } catch (error) {
         return res.status(400).json({ message: 'Les compétences sont mal formatées.' });
@@ -109,13 +109,11 @@ router.put('/employees/:id', async (req, res) => {
 
     try {
         const client = await pool.connect();
-        // Mise à jour de l'employé sans la photo de profil
         await client.query(
             'UPDATE EMPLOYEE SET first_name = $1, last_name = $2, hire_date = $3 WHERE id = $4',
             [firstName, lastName, hireDate, id]
         );
 
-        // Mise à jour des compétences
         await client.query('DELETE FROM EMPLOYEE_SKILL WHERE employee_id = $1', [id]);
         for (const skill of parsedSkills) {
             await client.query(

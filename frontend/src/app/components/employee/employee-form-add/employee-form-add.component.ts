@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Skill } from '../../../models/employees.model';
-import { SweetMessageService } from '../../../services/sweet-message.service';  // Importer le service
+import { SweetMessageService } from '../../../services/sweet-message.service';
 
 @Component({
   selector: 'app-employee-form-add',
@@ -27,9 +27,6 @@ export class EmployeeFormAddComponent implements OnInit {
     });
   }
 
-  /*
-
-   */
   ngOnInit(): void {
     this.http.get<Skill[]>('http://localhost:3000/api/skills').subscribe((skills) => this.skills = skills);
   }
