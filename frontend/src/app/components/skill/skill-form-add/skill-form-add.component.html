@@ -1,0 +1,13 @@
+<form class="skill-form" [formGroup]="skillForm" (ngSubmit)="onSubmit()">
+  <div class="form-row">
+    <div class="form-group">
+      <label for="description">Description</label>
+      <input id="description" type="text" formControlName="description" class="form-control" />
+    </div>
+  </div>
+  <button type="submit" class="submit-button">Add skill</button>
+
+  @if (isSubmitting) {
+    <div class="skill-added">New skill added</div>
+  }
+</form>
