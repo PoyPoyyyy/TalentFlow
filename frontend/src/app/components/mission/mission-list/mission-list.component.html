@@ -13,6 +13,7 @@
                 <th>Starting Date</th>
                 <th>Duration</th>
                 <th>Skills required</th>
+                <th>AssignedEmployees</th>
                 <th>Edit</th>
             </tr>
         </thead>
@@ -29,12 +30,24 @@
                 <td class="mission-skills">
                     <div id="mission-skills-container">
                         @for (skillInfos of mission.skills; track skillInfos.code) {
-                            <div id="container-skills">
-                                <span id="skill-code">
+                            <div class="container-skills">
+                                <span class="skill-code">
                                     {{ skillInfos.code }}
                                 </span>
-                                <span id="quantity">
+                                <span class="quantity">
                                     x{{ skillInfos.quantity }}
+                                </span>
+                            </div>
+                        }
+                    </div>
+                    
+                </td>
+                <td class="mission-employees">
+                    <div id="mission-employees-container">
+                        @for (employee of mission.employees; track employee.id) {
+                            <div class="container-employee">
+                                <span class="first-name">
+                                    {{ employee.first_name }}
                                 </span>
                             </div>
                         }
@@ -43,14 +56,14 @@
                 </td>
                 <td class="mission-edit">
                     <div>
-                        <button id="update" type="button" [routerLink]="['/mission/edit', mission.id]">Update</button>
+                        <button id="update" type="button" (click)="onUpdate(mission)" [routerLink]="['/mission/edit', mission.id]">Update</button>
                         <button id="delete" type="button" (click)="onDelete(mission)">Delete</button>
                     </div>
                 </td>
             </tr>
             } @empty {
                 <tr>
-                    <td id="empty" colspan="7">
+                    <td id="empty" colspan="8">
                         No mission match your search.
                     </td>
                 </tr>

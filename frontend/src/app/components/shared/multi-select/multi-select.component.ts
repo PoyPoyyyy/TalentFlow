@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Skill } from '../../../models/employees.model';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -11,6 +11,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class MultiSelectComponent {
 
+  @Input() initializedSkills: {skill: Skill, quantity: number}[] = [];
   @Output() selectedSkillsChange = new EventEmitter<{skill: Skill, quantity: number}[]>();
   searchQuery: string = '';
 
@@ -26,9 +27,8 @@ export class MultiSelectComponent {
 
   ngOnInit(): void {
       this.loadSkills();
+      this.initializeSelectedSkills();
   }
-
-  
 
   loadSkills() {
     this.http.get<Skill[]>('http://localhost:3000/api/skills')
@@ -117,6 +117,12 @@ export class MultiSelectComponent {
 
   }
 
-  
+  initializeSelectedSkills() {
+    if (this.initializedSkills && this.initializedSkills.length > 0) {
+      this.selectedSkills = [...this.initializedSkills];
+    }
+    
+
+  }
 
 }

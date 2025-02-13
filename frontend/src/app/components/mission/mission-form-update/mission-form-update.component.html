@@ -1,1 +1,34 @@
-<p>mission-form-update works!</p>
+@if (mission) {
+
+    <h2>Update Mission</h2>
+    <form (ngSubmit)="onSubmit()" [formGroup]="missionForm">
+        <label>Name:</label>
+        <input type="text" formControlName="name">
+
+        <label>Description:</label>
+        <textarea formControlName="description"></textarea>
+
+        <label>Start date:</label>
+        <input type="date" formControlName="start_date">
+
+        <label>Duration:</label>
+        <input type="number" formControlName="duration">
+
+        <label>Status:</label>
+        <select formControlName="status">
+            <option value="preparation">Preparation</option>
+            <option value="planned">Planned</option>
+            <option value="ongoing">Ongoing</option>
+            <option value="completed">Completed</option>
+        </select>
+
+        <label>Skills:</label>
+        <app-multi-select [initializedSkills]="this.skills" (selectedSkillsChange)="onSkillsChange($event)"></app-multi-select>
+
+        <label>Employees:</label>
+        <input type="number" formControlName="employees">
+
+        <button type="submit">Save Changes</button>
+    </form>
+
+}

@@ -38,10 +38,9 @@ export class MissionFormAddComponent implements OnInit {
   }
 
   onSubmit(): void {
-    const missionData = this.missionForm.value;
-    console.log(missionData);
-
-  this.http.post<Mission>('http://localhost:3000/api/missions', missionData)
+    if (this.skills.length != 0) {
+      const missionData = this.missionForm.value;
+      this.http.post<Mission>('http://localhost:3000/api/missions', missionData)
     .subscribe({
       next: (response: Mission) => {
         this.missionForm.reset();
@@ -52,6 +51,13 @@ export class MissionFormAddComponent implements OnInit {
         alert('Une erreur s\'est produite lors de l\'ajout de la mission.');
       }
     });
+    
+
+    } else {
+      alert("Remplissez le champ 'skills', vous pourrez le modifier plus tard.");
+    }
+
+  
   }
 
   

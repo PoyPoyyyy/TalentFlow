@@ -20,4 +20,5 @@ export interface Mission {
   duration: number;
   status: string;
   skills: {code: number, description: string, quantity: number}[];
+  employees: Employee[];
 }

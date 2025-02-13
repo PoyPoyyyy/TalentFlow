@@ -17,6 +17,8 @@ export class MissionListComponent implements OnInit {
   missionsList: Mission[] = [];
   missionsSelected: Mission[] = [];
   @Output() missionDeleted = new EventEmitter<void>();
+  @Output() missionUpdated = new EventEmitter<Mission>();
+
 
   constructor(private http: HttpClient) {}
 
@@ -26,12 +28,25 @@ export class MissionListComponent implements OnInit {
 
   loadMissions(): void {
     
-      this.http.get<Mission[]>('http://localhost:3000/api/missions')
-        .subscribe((missions: Mission[]) => {
-          this.missionsList = missions;
-          this.missionsSelected = [...this.missionsList];
-          console.table(this.missionsList);
-        });
+    this.http.get<Mission[]>('http://localhost:3000/api/missions')
+  .subscribe((missions: Mission[]) => {
+    this.missionsList = missions.map(mission => {
+      if (!mission.employees) {
+        mission.employees = [];
+      } else {
+        mission.employees = mission.employees.filter(employee => employee.first_name != null);
+
+      }
+      return mission;
+    });
+
+    this.missionsSelected = [...this.missionsList];
+  });
+
+        
+
+
+      
   }
     
   onDelete(mission: Mission): void {
@@ -55,11 +70,14 @@ export class MissionListComponent implements OnInit {
       mission.duration.toString().includes(query) ||
       mission.status.toLowerCase().includes(query)
     );
+
+
+    console.table(this.missionsList);
   }
 
 
-  onUpdate(): void {
-
+  onUpdate(mission: Mission): void {
+    this.missionUpdated.emit(mission);
   }
 
 }
