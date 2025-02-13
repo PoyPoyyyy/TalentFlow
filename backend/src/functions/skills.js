@@ -13,7 +13,7 @@ const pool = new Pool({
 router.get('/skills', async (req, res) => {
     try {
         const client = await pool.connect();
-        const result = await client.query('SELECT * FROM SKILL');
+        const result = await client.query('SELECT * FROM SKILL ORDER BY code');
         client.release();
         res.json(result.rows);
     } catch (err) {
@@ -23,24 +23,48 @@ router.get('/skills', async (req, res) => {
 });
 
 router.post('/skills', async (req, res) => {
-    const { description } = req.body;
-    if (!description) {
-        return res.status(400).json({ message: 'Description ne peut être NULL' });
+    const { category, description } = req.body;
+
+    if (!category || !description) {
+        return res.status(400).json({ message: "Catégorie et description requises." });
     }
 
     try {
         const client = await pool.connect();
+
+        // Trouver le premier numéro disponible dans la catégorie choisie
         const result = await client.query(
-            'INSERT INTO SKILL (code, description) VALUES ($1, $2) RETURNING *',
-            ['TEMP-' + Math.random().toString(36).substr(2, 9), description]
+            `SELECT code FROM SKILL WHERE code LIKE $1 ORDER BY code`,
+            [`${category}.%`]
         );
+
+        let nextNumber = 1;
+        const existingCodes = result.rows.map(row => parseInt(row.code.split('.')[1])).sort((a, b) => a - b);
+
+        for (const num of existingCodes) {
+            if (num === nextNumber) {
+                nextNumber++;
+            } else {
+                break;
+            }
+        }
+
+        const newCode = `${category}.${nextNumber}`;
+
+        // Insérer le nouveau skill
+        const insertResult = await client.query(
+            'INSERT INTO SKILL (code, description) VALUES ($1, $2) RETURNING *',
+            [newCode, description]
+        );
+
         client.release();
-        res.status(201).json(result.rows[0]);
+        res.status(201).json({ message: "Skill ajouté avec succès.", skill: insertResult.rows[0] });
     } catch (err) {
-        console.error('Erreur à l\'ajout d\'un skill:', err);
-        res.status(500).send('Erreur serveur');
+        console.error("Erreur lors de l’ajout du skill :", err);
+        res.status(500).json({ message: "Erreur serveur." });
     }
 });
+
 
 router.delete('/skills/:code', async (req, res) => {
     const skillCode = req.params.code;
@@ -67,7 +91,7 @@ router.delete('/skills/:code', async (req, res) => {
     }
 });
 
-//à vérifier
+
 router.put('/skills/:code', async (req, res) => {
     const { code } = req.params;
     const { description } = req.body;
