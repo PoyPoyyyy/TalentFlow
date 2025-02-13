@@ -23,6 +23,8 @@ export class SkillListComponent implements OnInit {
   skillsList: any[] = [];
   filteredSkills: any[] = [];
   filterType: string = 'all';
+  sortColumn: string = 'last_name';
+  sortDirection: number = 1;
 
   constructor(
     private http: HttpClient,
@@ -55,6 +57,29 @@ export class SkillListComponent implements OnInit {
     });
   }
 
+  sortSkills(column: string, toggle: boolean = true): void {
+    if (!Object.keys(this.skill[0] ?? {}).includes(column)) return;
+    const key = column as keyof Skill;
+
+    if (toggle) {
+      this.sortDirection = this.sortColumn === key ? -this.sortDirection : 1;
+    }
+    this.sortColumn = key;
+
+    this.filteredSkills.sort((a, b) => {
+      let valueA = a[key] as string | number;
+      let valueB = b[key] as string | number;
+
+      if (typeof valueA === 'string') valueA = valueA.toLowerCase();
+      if (typeof valueB === 'string') valueB = valueB.toLowerCase();
+
+      if (valueA < valueB) return -1 * this.sortDirection;
+      if (valueA > valueB) return 1 * this.sortDirection;
+      return 0;
+    });
+  }
+
+
   onDelete(skill: Skill): void {
     this.sweetMessageService
       .showAlert(
@@ -83,7 +108,7 @@ export class SkillListComponent implements OnInit {
           this.sweetMessageService.showToast('Skill deleted successfully.', 'success');
           this.loadSkills();
           this.searchQuery = this.saveQuery;
-          this.filterSkills();
+          this.loadSkills();
         },
         error: (error) => {
           console.error('Error deleting skill:', error);
