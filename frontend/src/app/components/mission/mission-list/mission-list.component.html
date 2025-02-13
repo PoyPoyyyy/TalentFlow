@@ -44,13 +44,19 @@
                 </td>
                 <td class="mission-employees">
                     <div id="mission-employees-container">
-                        @for (employee of mission.employees; track employee.id) {
+                    
+                        @for (employee of mission.employees; track employee.first_name) {
                             <div class="container-employee">
                                 <span class="first-name">
                                     {{ employee.first_name }}
                                 </span>
+                                <span class="last-name">
+                                    {{ employee.last_name }}
+                                </span>
                             </div>
                         }
+                    
+                        
                     </div>
                     
                 </td>

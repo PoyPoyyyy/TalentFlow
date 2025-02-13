@@ -37,17 +37,64 @@ export class MissionListComponent implements OnInit {
         mission.employees = mission.employees.filter(employee => employee.first_name != null);
 
       }
+
+      if (mission.start_date) {
+        const missionDate = new Date(mission.start_date);
+        const today = new Date();
+        if (missionDate < today && mission.status !== 'ongoing') {
+          // Si la mission est passée et que son statut n'est pas encore 'ongoing', on le met à jour
+          mission.status = 'ongoing';
+
+          // Mettre à jour le statut de la mission dans la base de données
+          this.updateMissionStatus(mission);
+        }
+
+        /*const endDate = new Date(missionDate); // Crée une nouvelle date basée sur la date de début
+        endDate.setUTCDate(missionDate.getUTCDate() + mission.duration); // Ajoute la durée à la date de début en UTC
+        
+        // Vérifier si la date de fin dépasse aujourd'hui
+        if (endDate > today) {
+          mission.status = 'completed'; // Mettre à jour le statut si la mission est terminée
+          this.updateMissionStatus(mission);
+        }*/
+      }
+
+
       return mission;
     });
 
     this.missionsSelected = [...this.missionsList];
   });
-
         
 
 
       
   }
+
+  updateMissionStatus(mission: Mission): void {
+    
+    const updatedMission = { name: mission.name, 
+                            description: mission.description,
+                            start_date: mission.start_date, 
+                            duration: mission.duration, 
+                            status: mission.status, 
+                            skills: mission.skills, 
+                            employees: mission.employees
+     };
+
+     console.table(updatedMission);
+
+    this.http.put(`http://localhost:3000/api/missions/${mission.id}`, updatedMission)
+      .subscribe({
+        next: () => {
+          console.log(`Mission ${mission.id} mise à jour avec succès`);
+        },
+        error: (error) => {
+          console.error('Erreur lors de la mise à jour du statut de la mission:', error);
+        }
+      });
+  }
+
     
   onDelete(mission: Mission): void {
     this.http.delete(`http://localhost:3000/api/missions/${mission.id}`, { responseType: 'text' }).subscribe({

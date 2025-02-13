@@ -26,7 +26,13 @@
         <app-multi-select [initializedSkills]="this.skills" (selectedSkillsChange)="onSkillsChange($event)"></app-multi-select>
 
         <label>Employees:</label>
-        <input type="number" formControlName="employees">
+        <div class="container-employees">
+            @for (employee of employees; track employee.id) {
+                <input type="checkbox" [value]="employee.id" [checked]="this.selectedEmployeesId.includes(employee.id)" (change)="toggleEmployeeSelection(employee.id, $event)">
+                    {{ employee.first_name }} {{ employee.last_name }}
+            }
+        </div>
+            
 
         <button type="submit">Save Changes</button>
     </form>
