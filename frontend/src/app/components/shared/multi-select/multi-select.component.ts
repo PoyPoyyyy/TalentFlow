@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Skill } from '../../../models/employees.model';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -11,13 +11,15 @@ import { HttpClient } from '@angular/common/http';
 })
 export class MultiSelectComponent {
 
-  @Output() selectedSkillsChange = new EventEmitter<Skill[]>();
+  @Input() initializedSkills: {skill: Skill, quantity: number}[] = [];
+  @Output() selectedSkillsChange = new EventEmitter<{skill: Skill, quantity: number}[]>();
   searchQuery: string = '';
 
   skillsList: Skill[] = [];
 
-  filteredSkills: Skill[] = [];                
-  selectedSkills: Skill[] = [];
+  filteredSkills: Skill[] = [];
+  selectedSkills: {skill: Skill, quantity: number}[] = [];
+
   dropDownOpen: boolean = false;
   allSelected: boolean = false;
 
@@ -25,9 +27,8 @@ export class MultiSelectComponent {
 
   ngOnInit(): void {
       this.loadSkills();
+      this.initializeSelectedSkills();
   }
-
-  
 
   loadSkills() {
     this.http.get<Skill[]>('http://localhost:3000/api/skills')
@@ -51,7 +52,7 @@ export class MultiSelectComponent {
   }
 
   isSkillSelected(skill: Skill): boolean {
-    return this.selectedSkills.some(s => s.code === skill.code);
+    return this.selectedSkills.some(s => s.skill.code === skill.code);
   }
 
   
@@ -61,10 +62,10 @@ export class MultiSelectComponent {
     const isChecked = (event.target as HTMLInputElement).checked;
 
     if (isChecked) {
-      this.selectedSkills.push(skill);
+      this.selectedSkills.push({skill: skill, quantity: 1});
       
     } else {
-      this.selectedSkills = this.selectedSkills.filter(s => s.code !== skill.code);
+      this.selectedSkills = this.selectedSkills.filter(s => s.skill.code !== skill.code);
     }
 
     this.selectedSkillsChange.emit(this.selectedSkills); 
@@ -77,7 +78,11 @@ export class MultiSelectComponent {
     this.allSelected = isChecked;
 
     if (isChecked) {
-      this.selectedSkills.push(...this.skillsList.filter(skill => !this.selectedSkills.includes(skill)));
+      this.selectedSkills.push(
+        ...this.skillsList
+          .filter(skill => !this.selectedSkills.some(s => s.skill.code === skill.code))
+          .map(skill => ({ skill, quantity: 1 }))
+      );
     } else {
       this.selectedSkills = [];
     }
@@ -88,6 +93,36 @@ export class MultiSelectComponent {
     this.allSelected = this.selectedSkills.length === this.skillsList.length;
   }
 
+
+  getSkillQuantity(skill: Skill): number {
+    return this.selectedSkills.find(s => s.skill.code === skill.code)?.quantity || 0;
+  }
+
+  toggleSkillSelectionQuantity(skill: Skill, event: Event) {
+
+    const value = (event.target as HTMLInputElement).valueAsNumber;
   
+    if (value >= 1) {
+      if (!this.isSkillSelected(skill)) {
+        this.selectedSkills.push({skill: skill, quantity:  1});
+      } else {
+        this.selectedSkills.find(s => s.skill.code === skill.code)!.quantity = value;
+      }
+    } else {
+      this.selectedSkills = this.selectedSkills.filter(s => s.skill.code !== skill.code);
+    }
+
+    this.selectedSkillsChange.emit(this.selectedSkills);
+    this.updateSelectAllCheckbox();
+
+  }
+
+  initializeSelectedSkills() {
+    if (this.initializedSkills && this.initializedSkills.length > 0) {
+      this.selectedSkills = [...this.initializedSkills];
+    }
+    
+
+  }
 
 }

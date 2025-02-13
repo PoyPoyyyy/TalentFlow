@@ -1,3 +1,4 @@
+
 * {
     box-sizing: border-box;
     color: #454545;
@@ -95,15 +96,25 @@
     border: 1.25px solid rgb(25, 25, 25);
 }
 
-.container-skill, .filters {
+.filters {
     display: flex;
     transition: background-color 0.2s;
-    padding: 10px;
     border-radius: 4px;
+    padding: 10px;
+}
+
+.left {
+    display: flex;
+    transition: background-color 0.2s;
+    border-radius: 4px;
+    gap: 5px;
 }
 
 .container-skill {
-    gap: 5px;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    justify-content: space-between;
 }
 
 .container-skill:hover {

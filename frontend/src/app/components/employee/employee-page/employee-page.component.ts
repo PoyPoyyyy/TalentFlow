@@ -11,6 +11,7 @@ import {EmployeeFormAddComponent} from '../employee-form-add/employee-form-add.c
 })
 export class EmployeePageComponent {
   @ViewChild(EmployeeListComponent) employeeList!: EmployeeListComponent;
+
   onEmployeeAdded(): void {
     this.employeeList.loadEmployees();
   }

@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Skill } from '../../../models/employees.model';
-import { SweetMessageService } from '../../../services/sweet-message.service';  // Importer le service
+import { SweetMessageService } from '../../../services/sweet-message.service';
 
 @Component({
   selector: 'app-employee-form-add',
