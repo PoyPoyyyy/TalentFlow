@@ -1,40 +1,75 @@
 @if (mission) {
 
-    <h2>Update Mission</h2>
-    <form (ngSubmit)="onSubmit()" [formGroup]="missionForm">
-        <label>Name:</label>
-        <input type="text" formControlName="name">
+    <form id="form" (ngSubmit)="onSubmit()" [formGroup]="missionForm">
+        <div class="inputs">
+            
+            <div class="container-input">
+                <label>Name</label>
+                <input type="text" formControlName="name">
+            </div>
+            <div class="container-input">
+                <label>Description</label>
+                <input formControlName="description">
+            </div>
+            <div class="container-input">
+                <label>Start date</label>
+                <input type="date" formControlName="start_date">
+            </div>
+            <div class="container-input">
+                <label>Duration</label>
+                <input type="number" formControlName="duration">
+            </div>
+            <div class="container-input">
+                <label>Status</label>
+                <select formControlName="status">
+                    <option value="preparation">Preparation</option>
+                    <option value="planned">Planned</option>
+                    <option value="ongoing">Ongoing</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </div>
+        </div>
 
-        <label>Description:</label>
-        <textarea formControlName="description"></textarea>
-
-        <label>Start date:</label>
-        <input type="date" formControlName="start_date">
-
-        <label>Duration:</label>
-        <input type="number" formControlName="duration">
-
-        <label>Status:</label>
-        <select formControlName="status">
-            <option value="preparation">Preparation</option>
-            <option value="planned">Planned</option>
-            <option value="ongoing">Ongoing</option>
-            <option value="completed">Completed</option>
-        </select>
-
-        <label>Skills:</label>
+        <label>Skills required :</label>
         <app-multi-select [initializedSkills]="this.skills" (selectedSkillsChange)="onSkillsChange($event)"></app-multi-select>
 
-        <label>Employees:</label>
+        <ul>
+            @for (skill of skills; track skill.skill.code) {
+                <li><strong>{{skill.skill.code}}</strong> : {{skill.skill.description}}
+                    <span [ngClass]="getSkillClass(skill)"> x {{ skill.quantity }}</span>
+                    <span> ({{ skillsAllocation[skill.skill.code] || 0 }})</span>
+                </li>
+            }
+        </ul>
+        
+
+        <label>Employees available :</label>
         <div class="container-employees">
-            @for (employee of employees; track employee.id) {
-                <input type="checkbox" [value]="employee.id" [checked]="this.selectedEmployeesId.includes(employee.id)" (change)="toggleEmployeeSelection(employee.id, $event)">
-                    {{ employee.first_name }} {{ employee.last_name }}
+            @for (employee of filteredEmployees; track employee.id) {
+                <div class="checkbox-employee">
+
+                
+                <input 
+                    class="checkbox" 
+                    type="checkbox" 
+                    [id]="'checkbox-' + employee.id" 
+                    [value]="employee.id" 
+                    [checked]="selectedEmployeesId.includes(employee.id)"
+                    (change)="toggleEmployeeSelection(employee.id, $event)"
+                >
+                <label [for]="'checkbox-' + employee.id">
+                    {{ employee.first_name }} {{ employee.last_name }} : 
+                    @for (skill of employee.skills; track skill.code) {
+                        <span>{{ skill.code }} </span>
+                    }
+                </label>
+                </div>
             }
         </div>
+        
             
 
-        <button type="submit">Save Changes</button>
+        <button id="submit-button" type="submit">Save Changes</button>
     </form>
 
 }

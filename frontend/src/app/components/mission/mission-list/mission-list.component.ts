@@ -42,21 +42,26 @@ export class MissionListComponent implements OnInit {
         const missionDate = new Date(mission.start_date);
         const today = new Date();
         if (missionDate < today && mission.status !== 'ongoing') {
-          // Si la mission est passée et que son statut n'est pas encore 'ongoing', on le met à jour
           mission.status = 'ongoing';
 
-          // Mettre à jour le statut de la mission dans la base de données
           this.updateMissionStatus(mission);
         }
 
-        /*const endDate = new Date(missionDate); // Crée une nouvelle date basée sur la date de début
-        endDate.setUTCDate(missionDate.getUTCDate() + mission.duration); // Ajoute la durée à la date de début en UTC
-        
-        // Vérifier si la date de fin dépasse aujourd'hui
-        if (endDate > today) {
-          mission.status = 'completed'; // Mettre à jour le statut si la mission est terminée
+        if (mission.employees.length > 0 && mission.status === 'preparation') {
+          mission.status = 'planned';
+
+          
           this.updateMissionStatus(mission);
-        }*/
+        }
+
+        const endDate = new Date(missionDate); 
+        endDate.setUTCDate(missionDate.getUTCDate() + mission.duration); 
+        
+       
+        if (endDate < today && mission.status!== 'completed') {
+          mission.status = 'completed';
+          this.updateMissionStatus(mission);
+        }
       }
 
 
@@ -82,7 +87,6 @@ export class MissionListComponent implements OnInit {
                             employees: mission.employees
      };
 
-     console.table(updatedMission);
 
     this.http.put(`http://localhost:3000/api/missions/${mission.id}`, updatedMission)
       .subscribe({
@@ -119,7 +123,6 @@ export class MissionListComponent implements OnInit {
     );
 
 
-    console.table(this.missionsList);
   }
 
 

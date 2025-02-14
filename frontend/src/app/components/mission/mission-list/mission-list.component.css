@@ -99,6 +99,23 @@
     font-size: 0.9rem;
 }
 
+.skill-code {
+    background: #c8e1e7;
+    padding: 5px 10px;
+    padding-right: 5px;
+    border-radius: 5px;
+}
+
+.quantity {
+    vertical-align: super;
+}
+
+.mission-skills-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 .preparation {
     background: rgba(255, 187, 77, 0.75);
 }

@@ -28,14 +28,14 @@
                 <td class="mission-start-date">{{ mission.start_date | date:'dd/MM/yyyy' }}</td>
                 <td class="mission-duration">{{ mission.duration }}</td>
                 <td class="mission-skills">
-                    <div id="mission-skills-container">
+                    <div class="mission-skills-container">
                         @for (skillInfos of mission.skills; track skillInfos.code) {
                             <div class="container-skills">
                                 <span class="skill-code">
                                     {{ skillInfos.code }}
                                 </span>
                                 <span class="quantity">
-                                    x{{ skillInfos.quantity }}
+                                    {{ skillInfos.quantity }}
                                 </span>
                             </div>
                         }
