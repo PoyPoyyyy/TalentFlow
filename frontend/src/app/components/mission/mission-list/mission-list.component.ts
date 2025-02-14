@@ -51,18 +51,51 @@ export class MissionListComponent implements OnInit {
 
   loadMissions(): void {
     this.http.get<Mission[]>('http://localhost:3000/api/missions')
-      .subscribe((missions: Mission[]) => {
-        this.missionsList = missions.map(mission => {
-          if (!mission.employees) {
-            mission.employees = [];
-          } else {
-            mission.employees = mission.employees.filter(employee => employee.first_name != null);
-          }
-          mission = this.checkAndUpdateMissionStatus(mission);
-          return mission;
-        });
-        this.missionsSelected = [...this.missionsList];
-      });
+  .subscribe((missions: Mission[]) => {
+    this.missionsList = missions.map(mission => {
+      if (!mission.employees) {
+        mission.employees = [];
+      } else {
+        mission.employees = mission.employees.filter(employee => employee.first_name != null);
+
+      }
+
+      if (mission.start_date) {
+        const missionDate = new Date(mission.start_date);
+        const today = new Date();
+        if (missionDate < today && mission.status !== 'ongoing') {
+          mission.status = 'ongoing';
+
+          this.updateMissionStatus(mission);
+        }
+
+        if (mission.employees.length > 0 && mission.status === 'preparation') {
+          mission.status = 'planned';
+
+          
+          this.updateMissionStatus(mission);
+        }
+
+        const endDate = new Date(missionDate); 
+        endDate.setUTCDate(missionDate.getUTCDate() + mission.duration); 
+        
+       
+        if (endDate < today && mission.status!== 'completed') {
+          mission.status = 'completed';
+          this.updateMissionStatus(mission);
+        }
+      }
+
+
+      return mission;
+    });
+
+    this.missionsSelected = [...this.missionsList];
+  });
+        
+
+
+      
   }
 
   updateMissionStatus(mission: Mission): void {
@@ -74,7 +107,8 @@ export class MissionListComponent implements OnInit {
                             skills: mission.skills,
                             employees: mission.employees
      };
-     console.table(updatedMission);
+
+
     this.http.put(`http://localhost:3000/api/missions/${mission.id}`, updatedMission)
       .subscribe({
         next: () => {
@@ -110,7 +144,6 @@ export class MissionListComponent implements OnInit {
     );
 
 
-    console.table(this.missionsList);
   }
 
   onUpdate(mission: Mission): void {

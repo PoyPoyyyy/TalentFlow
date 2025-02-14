@@ -141,23 +141,32 @@ router.put('/missions/:id', async (req, res) => {
             [name, description, start_date, duration, status, id]
         );
 
-        // Suppression des anciennes compétences et employés liés
-        await client.query('DELETE FROM MISSION_SKILL WHERE mission_id = $1', [id]);
-        await client.query('DELETE FROM MISSION_EMPLOYEE WHERE mission_id = $1', [id]);
+        // Vérification si des compétences et employés existent déjà pour cette mission
+        if (skills.length > 0) {
+            // Supprimer les anciennes compétences avant d'ajouter les nouvelles
+            await client.query('DELETE FROM MISSION_SKILL WHERE mission_id = $1', [id]);
 
-        // Ajout des nouvelles compétences
-        for (const skill of skills) {
-            await client.query(
-                'INSERT INTO MISSION_SKILL (mission_id, skill_code, quantity) VALUES ($1, $2, $3)',
-                [id, skill.skill.code, skill.quantity]
-            );
+
+            for (const skill of skills) {
+                const skillCode = skill.skill ? skill.skill.code : skill.code; // Gérer les deux formats possibles
+                await client.query(
+                    'INSERT INTO MISSION_SKILL (mission_id, skill_code, quantity) VALUES ($1, $2, $3)',
+                    [id, skillCode, skill.quantity]
+                );
+            }
         }
-        // Ajout des nouveaux employés
-        for (const employee of employees) {
-            await client.query(
-                'INSERT INTO MISSION_EMPLOYEE (mission_id, employee_id) VALUES ($1, $2)',
-                [id, employee.id]
-            );
+
+        if (employees.length > 0) {
+            // Supprimer les anciens employés avant d'ajouter les nouveaux
+            await client.query('DELETE FROM MISSION_EMPLOYEE WHERE mission_id = $1', [id]);
+
+            // Ajouter les nouveaux employés
+            for (const employee of employees) {
+                await client.query(
+                    'INSERT INTO MISSION_EMPLOYEE (mission_id, employee_id) VALUES ($1, $2)',
+                    [id, employee.id]
+                );
+            }
         }
 
         client.release();
@@ -168,6 +177,7 @@ router.put('/missions/:id', async (req, res) => {
         res.status(500).json({ message: 'Erreur serveur' });
     }
 });
+
 
 
 

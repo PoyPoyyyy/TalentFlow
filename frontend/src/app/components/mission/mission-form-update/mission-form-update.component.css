@@ -1,0 +1,116 @@
+.has-skill {
+    background: rgb(68, 230, 68);
+    padding: 5px;
+    border-radius: 5px;
+  }
+  
+.missing-skill {
+  background: rgb(241, 73, 73);
+  padding: 5px;
+  border-radius: 5px;
+}
+
+
+#form {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 40px;
+  background-color: rgb(245, 245, 245);
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border-radius: 10px;
+}
+
+.inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.inputs input, select {
+  height: 40px;
+  padding: 5px 10px;
+  padding-right: 0;
+  border: 1.25px solid #ddd;
+  border-radius: 4px;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.container-input {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.container-employees {
+  background: #f1f1f1;
+  padding: 10px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.checkbox-employee {
+  display: flex;
+  justify-content: start;
+  padding: 5px;
+  border-radius: 5px;
+  background: white;
+  gap: 10px;
+}
+
+.checkbox {
+  accent-color: black;
+}
+
+
+ul {
+  background: #f1f1f1;
+  padding: 10px;
+  border-radius: 10px;
+  padding-left: 25px;
+}
+
+ul li {
+  margin-bottom: 10px;
+}
+
+ul li:last-child {
+  margin-bottom: 0px;
+}
+
+
+
+
+
+
+
+
+
+
+#submit-button {
+    align-self: center;
+    border: 1.25px solid rgb(25, 25, 25);
+    border-radius: 4px;
+    background: rgb(245, 245, 245);
+    cursor: pointer;
+    transition: background-color 0.2s;
+    padding: 10px 20px;
+    font-size: 1rem;
+}
+
+#submit-button:hover {
+  background-color: #ddd;
+}
+
+#submit-button:disabled {
+  background-color: #f1f1f1;
+  cursor: not-allowed;
+  border: 1.25px solid #ddd;
+}
+
