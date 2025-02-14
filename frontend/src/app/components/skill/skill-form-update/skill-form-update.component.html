@@ -1,0 +1,19 @@
+<div class="container">
+  <form class="skill-form" [formGroup]="skillForm" (ngSubmit)="onSubmit()">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="code">Code</label>
+        <input id="code" type="text" formControlName="code" class="form-control" readonly />
+        <!--<input id="code" type="text" formControlName="code" class="form-control" />-->
+      </div>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <input id="description" type="text" formControlName="description" class="form-control" />
+      </div>
+    </div>
+    <div class="form-group button-group">
+      <button type="submit" class="submit-button">Update Skill</button>
+      <a class="cancel-button" routerLink="/skill-page" routerLinkActive="activebutton">Cancel</a>
+    </div>
+  </form>
+</div>

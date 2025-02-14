@@ -4,7 +4,7 @@
   padding: 20px;
 }
 
-.employee-form {
+.skill-form {
   max-width: 1200px;
   margin: 20px auto;
   padding: 40px;
@@ -17,33 +17,33 @@
   align-items: flex-start;
 }
 
-.employee-form .form-row {
+.skill-form .form-row {
   display: flex;
   gap: 20px;
   width: 100%;
 }
 
 /* Cette partie permet de modifier la direction des items de la flex box
- * qui contient les champs de saisie du formulaire des employees */
+ * qui contient les champs de saisie du formulaire des skills */
 @media screen and (max-width: 600px) {
-  .employee-form .form-row {
+  .skill-form .form-row {
     flex-direction: column;
   }
 }
 
-.employee-form .form-group {
+.skill-form .form-group {
   display: flex;
   flex-direction: column;
   gap: 5px;
   width: 100%;
 }
 
-.employee-form label {
+.skill-form label {
   font-size: 1rem;
   color: rgb(60, 60, 60);
 }
 
-.employee-form input.form-control {
+.skill-form input.form-control {
   height: 40px;
   padding: 5px 10px;
   border: 1.25px solid #ddd;
@@ -52,15 +52,15 @@
   transition: border 0.2s;
 }
 
-.employee-form input.form-control:hover {
+.skill-form input.form-control:hover {
   border: 1.25px solid #b5b5b5;
 }
 
-.employee-form input.form-control:focus {
+.skill-form input.form-control:focus {
   border: 1.25px solid rgb(25, 25, 25);
 }
 
-.employee-form .skill-list {
+.skill-form .skill-list {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
@@ -68,7 +68,7 @@
   justify-content: flex-start;
 }
 
-.employee-form .skill-item {
+.skill-form .skill-item {
   cursor: pointer;
   padding: 5px 10px;
   border-radius: 4px;
@@ -76,21 +76,21 @@
   transition: background-color 0.2s, border-color 0.2s;
 }
 
-.employee-form .skill-item:hover {
+.skill-form .skill-item:hover {
   background-color: #f0f0f0;
 }
 
-.employee-form .skill-item.selected {
+.skill-form .skill-item.selected {
   background-color: rgb(200, 220, 240);
   border-color: rgb(25, 25, 25);
 }
 
-.employee-form .button-group {
+.skill-form .button-group {
   display: flex;
   justify-content: center;
 }
 
-.employee-form .submit-button {
+.skill-form .submit-button {
   padding: 8px 20px;
   font-size: 1rem;
   border: 1.25px solid rgb(25, 25, 25);
@@ -101,17 +101,40 @@
   align-self: center;
 }
 
-.employee-form .submit-button:hover {
+.skill-form .submit-button:hover {
   background-color: #ddd;
 }
 
-.employee-form .submit-button:disabled {
+.skill-form .submit-button:disabled {
   background-color: #f1f1f1;
   cursor: not-allowed;
   border: 1.25px solid #ddd;
 }
 
-.employee-form .employee-added {
+.skill-form .cancel-button {
+  padding: 8px 20px;
+  font-size: 1rem;
+  border: 1.25px solid rgb(25, 25, 25);
+  background-color: rgb(245, 245, 245);
+  color: #191919;
+  cursor: pointer;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background-color 0.2s;
+  align-self: center;
+}
+
+.skill-form .cancel-button:hover {
+  background-color: rgb(230, 126, 126);
+}
+
+.skill-form .cancel-button:disabled {
+  background-color: #f1f1f1;
+  cursor: not-allowed;
+  border: 1.25px solid #ddd;
+}
+
+.skill-form .skill-added {
   padding: 10px;
   background-color: #d4edda;
   color: #155724;

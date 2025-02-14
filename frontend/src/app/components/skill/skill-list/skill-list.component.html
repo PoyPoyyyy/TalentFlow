@@ -8,12 +8,12 @@
       <option value="description">Description</option>
     </select>
   </div>
-
   <table class="skills-table">
     <thead>
     <tr>
-      <th>Code</th>
-      <th>Description</th>
+      <th  class="button-sort" (click)="sortSkills('code')">Code</th>
+      <th  class="button-sort" (click)="sortSkills('description')">Description</th>
+      <th>Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -21,6 +21,10 @@
         <tr>
           <td class="skill-code">{{ skill.code }}</td>
           <td class="skill-description">{{ skill.description }}</td>
+          <td class="actions-cell">
+            <button class="button-edit" [routerLink]="['/skill/edit', skill.code]">Edit</button>
+            <button class="button-delete" (click)="onDelete(skill)">Delete</button>
+          </td>
         </tr>
 
       } @empty {

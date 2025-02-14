@@ -1,1 +1,6 @@
-<app-skill-list></app-skill-list>
+<div class="skill-page">
+  <app-repliable-container title="Add Skill">
+    <app-skill-form-add (skillAdded)="onSkillAdded()"></app-skill-form-add>
+  </app-repliable-container>
+  <app-skill-list></app-skill-list>
+</div>
