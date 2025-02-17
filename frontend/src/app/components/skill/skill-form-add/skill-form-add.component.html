@@ -1,0 +1,26 @@
+<form class="skill-form" [formGroup]="skillForm" (ngSubmit)="onSubmit()">
+  <div class="form-row">
+    <div class="form-group">
+      <label>Catégorie</label>
+      <div class="category-buttons">
+        <button *ngFor="let category of categories"
+                [ngClass]="{'selected': skillForm.value.category === category}"
+                type="button"
+                (click)="selectCategory(category)">
+        {{ category }}
+        </button>
+      </div>
+    </div>
+    <input type="hidden" formControlName="category"> <!-- Garde la valeur du formulaire -->
+    <div class="form-group">
+      <label for="description">Description</label>
+      <input id="description" type="text" formControlName="description" class="form-control" />
+    </div>
+  </div>
+
+  <button type="submit" class="submit-button">Add skill</button>
+
+  @if (isSubmitting) {
+    <div class="skill-added">New skill added</div>
+  }
+</form>

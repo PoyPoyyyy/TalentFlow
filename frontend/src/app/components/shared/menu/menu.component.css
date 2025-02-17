@@ -37,14 +37,14 @@
   color: #fff;
 }
 
-@media (max-width: 600px) {
+@media screen and (max-width: 600px) {
   .menu-bar {
     flex-direction: column;
     align-items: flex-start;
   }
 
   .button {
-    width: 100%;
+    width: 90%;
     text-align: center;
   }
 }
