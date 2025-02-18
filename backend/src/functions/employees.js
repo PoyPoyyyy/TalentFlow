@@ -12,6 +12,11 @@ const pool = new Pool({
     port: 5432,
 });
 
+/*
+ * Récupère la liste complète des employés.
+ * @input : aucun
+ * @output : Observable<Employee[]> - La liste des employés sous forme d'un tableau d'objets Employee.
+ */
 router.get('/employees', async (req, res) => {
     try {
         const client = await pool.connect();
@@ -23,9 +28,9 @@ router.get('/employees', async (req, res) => {
                 e.hire_date,
                 encode(e.profile_picture, 'base64') AS profile_picture,
                 json_agg(json_build_object('code', s.code, 'description', s.description)) AS skills
-            FROM EMPLOYEE e, EMPLOYEE_SKILL es, SKILL s
-            WHERE e.id = es.employee_id
-              AND es.skill_code = s.code
+            FROM EMPLOYEE e
+                     LEFT JOIN EMPLOYEE_SKILL es ON e.id = es.employee_id
+                     LEFT JOIN SKILL s ON es.skill_code = s.code
             GROUP BY e.id
             ORDER BY e.last_name;
         `;
@@ -38,6 +43,11 @@ router.get('/employees', async (req, res) => {
     }
 });
 
+/*
+ * Ajoute un nouvel employé avec ses compétences et une photo de profil.
+ * @input : firstName, lastName, hireDate, skills (JSON array), profilePicture (fichier)
+ * @output : number - ID de l'employé créé.
+ */
 router.post('/employees', upload.single('profilePicture'), async (req, res) => {
     const { firstName, lastName, hireDate, skills } = req.body;
     const profilePicture = req.file ? req.file.buffer : null;
@@ -61,7 +71,6 @@ router.post('/employees', upload.single('profilePicture'), async (req, res) => {
             [firstName, lastName, hireDate, profilePicture]
         );
         const employeeId = result.rows[0].id;
-
         for (const skill of parsedSkills) {
             await client.query(
                 'INSERT INTO EMPLOYEE_SKILL (employee_id, skill_code) VALUES ($1, $2)',
@@ -77,6 +86,11 @@ router.post('/employees', upload.single('profilePicture'), async (req, res) => {
     }
 });
 
+/*
+ * Supprime un employé ainsi que ses compétences associées.
+ * @input : number - ID de l'employé.
+ * @output : string - Message de confirmation.
+ */
 router.delete('/employees/:id', async (req, res) => {
     const employeeId = req.params.id;
     try {
@@ -91,7 +105,11 @@ router.delete('/employees/:id', async (req, res) => {
     }
 });
 
-
+/*
+ * Met à jour les informations d'un employé ainsi que ses compétences.
+ * @input : number - ID de l'employé, firstName, lastName, hireDate, skills (JSON array).
+ * @output : string - Message de confirmation.
+ */
 router.put('/employees/:id', async (req, res) => {
     const { id } = req.params;
     const { firstName, lastName, hireDate, skills } = req.body;
@@ -114,7 +132,6 @@ router.put('/employees/:id', async (req, res) => {
             'UPDATE EMPLOYEE SET first_name = $1, last_name = $2, hire_date = $3 WHERE id = $4',
             [firstName, lastName, hireDate, id]
         );
-
         await client.query('DELETE FROM EMPLOYEE_SKILL WHERE employee_id = $1', [id]);
         for (const skill of parsedSkills) {
             await client.query(
@@ -125,42 +142,41 @@ router.put('/employees/:id', async (req, res) => {
 
         client.release();
         res.status(200).json({ message: 'Employé mis à jour avec succès' });
-
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Erreur serveur' });
     }
 });
 
+/*
+ * Récupère les informations d'un employé spécifique avec ses compétences.
+ * @input : number - ID de l'employé.
+ * @output : Employee - Informations de l'employé (nom, prénom, date d'embauche, compétences).
+ */
 router.get('/employees/:id', async (req, res) => {
     const employeeId = req.params.id;
     try {
         const client = await pool.connect();
         const query = `
-      SELECT
-        e.id,
-        e.first_name,
-        e.last_name,
-        e.hire_date,
-        json_agg(json_build_object('code', s.code, 'description', s.description)) AS skills
-      FROM EMPLOYEE e
-      LEFT JOIN EMPLOYEE_SKILL es ON e.id = es.employee_id
-      LEFT JOIN SKILL s ON es.skill_code = s.code
-      WHERE e.id = $1
-      GROUP BY e.id
-    `;
+            SELECT
+                e.id,
+                e.first_name,
+                e.last_name,
+                e.hire_date,
+                json_agg(json_build_object('code', s.code, 'description', s.description)) AS skills
+            FROM EMPLOYEE e
+                     LEFT JOIN EMPLOYEE_SKILL es ON e.id = es.employee_id
+                     LEFT JOIN SKILL s ON es.skill_code = s.code
+            WHERE e.id = $1
+            GROUP BY e.id;
+        `;
         const result = await client.query(query, [employeeId]);
         client.release();
-        if (result.rows.length > 0) {
-            res.json(result.rows[0]);
-        } else {
-            res.status(404).send('Employé non trouvé');
-        }
+        res.json(result.rows.length > 0 ? result.rows[0] : { message: 'Employé non trouvé' });
     } catch (err) {
         console.error(err);
         res.status(500).send('Erreur serveur');
     }
 });
-
 
 module.exports = router;
