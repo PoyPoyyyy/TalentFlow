@@ -3,12 +3,13 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Skill } from '../../../models/employees.model';
 import { SweetMessageService } from '../../../services/sweet-message.service';
+import { EmployeeService } from '../../../services/employee/employee.service';
 
 @Component({
   selector: 'app-employee-form-add',
-  imports: [ReactiveFormsModule],
   templateUrl: './employee-form-add.component.html',
-  styleUrls: ['./employee-form-add.component.css']
+  styleUrls: ['./employee-form-add.component.css'],
+  imports: [ReactiveFormsModule]
 })
 export class EmployeeFormAddComponent implements OnInit {
   employeeForm: FormGroup;
@@ -18,7 +19,12 @@ export class EmployeeFormAddComponent implements OnInit {
   @Output() employeeAdded = new EventEmitter<unknown>();
   selectedFileName = '';
 
-  constructor(private formBuilder: FormBuilder, private http: HttpClient, private sweetMessageService: SweetMessageService) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private http: HttpClient,
+    private employeeService: EmployeeService,
+    private sweetMessageService: SweetMessageService
+  ) {
     this.employeeForm = this.formBuilder.group({
       firstName: '',
       lastName: '',
@@ -28,7 +34,8 @@ export class EmployeeFormAddComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.http.get<Skill[]>('http://localhost:3000/api/skills').subscribe((skills) => this.skills = skills);
+    this.http.get<Skill[]>('http://localhost:3000/api/skills')
+      .subscribe((skills) => this.skills = skills);
   }
 
   onFileSelected(event: any): void {
@@ -56,11 +63,10 @@ export class EmployeeFormAddComponent implements OnInit {
     if (profilePicture) {
       formData.append('profilePicture', profilePicture, profilePicture.name);
     }
-
     formData.append('skills', JSON.stringify(this.selectedSkills));
 
-    this.http.post('http://localhost:3000/api/employees', formData).subscribe({
-      next: (response) => {
+    this.employeeService.addEmployee(formData).subscribe({
+      next: () => {
         this.employeeForm.reset();
         this.selectedFileName = '';
         this.selectedSkills = [];

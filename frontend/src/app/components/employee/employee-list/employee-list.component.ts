@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Employee } from '../../../models/employees.model';
 import { SweetMessageService } from '../../../services/sweet-message.service';
+import { EmployeeService } from '../../../services/employee/employee.service';
 import { RouterLink } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -22,7 +22,7 @@ export class EmployeeListComponent implements OnInit {
   sortDirection: number = 1;
 
   constructor(
-    private http: HttpClient,
+    private employeeService: EmployeeService,
     private sweetMessageService: SweetMessageService
   ) {}
 
@@ -31,7 +31,7 @@ export class EmployeeListComponent implements OnInit {
   }
 
   loadEmployees(): void {
-    this.http.get<Employee[]>('http://localhost:3000/api/employees').subscribe({
+    this.employeeService.getEmployees().subscribe({
       next: (employees: Employee[]) => {
         this.employees = employees;
         this.filteredEmployees = [...this.employees];
@@ -84,7 +84,14 @@ export class EmployeeListComponent implements OnInit {
 
   onDelete(employee: Employee): void {
     this.sweetMessageService
-      .showAlert('Confirm Deletion', `Are you sure you want to delete ${employee.first_name} ${employee.last_name}?`, 'warning', true, 'Delete', 'Cancel')
+      .showAlert(
+        'Confirm Deletion',
+        `Are you sure you want to delete ${employee.first_name} ${employee.last_name}?`,
+        'warning',
+        true,
+        'Delete',
+        'Cancel'
+      )
       .then((result) => {
         if (result.isConfirmed) {
           this.confirmDelete(employee.id);
@@ -92,23 +99,19 @@ export class EmployeeListComponent implements OnInit {
       });
   }
 
-  private confirmDelete(employeeId: number): void {
+  confirmDelete(employeeId: number): void {
     this.saveQuery = this.searchQuery;
-    this.http
-      .delete(`http://localhost:3000/api/employees/${employeeId}`, {
-        responseType: 'text',
-      })
-      .subscribe({
-        next: () => {
-          this.sweetMessageService.showToast('Employee deleted successfully.', 'success');
-          this.loadEmployees();
-          this.searchQuery = this.saveQuery;
-          this.filterEmployees();
-        },
-        error: (error) => {
-          console.error('Error deleting employee:', error);
-          this.sweetMessageService.showToast('An error occurred while deleting the employee.', 'error');
-        },
-      });
+    this.employeeService.deleteEmployee(employeeId).subscribe({
+      next: (response) => {
+        this.sweetMessageService.showToast('Employee deleted successfully.', 'success');
+        this.loadEmployees();
+        this.searchQuery = this.saveQuery;
+        this.filterEmployees();
+      },
+      error: (error) => {
+        console.error('Error deleting employee:', error);
+        this.sweetMessageService.showToast('An error occurred while deleting the employee.', 'error');
+      },
+    });
   }
 }

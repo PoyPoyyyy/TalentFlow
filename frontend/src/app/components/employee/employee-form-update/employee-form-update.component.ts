@@ -1,18 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Skill } from '../../../models/employees.model';
 import { SweetMessageService } from '../../../services/sweet-message.service';
+import { EmployeeService } from '../../../services/employee/employee.service';
 import { catchError, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-employee-form-update',
   templateUrl: './employee-form-update.component.html',
-  imports: [
-    ReactiveFormsModule
-  ],
-  styleUrls: ['./employee-form-update.component.css']
+  styleUrls: ['./employee-form-update.component.css'],
+  imports: [ReactiveFormsModule]
 })
 export class EmployeeFormUpdateComponent implements OnInit {
   employeeForm: FormGroup;
@@ -24,6 +23,7 @@ export class EmployeeFormUpdateComponent implements OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private http: HttpClient,
+    private employeeService: EmployeeService,
     private sweetMessageService: SweetMessageService,
     private router: Router
   ) {
@@ -36,14 +36,14 @@ export class EmployeeFormUpdateComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.http.get<Skill[]>('http://localhost:3000/api/skills').subscribe((skills) => this.skills = skills);
+    this.http.get<Skill[]>('http://localhost:3000/api/skills')
+      .subscribe((skills) => this.skills = skills);
     this.loadEmployeeData();
   }
 
   loadEmployeeData(): void {
-    this.http.get(`http://localhost:3000/api/employees/${this.employeeId}`).subscribe((employee: any) => {
+    this.employeeService.getEmployeeById(this.employeeId).subscribe((employee: any) => {
       const hireDate = new Date(employee.hire_date).toISOString().split('T')[0];
-
       this.employeeForm.patchValue({
         firstName: employee.first_name,
         lastName: employee.last_name,
@@ -69,7 +69,7 @@ export class EmployeeFormUpdateComponent implements OnInit {
       skills: JSON.stringify(this.selectedSkills)
     };
 
-    this.http.put(`http://localhost:3000/api/employees/${this.employeeId}`, employeeData)
+    this.employeeService.updateEmployee(this.employeeId, employeeData)
       .pipe(
         catchError((error) => {
           console.error('Error occurred:', error);
