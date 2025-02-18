@@ -30,6 +30,11 @@ export class EmployeeListComponent implements OnInit {
     this.loadEmployees();
   }
 
+  /*
+   * Charge la liste des employés depuis l'API et la trie par défaut.
+   * @input : aucun
+   * @output : aucun
+   */
   loadEmployees(): void {
     this.employeeService.getEmployees().subscribe({
       next: (employees: Employee[]) => {
@@ -43,6 +48,11 @@ export class EmployeeListComponent implements OnInit {
     });
   }
 
+  /*
+   * Filtre les employés en fonction de la requête de recherche et du type de filtre sélectionné.
+   * @input : aucun
+   * @output : aucun
+   */
   filterEmployees(): void {
     const query = this.searchQuery.toLowerCase();
     this.filteredEmployees = this.employees.filter((employee) => {
@@ -60,6 +70,12 @@ export class EmployeeListComponent implements OnInit {
     this.sortEmployees(this.sortColumn, false);
   }
 
+  /*
+   * Trie les employés par une colonne donnée et dans un ordre spécifique.
+   * @input : column (string) - La colonne sur laquelle trier les employés.
+   *         toggle (boolean) - Indique si le tri doit être inversé ou non.
+   * @output : aucun
+   */
   sortEmployees(column: string, toggle: boolean = true): void {
     if (!Object.keys(this.employees[0] ?? {}).includes(column)) return;
     const key = column as keyof Employee;
@@ -82,6 +98,11 @@ export class EmployeeListComponent implements OnInit {
     });
   }
 
+  /*
+   * Ouvre une boîte de dialogue pour confirmer la suppression d'un employé.
+   * @input : employee (Employee) - L'employé à supprimer.
+   * @output : aucun
+   */
   onDelete(employee: Employee): void {
     this.sweetMessageService
       .showAlert(
@@ -99,6 +120,11 @@ export class EmployeeListComponent implements OnInit {
       });
   }
 
+  /*
+   * Confirme la suppression d'un employé en appelant l'API.
+   * @input : employeeId (number) - L'identifiant de l'employé à supprimer.
+   * @output : aucun
+   */
   confirmDelete(employeeId: number): void {
     this.saveQuery = this.searchQuery;
     this.employeeService.deleteEmployee(employeeId).subscribe({

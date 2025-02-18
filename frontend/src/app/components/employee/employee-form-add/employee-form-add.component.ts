@@ -38,6 +38,11 @@ export class EmployeeFormAddComponent implements OnInit {
       .subscribe((skills) => this.skills = skills);
   }
 
+  /*
+   * Gère la sélection d'un fichier (photo de profil) dans le formulaire.
+   * @input : event (any) - L'événement de sélection de fichier.
+   * @output : aucun
+   */
   onFileSelected(event: any): void {
     const file = event.target.files[0];
     if (file) {
@@ -46,6 +51,11 @@ export class EmployeeFormAddComponent implements OnInit {
     }
   }
 
+  /*
+   * Gère l'ajout ou la suppression d'une compétence sélectionnée.
+   * @input : skillCode (string) - Le code de la compétence à ajouter ou supprimer.
+   * @output : aucun
+   */
   toggleSkill(skillCode: string): void {
     if (this.selectedSkills.includes(skillCode)) {
       this.selectedSkills = this.selectedSkills.filter(code => code !== skillCode);
@@ -54,6 +64,11 @@ export class EmployeeFormAddComponent implements OnInit {
     }
   }
 
+  /*
+   * Soumet le formulaire pour ajouter un nouvel employé à l'API.
+   * @input : aucun
+   * @output : aucun
+   */
   onSubmit(): void {
     const formData = new FormData();
     formData.append('firstName', this.employeeForm.get('firstName')?.value);

@@ -12,6 +12,12 @@ import { EmployeeFormAddComponent } from '../employee-form-add/employee-form-add
 export class EmployeePageComponent {
   @ViewChild(EmployeeListComponent) employeeList!: EmployeeListComponent;
 
+  /*
+   * Méthode appelée lorsqu'un employé est ajouté.
+   * Cette méthode recharge la liste des employés en appelant la méthode `loadEmployees` de `EmployeeListComponent`.
+   * @input : aucun
+   * @output : aucun
+   */
   onEmployeeAdded(): void {
     this.employeeList.loadEmployees();
   }

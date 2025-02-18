@@ -41,6 +41,11 @@ export class EmployeeFormUpdateComponent implements OnInit {
     this.loadEmployeeData();
   }
 
+  /*
+   * Charge les données d'un employé existant dans le formulaire en fonction de son ID.
+   * @input : aucun
+   * @output : aucun
+   */
   loadEmployeeData(): void {
     this.employeeService.getEmployeeById(this.employeeId).subscribe((employee: any) => {
       const hireDate = new Date(employee.hire_date).toISOString().split('T')[0];
@@ -53,6 +58,11 @@ export class EmployeeFormUpdateComponent implements OnInit {
     });
   }
 
+  /*
+   * Gère l'ajout ou la suppression d'une compétence sélectionnée.
+   * @input : skillCode (string) - Le code de la compétence à ajouter ou supprimer.
+   * @output : aucun
+   */
   toggleSkill(skillCode: string): void {
     if (this.selectedSkills.includes(skillCode)) {
       this.selectedSkills = this.selectedSkills.filter(code => code !== skillCode);
@@ -61,6 +71,11 @@ export class EmployeeFormUpdateComponent implements OnInit {
     }
   }
 
+  /*
+   * Soumet les données du formulaire pour mettre à jour les informations de l'employé.
+   * @input : aucun
+   * @output : aucun
+   */
   onSubmit(): void {
     const employeeData = {
       firstName: this.employeeForm.get('firstName')?.value,
