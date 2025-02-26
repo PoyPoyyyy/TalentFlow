@@ -11,8 +11,14 @@ export class AuthentificationService {
   private loginUrl = 'http://localhost:3000/api/login';
   public currentUser: any = null;
 
-  constructor(private http: HttpClient, private router: Router) {}
-
+  constructor(private http: HttpClient,
+              private router: Router
+              ) {}
+  /*
+   * Tente de se connecter avec l'email et le mot de passe fournis.
+   * @input : aucun
+   * @output : aucun
+   */
   login(email: string, password: string): Observable<any> {
     return this.http.post(this.loginUrl, { email, password }).pipe(
       tap((response: any) => {
@@ -24,6 +30,11 @@ export class AuthentificationService {
     );
   }
 
+  /*
+   * Gère la déconnexion de l'utilisateur.
+   * @input : aucun
+   * @output : aucun
+   */
   logout(): void {
     this.authenticated = false;
     this.currentUser = null;

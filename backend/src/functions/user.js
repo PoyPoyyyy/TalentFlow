@@ -9,7 +9,11 @@ const pool = new Pool({
     password: 'dbtalentflow',
     port: 5432,
 });
-
+/*
+ * Vérifie les identifiants d'un employé pour se connecter.
+ * @input : email (string), password (string)
+ * @output : user (object) - Informations de l'utilisateur en cas de succès ou message d'erreur.
+ */
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
