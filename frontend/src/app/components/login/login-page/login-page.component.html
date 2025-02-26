@@ -1,9 +1,10 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
-  <label> Mail <input type="email" formControlName="email">
-  </label>
-  <br>
-  <label> Password <input type="password" formControlName="password">
-  </label>
-  <br>
-  <button type="submit">Login</button>
-</form>
+<div class="container">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="login-form">
+    <h2 class="form-header">TalentFlow</h2>
+    <label for="email">Mail</label>
+    <input id="email" type="email" formControlName="email" placeholder="Enter your email">
+    <label for="password">Password</label>
+    <input id="password" type="password" formControlName="password" placeholder="Enter your password">
+    <button type="submit" class="submit-button">Login</button>
+  </form>
+</div>

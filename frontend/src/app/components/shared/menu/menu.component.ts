@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {RouterLink, RouterLinkActive} from "@angular/router";
+import {AuthentificationService} from '../../../services/login/authentification.service';
 
 @Component({
   selector: 'app-menu',
@@ -11,5 +12,7 @@ import {RouterLink, RouterLinkActive} from "@angular/router";
   styleUrl: './menu.component.css'
 })
 export class MenuComponent {
-
+  constructor(
+    protected authService: AuthentificationService,
+  ) {}
 }
