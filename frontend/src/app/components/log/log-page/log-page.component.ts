@@ -4,11 +4,9 @@ import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-log-page',
-  imports: [
-    DatePipe
-  ],
+  imports: [DatePipe],
   templateUrl: './log-page.component.html',
-  styleUrls: ['./log-page.component.css'],
+  styleUrl: './log-page.component.css'
 })
 export class LogPageComponent implements OnInit {
   logs: any[] = [];

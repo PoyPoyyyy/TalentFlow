@@ -1,6 +1,4 @@
-<h2>Journal des actions</h2>
-
-<table>
+<table class="log-table">
   <thead>
   <tr>
     <th>ID</th>
@@ -12,16 +10,17 @@
   </thead>
   <tbody>
     @for (log of logs; track log.id) {
-      <td>{{ log.id }}</td>
-      <td>{{ log.user_id }}</td>
-      <td>{{ log.title }}</td>
-      <td>{{ log.content }}</td>
-      <td>{{ log.date | date: 'short' }}</td>
+      <tr>
+        <td>{{ log.id }}</td>
+        <td>{{ log.user_id }}</td>
+        <td>{{ log.title }}</td>
+        <td>{{ log.content }}</td>
+        <td>{{ log.date | date: 'short' }}</td>
+      </tr>
     }
   </tbody>
 </table>
 
-<!-- Pagination -->
 <div class="pagination">
   <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
     Précédent
