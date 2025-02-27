@@ -11,13 +11,15 @@ import { SessionPageComponent} from './components/session/session-page/session-p
 import { LoginPageComponent } from './components/login/login-page/login-page.component';
 import { WelcomePageComponent } from './components/welcome/welcome-page/welcome-page.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
-import { UserPageComponent} from './components/user/user-page/user-page.component';
+import { UserPageComponent } from './components/user/user-page/user-page.component';
+import { LogPageComponent } from './components/log/log-page/log-page.component';
 
 // Importations des guards
 import { authentificationGuard } from './guards/authentification.guard';
 import { employeeGuard } from './guards/employee.guard';
 import { employeeRhGuard } from './guards/employee-rh.guard';
 import { employeeRhRespGuard } from './guards/employee-rh-resp.guard';
+
 
 export const routes: Routes = [
   // Employee
@@ -32,6 +34,7 @@ export const routes: Routes = [
   { path: 'skill/edit/:code', component: SkillFormUpdateComponent, canActivate: [authentificationGuard, employeeRhGuard] },
   // EmployeeRhResp
   { path : 'session-page', component: SessionPageComponent, canActivate: [authentificationGuard, employeeRhRespGuard] },
+  { path : 'log-page', component: LogPageComponent, canActivate: [authentificationGuard, employeeRhRespGuard] },
 
   { path: 'login-page', component: LoginPageComponent },
   { path: '', redirectTo: 'login-page', pathMatch: 'full' },

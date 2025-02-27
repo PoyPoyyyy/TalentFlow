@@ -13,6 +13,7 @@
 
   @if (authService.currentUser.type === 'employeeRhResp') {
     <a class="button" routerLink="/session-page" routerLinkActive="activebutton">Sessions</a>
+    <a class="button" routerLink="/log-page" routerLinkActive="activebutton">Logs</a>
   }
 
   <button class="button" (click)="authService.logout()">Logout</button>
