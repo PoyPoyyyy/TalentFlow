@@ -8,7 +8,7 @@ import { SweetMessageService } from '../../../services/sweet-message.service';
   selector: 'app-login-page',
   imports: [ReactiveFormsModule],
   templateUrl: './login-page.component.html',
-  styleUrls: ['./login-page.component.css']
+  styleUrl: './login-page.component.css'
 })
 export class LoginPageComponent {
   form: FormGroup = new FormGroup({
@@ -20,22 +20,29 @@ export class LoginPageComponent {
   type: string = '';
 
   constructor(
-    private authService: AuthentificationService,
-    private router: Router,
-    private sweetMessageService: SweetMessageService
-  ) {}
-
+      private authService: AuthentificationService,
+      private router: Router,
+      private sweetMessageService: SweetMessageService
+  ) {
+    if (this.authService.isAuthenticated()) {
+      this.type = this.authService.currentUser.type;
+      if (this.type === 'employee') {
+        this.router.navigate(['/user-page']);
+      } else if (this.type === 'employeeRh' || this.type === 'employeeRhResp') {
+        this.router.navigate(['/welcome-page']);
+      }
+    }
+  }
   /*
-   * Soumet le formulaire et tente de se connecter avec les informations fournies.
-   * @input : aucun
-   * @output : aucun
-   */
+  * Soumet le formulaire et tente de se connecter avec les informations fournies.
+  * @input : aucun
+  * @output : aucun
+  */
   onSubmit(): void {
     if (this.form.invalid) {
       this.sweetMessageService.showToast('Veuillez remplir tous les champs correctement.', 'error');
       return;
     }
-
     const { email, password } = this.form.value;
     this.authService.login(email, password).subscribe({
       next: (res) => {
