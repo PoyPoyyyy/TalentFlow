@@ -1,1 +1,33 @@
-<p>log-page works!</p>
+<h2>Journal des actions</h2>
+
+<table>
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>User ID</th>
+    <th>Titre</th>
+    <th>Contenu</th>
+    <th>Date</th>
+  </tr>
+  </thead>
+  <tbody>
+    @for (log of logs; track log.id) {
+      <td>{{ log.id }}</td>
+      <td>{{ log.user_id }}</td>
+      <td>{{ log.title }}</td>
+      <td>{{ log.content }}</td>
+      <td>{{ log.date | date: 'short' }}</td>
+    }
+  </tbody>
+</table>
+
+<!-- Pagination -->
+<div class="pagination">
+  <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+    Précédent
+  </button>
+  <span>Page {{ currentPage }} sur {{ totalPages() }}</span>
+  <button (click)="changePage(currentPage + 1)" [disabled]="currentPage >= totalPages()">
+    Suivant
+  </button>
+</div>

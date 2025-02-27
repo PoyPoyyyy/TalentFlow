@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { Skill } from '../../../models/employees.model';
 import { SweetMessageService } from '../../../services/sweet-message.service';
 import { EmployeeService } from '../../../services/employee/employee.service';
+import {LogsService} from '../../../services/log/logs.service';
+import {AuthentificationService} from '../../../services/login/authentification.service';
 
 @Component({
   selector: 'app-employee-form-add',
@@ -23,7 +25,9 @@ export class EmployeeFormAddComponent implements OnInit {
     private formBuilder: FormBuilder,
     private http: HttpClient,
     private employeeService: EmployeeService,
-    private sweetMessageService: SweetMessageService
+    private sweetMessageService: SweetMessageService,
+    private logsService: LogsService,
+    private authService: AuthentificationService
   ) {
     this.employeeForm = this.formBuilder.group({
       firstName: '',
@@ -87,12 +91,23 @@ export class EmployeeFormAddComponent implements OnInit {
 
     this.employeeService.addEmployee(formData).subscribe({
       next: () => {
+        const firstName = this.employeeForm.get('firstName')?.value;
+        const lastName = this.employeeForm.get('lastName')?.value;
         this.employeeForm.reset();
         this.selectedFileName = '';
         this.selectedSkills = [];
         this.employeeAdded.emit();
         this.sweetMessageService.showToast('Employee added successfully!', 'success');
+        const logMessage = `A new employee added: ${firstName} ${lastName}`;
+
+        this.logsService.createLog(
+          this.authService.currentUser.id,
+          'Add - employee',
+          logMessage
+        ).subscribe(() => {});
       },
+
+
       error: (err) => {
         console.error(err);
         this.sweetMessageService.showToast('An error occurred while adding the employee.', 'error');

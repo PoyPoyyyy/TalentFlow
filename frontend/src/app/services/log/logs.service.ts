@@ -36,7 +36,7 @@ export class LogsService {
   *        title (string) - Le titre du log.
   *       content (string) - Le contenu du log.
   * @output : Observable<any> - La réponse de l'API, qui pourrait être un message de confirmation ou une erreur.
-  * 
+  *
   */
   createLog(userId: number, title: string, content: string): Observable<any> {
     const logData = { user_id: userId, title, content };

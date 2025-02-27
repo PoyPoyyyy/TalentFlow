@@ -10,7 +10,12 @@ const pool = new Pool({
     port: 5432,
 });
 
-app.get('/api/logs', (req, res) => {
+/*
+* Récupère la liste des logs paginée.
+* @input : page (number), limit (number)
+* @output : logs (array) - La liste des logs
+*/
+router.get('/logs', (req, res) => {
     const { page = 1, limit = 50 } = req.query;
     const offset = (page - 1) * limit;
     const query = `
@@ -22,15 +27,43 @@ app.get('/api/logs', (req, res) => {
         .then((result) => res.json(result.rows))
         .catch((err) => res.status(500).json({ error: err.message }));
 });
+/*
+* Ajoute un nouveau log
+* @input : user_id, title, content
+* @output : log (object) - Le log créé
+*/
+router.post('/logs', (req, res) => {
+    const { user_id, title, content } = req.body;
+    if (!user_id || !title || !content) {
+        return res.status(400).json({ error: 'Missing fields' });
+    }
+    const query = `
+        INSERT INTO LOGS (user_id, title, content, date) 
+        VALUES ($1, $2, $3, NOW()) RETURNING *;
+    `;
+    pool.query(query, [user_id, title, content])
+        .then((result) => res.status(201).json(result.rows[0]))
+        .catch((err) => res.status(500).json({ error: err.message }));
+});
 
-app.get('/api/logs/count', (req, res) => {
+/*
+* Récupère le nombre total de logs
+* @input : aucun
+* @output : total (number) - Le nombre total de logs
+*/
+router.get('/logs/count', (req, res) => {
     const query = 'SELECT COUNT(*) AS total FROM LOGS';
     pool.query(query)
         .then((result) => res.json(result.rows[0]))
         .catch((err) => res.status(500).json({ error: err.message }));
 });
 
-app.get('/logs', (req, res) => {
+/*
+* Récupère la liste des logs
+* @input : aucun
+* @output : logs (array) - La liste des logs
+*/
+router.get('/logs', (req, res) => {
     const query = 'SELECT * FROM LOGS ORDER BY date DESC';
     pool.query(query)
         .then((result) => res.json(result.rows))
