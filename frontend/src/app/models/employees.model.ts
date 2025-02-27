@@ -8,6 +8,9 @@ export interface Employee {
   first_name: string;
   last_name: string;
   hire_date: string;
+  type: string;
+  email: string;
+  password: string;
   profile_picture: string;
   skills: Skill[];
 }

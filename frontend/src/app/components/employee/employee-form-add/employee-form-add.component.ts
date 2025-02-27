@@ -7,9 +7,9 @@ import { EmployeeService } from '../../../services/employee/employee.service';
 
 @Component({
   selector: 'app-employee-form-add',
+  imports: [ReactiveFormsModule],
   templateUrl: './employee-form-add.component.html',
-  styleUrls: ['./employee-form-add.component.css'],
-  imports: [ReactiveFormsModule]
+  styleUrls: ['./employee-form-add.component.css']
 })
 export class EmployeeFormAddComponent implements OnInit {
   employeeForm: FormGroup;
@@ -29,6 +29,8 @@ export class EmployeeFormAddComponent implements OnInit {
       firstName: '',
       lastName: '',
       hireDate: '',
+      email: '',
+      password: '',
       profilePicture: null
     });
   }
@@ -46,7 +48,7 @@ export class EmployeeFormAddComponent implements OnInit {
   onFileSelected(event: any): void {
     const file = event.target.files[0];
     if (file) {
-      this.employeeForm.patchValue({ profilePicture: file });
+      this.employeeForm.patchValue({profilePicture: file});
       this.selectedFileName = file.name;
     }
   }
@@ -74,6 +76,9 @@ export class EmployeeFormAddComponent implements OnInit {
     formData.append('firstName', this.employeeForm.get('firstName')?.value);
     formData.append('lastName', this.employeeForm.get('lastName')?.value);
     formData.append('hireDate', this.employeeForm.get('hireDate')?.value);
+    formData.append('email', this.employeeForm.get('email')?.value);
+    formData.append('password', this.employeeForm.get('password')?.value);
+    formData.append('type', 'employee');
     const profilePicture = this.employeeForm.get('profilePicture')?.value;
     if (profilePicture) {
       formData.append('profilePicture', profilePicture, profilePicture.name);

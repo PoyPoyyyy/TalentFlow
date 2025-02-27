@@ -26,6 +26,8 @@ router.get('/employees', async (req, res) => {
                 e.first_name,
                 e.last_name,
                 e.hire_date,
+                e.type,
+                e.email,
                 encode(e.profile_picture, 'base64') AS profile_picture,
                 json_agg(json_build_object('code', s.code, 'description', s.description)) AS skills
             FROM EMPLOYEE e
@@ -49,13 +51,14 @@ router.get('/employees', async (req, res) => {
  * @output : number - ID de l'employé créé.
  */
 router.post('/employees', upload.single('profilePicture'), async (req, res) => {
-    const { firstName, lastName, hireDate, skills } = req.body;
+    const { firstName, lastName, hireDate, skills, type, email, password } = req.body;
     const profilePicture = req.file ? req.file.buffer : null;
-
-    if (!firstName || !lastName || !hireDate || !skills) {
-        return res.status(400).json({ message: 'Données invalides.' });
+    if (type === 'employee' && (!firstName || !lastName || !hireDate || !skills)) {
+        return res.status(400).json({ message: 'Données invalides pour un employé standard.' });
     }
-
+    if ((type === 'employeeRh' || type === 'employeeRhResp') && (!firstName || !lastName || !hireDate || !email || !password || !skills)) {
+        return res.status(400).json({ message: 'Données invalides pour un employé RH.' });
+    }
     let parsedSkills = [];
     try {
         parsedSkills = JSON.parse(skills);
@@ -63,13 +66,26 @@ router.post('/employees', upload.single('profilePicture'), async (req, res) => {
     } catch (error) {
         return res.status(400).json({ message: 'Les compétences sont mal formatées.' });
     }
-
     try {
         const client = await pool.connect();
-        const result = await client.query(
-            'INSERT INTO EMPLOYEE (first_name, last_name, hire_date, profile_picture) VALUES ($1, $2, $3, $4) RETURNING id',
-            [firstName, lastName, hireDate, profilePicture]
-        );
+        let result;
+        if (type === 'employee') {
+            result = await client.query(
+                'INSERT INTO EMPLOYEE (first_name, last_name, hire_date, profile_picture) VALUES ($1, $2, $3, $4) RETURNING id',
+                [firstName, lastName, hireDate, profilePicture]
+            );
+        } else if (type === 'employeeRh') {
+            result = await client.query(
+                'INSERT INTO EMPLOYEE (first_name, last_name, hire_date, email, password, type, profile_picture) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id',
+                [firstName, lastName, hireDate, email, password, 'employeeRh', profilePicture]
+            );
+        } else if (type === 'employeeRhResp') {
+            result = await client.query(
+                'INSERT INTO EMPLOYEE (first_name, last_name, hire_date, email, password, type, profile_picture) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id',
+                [firstName, lastName, hireDate, email, password, 'employeeRhResp', profilePicture]
+            );
+        }
+
         const employeeId = result.rows[0].id;
         for (const skill of parsedSkills) {
             await client.query(
