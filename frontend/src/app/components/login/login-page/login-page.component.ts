@@ -16,6 +16,7 @@ export class LoginPageComponent {
   });
 
   errorMessage: string = '';
+  type: string = '';
 
   constructor(
     private authService: AuthentificationService,
@@ -31,9 +32,14 @@ export class LoginPageComponent {
     const { email, password } = this.form.value;
     this.authService.login(email, password).subscribe({
       next: (res) => {
-        this.router.navigate(['/welcome-page']);
-        this.sweetMessageService.showToast('Connected as '+this.authService.currentUser.type, 'success');
-
+        this.type = this.authService.currentUser.type;
+        if (this.type === 'employee') {
+          this.router.navigate(['/user-page']);
+        }
+        if (this.type === 'employeeRh' || this.type === 'employeeRhResp') {
+          this.router.navigate(['/welcome-page']);
+        }
+        this.sweetMessageService.showToast('Welcome back ' + this.authService.currentUser.last_name + ' ' + this.authService.currentUser.first_name + ' connected as '+this.type, 'success');
       },
       error: (err) => {
         this.errorMessage = err.error.message || 'Erreur lors de la connexion';

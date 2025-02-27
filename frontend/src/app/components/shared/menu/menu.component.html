@@ -1,15 +1,19 @@
 <nav class="menu-bar">
   <h2 routerLink="/welcome-page">TalentFlow</h2>
-  @if (authService.currentUser.type == 'employee') {
-    // A
+
+  @if (authService.currentUser.type === 'employee') {
+    <a class="button" routerLink="/user-page" routerLinkActive="activebutton">Profil</a>
   }
-  @if (authService.currentUser.type == 'employeeRh' || authService.currentUser.type == 'employeeRhResp') {
+
+  @if (authService.currentUser.type === 'employeeRh' || authService.currentUser.type === 'employeeRhResp') {
     <a class="button" routerLink="/employee-page" routerLinkActive="activebutton">Employees</a>
     <a class="button" routerLink="/mission-page" routerLinkActive="activebutton">Missions</a>
     <a class="button" routerLink="/skill-page" routerLinkActive="activebutton">Skills</a>
   }
-  @if (authService.currentUser.type == 'employeeRhResp') {
-    // A
+
+  @if (authService.currentUser.type === 'employeeRhResp') {
+    <a class="button" routerLink="/session-page" routerLinkActive="activebutton">Sessions</a>
   }
+
   <button class="button" (click)="authService.logout()">Logout</button>
 </nav>

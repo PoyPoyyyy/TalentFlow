@@ -11,9 +11,10 @@ export class AuthentificationService {
   private loginUrl = 'http://localhost:3000/api/login';
   public currentUser: any = null;
 
-  constructor(private http: HttpClient,
-              private router: Router
-              ) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router
+  ) {}
   /*
    * Tente de se connecter avec l'email et le mot de passe fournis.
    * @input : aucun
