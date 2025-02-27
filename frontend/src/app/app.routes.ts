@@ -8,7 +8,6 @@ import { MissionFormUpdateComponent } from './components/mission/mission-form-up
 import { SkillPageComponent } from './components/skill/skill-page/skill-page.component';
 import { SkillFormUpdateComponent } from './components/skill/skill-form-update/skill-form-update.component';
 import { SessionPageComponent} from './components/session/session-page/session-page.component';
-import { SessionFormUpdateComponent } from './components/session/session-form-update/session-form-update.component';
 import { LoginPageComponent } from './components/login/login-page/login-page.component';
 import { WelcomePageComponent } from './components/welcome/welcome-page/welcome-page.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
@@ -33,7 +32,6 @@ export const routes: Routes = [
   { path: 'skill/edit/:code', component: SkillFormUpdateComponent, canActivate: [authentificationGuard, employeeRhGuard] },
   // EmployeeRhResp
   { path : 'session-page', component: SessionPageComponent, canActivate: [authentificationGuard, employeeRhRespGuard] },
-  { path : 'session/edit/:id', component: SessionFormUpdateComponent, canActivate: [authentificationGuard, employeeRhRespGuard] },
 
   { path: 'login-page', component: LoginPageComponent },
   { path: '', redirectTo: 'login-page', pathMatch: 'full' },

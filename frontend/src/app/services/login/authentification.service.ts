@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable, tap } from 'rxjs';
+import { Observable, tap, catchError } from 'rxjs';
+import { throwError } from 'rxjs';
+import { SweetMessageService} from '../sweet-message.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,13 +15,10 @@ export class AuthentificationService {
 
   constructor(
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private sweetMessageService: SweetMessageService
   ) {}
-  /*
-   * Tente de se connecter avec l'email et le mot de passe fournis.
-   * @input : aucun
-   * @output : aucun
-   */
+
   login(email: string, password: string): Observable<any> {
     return this.http.post(this.loginUrl, { email, password }).pipe(
       tap((response: any) => {
@@ -27,15 +26,14 @@ export class AuthentificationService {
           this.authenticated = true;
           this.currentUser = response.user;
         }
+      }),
+      catchError((error) => {
+        this.sweetMessageService.showToast('Erreur de connexion : ' + error.error.message, 'error');
+        return throwError(error);
       })
     );
   }
 
-  /*
-   * Gère la déconnexion de l'utilisateur.
-   * @input : aucun
-   * @output : aucun
-   */
   logout(): void {
     this.authenticated = false;
     this.currentUser = null;

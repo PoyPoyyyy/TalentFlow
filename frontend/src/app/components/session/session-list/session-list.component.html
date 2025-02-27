@@ -27,7 +27,6 @@
             <td>{{ employee.email }}</td>
             <td>{{ employee.hire_date | date: 'dd/MM/yyyy' }}</td>
             <td class="actions-cell">
-              <button class="button-edit" [routerLink]="['/employee/edit', employee.id]">Edit</button>
               <button class="button-delete" (click)="onDelete(employee)">Delete</button>
             </td>
           </tr>

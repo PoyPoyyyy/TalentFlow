@@ -4,14 +4,12 @@ import {EmployeeService} from '../../../services/employee/employee.service';
 import {SweetMessageService} from '../../../services/sweet-message.service';
 import {DatePipe} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-session-list',
   imports: [
     DatePipe,
-    FormsModule,
-    RouterLink
+    FormsModule
   ],
   templateUrl: './session-list.component.html',
   styleUrl: './session-list.component.css'

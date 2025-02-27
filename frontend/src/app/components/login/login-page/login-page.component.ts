@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
-import { AuthentificationService} from '../../../services/login/authentification.service';
+import { FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AuthentificationService } from '../../../services/login/authentification.service';
 import { Router } from '@angular/router';
 import { SweetMessageService } from '../../../services/sweet-message.service';
+
 @Component({
   selector: 'app-login-page',
   imports: [ReactiveFormsModule],
@@ -11,8 +12,8 @@ import { SweetMessageService } from '../../../services/sweet-message.service';
 })
 export class LoginPageComponent {
   form: FormGroup = new FormGroup({
-    email: new FormControl(''),
-    password: new FormControl('')
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [Validators.required])
   });
 
   errorMessage: string = '';
@@ -23,12 +24,18 @@ export class LoginPageComponent {
     private router: Router,
     private sweetMessageService: SweetMessageService
   ) {}
+
   /*
    * Soumet le formulaire et tente de se connecter avec les informations fournies.
    * @input : aucun
    * @output : aucun
    */
   onSubmit(): void {
+    if (this.form.invalid) {
+      this.sweetMessageService.showToast('Veuillez remplir tous les champs correctement.', 'error');
+      return;
+    }
+
     const { email, password } = this.form.value;
     this.authService.login(email, password).subscribe({
       next: (res) => {
@@ -39,10 +46,11 @@ export class LoginPageComponent {
         if (this.type === 'employeeRh' || this.type === 'employeeRhResp') {
           this.router.navigate(['/welcome-page']);
         }
-        this.sweetMessageService.showToast('Welcome back ' + this.authService.currentUser.last_name + ' ' + this.authService.currentUser.first_name + ' connected as '+this.type, 'success');
+        this.sweetMessageService.showToast('Bienvenue ' + this.authService.currentUser.last_name + ' ' + this.authService.currentUser.first_name + ' connecté en tant que ' + this.type, 'success');
       },
       error: (err) => {
         this.errorMessage = err.error.message || 'Erreur lors de la connexion';
+        this.sweetMessageService.showToast(this.errorMessage, 'error');
       }
     });
   }
