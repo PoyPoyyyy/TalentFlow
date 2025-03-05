@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Mission, Skill } from '../../../models/employees.model';
 import { MultiSelectComponent } from '../../shared/multi-select/multi-select.component';
+import { MissionService } from '../../../services/mission/mission.service';
 
 @Component({
   selector: 'app-mission-form-add',
@@ -17,7 +17,7 @@ export class MissionFormAddComponent implements OnInit {
   skills: {skill: Skill, quantity: number}[] = [];
   @Output() missionAdded = new EventEmitter<Mission>();
 
-  constructor(private formBuilder: FormBuilder, private http: HttpClient) {
+  constructor(private formBuilder: FormBuilder, private missionService: MissionService) {
     this.missionForm = this.formBuilder.group({
       name: '',
       description: '',
@@ -56,7 +56,7 @@ export class MissionFormAddComponent implements OnInit {
   
     const missionData = this.missionForm.value;
   
-    this.http.post<Mission>('http://localhost:3000/api/missions', missionData)
+    this.missionService.addMission(missionData)
       .subscribe({
         next: (response: Mission) => {
           this.missionForm.reset();

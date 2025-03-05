@@ -2,7 +2,6 @@ import { Component, ViewChild } from '@angular/core';
 import { RepliableContainerComponent } from '../../shared/repliable-container/repliable-container.component';
 import { MissionListComponent } from "../mission-list/mission-list.component";
 import { MissionFormAddComponent } from '../mission-form-add/mission-form-add.component';
-import { MultiSelectComponent } from '../../shared/multi-select/multi-select.component';
 
 @Component({
   selector: 'app-mission-page',

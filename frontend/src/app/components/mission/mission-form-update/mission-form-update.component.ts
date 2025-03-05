@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Employee, Mission, Skill } from '../../../models/employees.model';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { catchError, throwError } from 'rxjs';
 import { MultiSelectComponent } from '../../shared/multi-select/multi-select.component';
 import { CommonModule } from '@angular/common';
+import { MissionService } from '../../../services/mission/mission.service';
+import { EmployeeService } from '../../../services/employee/employee.service';
 
 @Component({
   selector: 'app-mission-form-update',
@@ -24,7 +25,11 @@ export class MissionFormUpdateComponent implements OnInit {
   skills: {skill: Skill, quantity: number}[] = [];
   skillsAllocation: { [key: string]: number } = {}; 
 
-  constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient, private formBuilder: FormBuilder,) {
+  constructor(private route: ActivatedRoute, 
+              private router: Router, 
+              private missionService: MissionService,
+              private employeeService: EmployeeService,
+              private formBuilder: FormBuilder,) {
     this.missionForm = this.formBuilder.group({
       name: '',
       description: '',
@@ -39,8 +44,8 @@ export class MissionFormUpdateComponent implements OnInit {
   ngOnInit(): void {
     const id = this.route.snapshot.params['id'];
     if (!id) return;
-  
-    this.http.get<Employee[]>('http://localhost:3000/api/employees').subscribe(employees => {
+    
+    this.employeeService.getEmployees().subscribe(employees => {
       this.employees = employees;
   
     this.loadMission(id);
@@ -104,7 +109,7 @@ export class MissionFormUpdateComponent implements OnInit {
         employees: employees
     };
 
-    this.http.put(`http://localhost:3000/api/missions/${this.mission.id}`, missionData)
+    this.missionService.updateMission(this.mission.id, missionData)
         .pipe(
             catchError((error) => {
                 console.error('Error occurred:', error);
@@ -145,29 +150,31 @@ removeUnqualifiedEmployees(): void {
     return hasRequiredSkill; 
   });
 
-  console.log('🔹 Employés après suppression des non qualifiés:', this.selectedEmployeesId);
+  console.log('Employés après suppression des non qualifiés:', this.selectedEmployeesId);
 }
 
 
 
-    loadMission(id: string): void {
-      this.http.get<Mission>(`http://localhost:3000/api/missions/${id}`)
+    loadMission(id: number): void {
+      this.missionService.getMissionById(id)
         .subscribe(mission => {
           this.mission = mission;
     
           const uniqueSkills = mission.skills.reduce((acc, skill) => {
-            if (!acc.some(s => s.code === skill.code)) {
+            if (!acc.some(s => s.skill.code === skill.skill.code)) {
               acc.push(skill);
             }
             return acc;
-          }, [] as { code: number, description: string, quantity: number }[]);
-    
-          this.skills = uniqueSkills.map(skill => ({
-            skill: { code: String(skill.code), description: skill.description },
-            quantity: skill.quantity
+          }, [] as { skill: Skill, quantity: number }[]);
+          
+          this.skills = uniqueSkills.map(skillInfos => ({
+            
+            skill: { code: skillInfos.skill.code, description: skillInfos.skill.description },
+            quantity: skillInfos.quantity
           }));
     
-          this.selectedEmployeesId = [...new Set(mission.employees.map(emp => emp.id))];
+          this.selectedEmployeesId = mission.employees ? [...new Set(mission.employees.map(emp => emp.id))] : [];
+          
     
           this.updateSkillsAllocation();
     
