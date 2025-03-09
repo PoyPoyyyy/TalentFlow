@@ -54,7 +54,7 @@ export class MissionListComponent implements OnInit {
           this.updateMissionStatus(mission);
         }
       
-        const endDate = new Date(parseInt(missionDate) + mission.duration * 24 * 60 * 60 * 1000).toLocaleDateString();
+        const endDate = new Date(missionDate + mission.duration * 24 * 60 * 60 * 1000).toLocaleDateString();
       
         if (endDate < today && mission.status !== 'completed') {
           mission.status = 'completed';

@@ -17,10 +17,12 @@ import { EmployeeService } from '../../../services/employee/employee.service';
 
 export class MissionFormUpdateComponent implements OnInit {
 
+  missionId!: number;
   employees: Employee[] = [];
   filteredEmployees: Employee[] = [];
   selectedEmployeesId: number[] = [];
   mission!: Mission;
+  missions: Mission[] = [];
   missionForm: FormGroup;
   skills: {skill: Skill, quantity: number}[] = [];
   skillsAllocation: { [key: string]: number } = {}; 
@@ -42,17 +44,15 @@ export class MissionFormUpdateComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const id = this.route.snapshot.params['id'];
-    if (!id) return;
+    this.missionId = this.route.snapshot.params['id'];
+    if (!this.missionId) return;
     
     this.employeeService.getEmployees().subscribe(employees => {
       this.employees = employees;
   
-    this.loadMission(id);
-  
-        
-  
-        
+      this.loadMission(this.missionId);
+      this.loadMissions();
+      
       
   
     }, error => {
@@ -60,22 +60,67 @@ export class MissionFormUpdateComponent implements OnInit {
     });
   }
 
-  initializeSkillsAllocation(): void {
-    
-  
-    console.log("Répartition des compétences (corrigée) :", this.skillsAllocation);
+
+  loadMissions(): void {
+
+    this.missionService.getMissions().subscribe(missions => {
+      this.missions = missions;
+      this.filterEmployees();
+      
+    }, error => {
+      console.error("Erreur lors du chargement des missions:", error);
+    });
+
+
   }
-  
   
   
 
   filterEmployees(): void {
+    if (!this.mission) {
+      console.log("mission pas chargée !");
+      return;
+    };
+  
+    // Filtrer les employés qui ont les compétences requises
     this.filteredEmployees = this.employees.filter(employee =>
       employee.skills.some(empSkill =>
         this.skills.some(skill => empSkill.code === skill.skill.code)
       )
     );
+
+    const assignedEmployees: Employee[] = [];
+    this.missions.forEach(mission => {
+      if (mission.employees) {
+        mission.employees.forEach(emp => {
+          
+            if (this.mission.id !== mission.id && this.filteredEmployees.some(e => e.id === emp.id)) {
+              assignedEmployees.push(emp);
+            }
+          
+          
+        })
+      }
+      
+    })
+
+    console.log("Assigned : ");
+    console.log(assignedEmployees);
+
+    this.filteredEmployees = this.filteredEmployees.filter(employee =>
+      !assignedEmployees.some(assignedEmp => assignedEmp.id === employee.id)
+    );
+    
+
+    
+    
+
+
+
+    
   }
+  
+  
   
   
   
@@ -187,8 +232,10 @@ removeUnqualifiedEmployees(): void {
             skills: this.skills,
             employees: this.selectedEmployeesId
           });
-    
+          
           this.filterEmployees();
+
+          
         }, error => {
           console.error("Erreur lors du chargement de la mission:", error);
         });
