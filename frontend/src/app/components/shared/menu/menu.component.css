@@ -16,6 +16,10 @@
   font-weight: bold;
 }
 
+.menu-bar h2:hover {
+  cursor: pointer;
+}
+
 .button {
   background-color: #f0f0f0;
   border: none;
@@ -24,7 +28,7 @@
   font-size: 16px;
   color: #333;
   text-decoration: none;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .button:hover {
@@ -44,7 +48,7 @@
   }
 
   .button {
-    width: 90%;
+    width: 92%;
     text-align: center;
   }
 }
