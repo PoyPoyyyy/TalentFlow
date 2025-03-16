@@ -38,23 +38,41 @@ router.get('/employees', async (req, res) => {
     }
 });
 
+// 📌 Route pour récupérer les statistiques des employés en mission
 router.get('/employees-mission-stats', async (req, res) => {
     try {
-        const result = await pool.query(`
-      SELECT 
-          COUNT(*) AS total,
-          COUNT(CASE WHEN me.employee_id IS NULL THEN 1 END) AS withoutMission
-      FROM EMPLOYEE e
-      LEFT JOIN MISSION_EMPLOYEE me ON e.id = me.employee_id;
-    `);
-        res.json(result.rows[0]);
+        // Connexion à la base de données
+        const client = await pool.connect();
+
+        // 🔍 Requête SQL pour compter les employés avec et sans mission
+        const query = `
+            SELECT 
+                COUNT(*) AS totalEmployees,         -- Nombre total d'employés
+                COUNT(me.employee_id) AS withMission -- Nombre d'employés avec une mission
+            FROM EMPLOYEE e
+            LEFT JOIN MISSION_EMPLOYEE me ON e.id = me.employee_id;
+        `;
+
+        // Exécution de la requête
+        const result = await client.query(query);
+
+        // Récupération des valeurs
+        const totalEmployees = result.rows[0].totalemployees; // Nombre total
+        const withMission = result.rows[0].withmission;       // Avec mission
+        const withoutMission = totalEmployees - withMission;  // Sans mission
+
+        // Libération de la connexion
+        client.release();
+
+        // Envoi des données au format JSON au frontend
+        res.json({ totalEmployees, withMission, withoutMission });
+
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Erreur serveur');
+        // En cas d'erreur, affichage dans la console et envoi d'une erreur HTTP 500
+        console.error('Erreur dans /employees-mission-stats:', error);
+        res.status(500).json({ message: 'Erreur serveur' });
     }
 });
-
-module.exports = router;
 
 
 router.post('/employees', upload.single('profilePicture'), async (req, res) => {
@@ -179,6 +197,5 @@ router.get('/employees/:id', async (req, res) => {
         res.status(500).send('Erreur serveur');
     }
 });
-
 
 module.exports = router;
