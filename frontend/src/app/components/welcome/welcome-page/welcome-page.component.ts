@@ -1,11 +1,15 @@
 import { Component } from '@angular/core';
+import {EmployeeMissionChartComponent} from '../employee-mission-chart/employee-mission-chart.component';
 
 @Component({
   selector: 'app-welcome-page',
-  imports: [],
+  imports: [
+    EmployeeMissionChartComponent
+  ],
   templateUrl: './welcome-page.component.html',
-  styleUrl: './welcome-page.component.css'
+  styleUrls: ['./welcome-page.component.css']
 })
+
 export class WelcomePageComponent {
 
 }

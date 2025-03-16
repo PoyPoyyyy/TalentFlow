@@ -38,6 +38,25 @@ router.get('/employees', async (req, res) => {
     }
 });
 
+router.get('/employees-mission-stats', async (req, res) => {
+    try {
+        const result = await pool.query(`
+      SELECT 
+          COUNT(*) AS total,
+          COUNT(CASE WHEN me.employee_id IS NULL THEN 1 END) AS withoutMission
+      FROM EMPLOYEE e
+      LEFT JOIN MISSION_EMPLOYEE me ON e.id = me.employee_id;
+    `);
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Erreur serveur');
+    }
+});
+
+module.exports = router;
+
+
 router.post('/employees', upload.single('profilePicture'), async (req, res) => {
     const { firstName, lastName, hireDate, skills } = req.body;
     const profilePicture = req.file ? req.file.buffer : null;
