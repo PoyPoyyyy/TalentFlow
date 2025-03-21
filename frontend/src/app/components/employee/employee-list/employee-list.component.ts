@@ -5,6 +5,8 @@ import { EmployeeService } from '../../../services/employee/employee.service';
 import { RouterLink } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import {LogsService} from '../../../services/log/logs.service';
+import {AuthentificationService} from '../../../services/login/authentification.service';
 
 @Component({
   selector: 'app-employee-list',
@@ -23,7 +25,9 @@ export class EmployeeListComponent implements OnInit {
 
   constructor(
     private employeeService: EmployeeService,
-    private sweetMessageService: SweetMessageService
+    private sweetMessageService: SweetMessageService,
+    private logsService: LogsService,
+    private authService: AuthentificationService
   ) {}
 
   ngOnInit(): void {
@@ -133,6 +137,12 @@ export class EmployeeListComponent implements OnInit {
         this.loadEmployees();
         this.searchQuery = this.saveQuery;
         this.filterEmployees();
+        const logMessage = `A new employee deleted:  + ${employeeId}`;
+        this.logsService.createLog(
+          this.authService.currentUser.id,
+          'Delete - employee',
+          logMessage
+        ).subscribe(() => {});
       },
       error: (error) => {
         console.error('Error deleting employee:', error);

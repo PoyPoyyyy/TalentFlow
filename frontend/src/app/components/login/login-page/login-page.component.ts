@@ -3,6 +3,7 @@ import { FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angula
 import { AuthentificationService } from '../../../services/login/authentification.service';
 import { Router } from '@angular/router';
 import { SweetMessageService } from '../../../services/sweet-message.service';
+import {LogsService} from '../../../services/log/logs.service';
 
 @Component({
   selector: 'app-login-page',
@@ -22,7 +23,8 @@ export class LoginPageComponent {
   constructor(
       private authService: AuthentificationService,
       private router: Router,
-      private sweetMessageService: SweetMessageService
+      private sweetMessageService: SweetMessageService,
+      private logsService: LogsService
   ) {
     if (this.authService.isAuthenticated()) {
       this.type = this.authService.currentUser.type;
@@ -54,6 +56,13 @@ export class LoginPageComponent {
           this.router.navigate(['/welcome-page']);
         }
         this.sweetMessageService.showToast('Bienvenue ' + this.authService.currentUser.last_name + ' ' + this.authService.currentUser.first_name + ' connecté en tant que ' + this.type, 'success');
+        const logMessage = `User ${this.authService.currentUser.id} logged in as ${this.type}`;
+
+        this.logsService.createLog(
+          this.authService.currentUser.id,
+          'Login - ' + this.type,
+          logMessage
+        ).subscribe(() => {});
       },
       error: (err) => {
         this.errorMessage = err.error.message || 'Erreur lors de la connexion';

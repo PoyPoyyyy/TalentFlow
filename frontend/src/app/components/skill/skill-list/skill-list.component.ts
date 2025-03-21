@@ -5,6 +5,8 @@ import {Employee} from '../../../models/employees.model';
 import {Skill} from '../../../models/skills.model';
 import {SweetMessageService} from '../../../services/sweet-message.service';
 import { RouterLink } from '@angular/router';
+import {LogsService} from '../../../services/log/logs.service';
+import {AuthentificationService} from '../../../services/login/authentification.service';
 
 @Component({
   selector: 'app-skill-list',
@@ -28,7 +30,9 @@ export class SkillListComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private sweetMessageService: SweetMessageService
+    private sweetMessageService: SweetMessageService,
+    private logsService: LogsService,
+    private authService: AuthentificationService
   ) {}
 
   ngOnInit(): void {
@@ -115,5 +119,12 @@ export class SkillListComponent implements OnInit {
           this.sweetMessageService.showToast('An error occurred while deleting the skill.', 'error');
         },
       });
+    const logMessage = `Skill deleted: ${skillCode}`;
+
+    this.logsService.createLog(
+      this.authService.currentUser.id,
+      'Delete - skill',
+      logMessage
+    ).subscribe(() => {});
   }
 }

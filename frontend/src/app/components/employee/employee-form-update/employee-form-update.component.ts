@@ -6,6 +6,8 @@ import { Skill } from '../../../models/employees.model';
 import { SweetMessageService } from '../../../services/sweet-message.service';
 import { EmployeeService } from '../../../services/employee/employee.service';
 import { catchError, throwError } from 'rxjs';
+import {LogsService} from '../../../services/log/logs.service';
+import {AuthentificationService} from '../../../services/login/authentification.service';
 
 @Component({
   selector: 'app-employee-form-update',
@@ -25,7 +27,9 @@ export class EmployeeFormUpdateComponent implements OnInit {
     private http: HttpClient,
     private employeeService: EmployeeService,
     private sweetMessageService: SweetMessageService,
-    private router: Router
+    private router: Router,
+    private logsService: LogsService,
+    private authService: AuthentificationService
   ) {
     this.employeeForm = this.formBuilder.group({
       firstName: '',
@@ -98,5 +102,12 @@ export class EmployeeFormUpdateComponent implements OnInit {
           this.router.navigateByUrl('/employee-page');
         }
       });
+    const logMessage = `Employee updated: ${employeeData.firstName} ${employeeData.lastName}`;
+
+    this.logsService.createLog(
+      this.authService.currentUser.id,
+      'Update - employee',
+      logMessage
+    ).subscribe(() => {});
   }
 }

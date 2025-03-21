@@ -3,6 +3,8 @@ import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angul
 import { Mission, Skill } from '../../../models/employees.model';
 import { MultiSelectComponent } from '../../shared/multi-select/multi-select.component';
 import { MissionService } from '../../../services/mission/mission.service';
+import {LogsService} from '../../../services/log/logs.service';
+import {AuthentificationService} from '../../../services/login/authentification.service';
 
 @Component({
   selector: 'app-mission-form-add',
@@ -12,12 +14,14 @@ import { MissionService } from '../../../services/mission/mission.service';
 })
 export class MissionFormAddComponent implements OnInit {
 
-  
+
   missionForm: FormGroup;
   skills: {skill: Skill, quantity: number}[] = [];
   @Output() missionAdded = new EventEmitter<Mission>();
 
-  constructor(private formBuilder: FormBuilder, private missionService: MissionService) {
+  constructor(private formBuilder: FormBuilder, private missionService: MissionService,
+              private logsService: LogsService,
+              private authService: AuthentificationService) {
     this.missionForm = this.formBuilder.group({
       name: '',
       description: '',
@@ -29,7 +33,7 @@ export class MissionFormAddComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
+
   }
 
   onSkillsChange(skills: {skill: Skill, quantity: number}[]) {
@@ -40,22 +44,22 @@ export class MissionFormAddComponent implements OnInit {
   onSubmit(): void {
     const startDate = new Date(this.missionForm.get('start_date')?.value);
     const today = new Date();
-  
+
     const startDateFormatted = startDate.toISOString().split('T')[0];
     const todayFormatted = today.toISOString().split('T')[0];
-  
+
     if (startDateFormatted < todayFormatted) {
       alert("Erreur : La date de début ne peut pas être antérieure à aujourd'hui.");
       return;
     }
-  
+
     if (this.skills.length === 0) {
       alert("Remplissez le champ 'skills', vous pourrez le modifier plus tard.");
       return;
     }
-  
+
     const missionData = this.missionForm.value;
-  
+
     this.missionService.addMission(missionData)
       .subscribe({
         next: (response: Mission) => {
@@ -67,9 +71,16 @@ export class MissionFormAddComponent implements OnInit {
           alert("Une erreur s'est produite lors de l'ajout de la mission.");
         }
       });
-  }
-  
+    const logMessage = `Mission added : ${missionData.name}`;
 
-  
+    this.logsService.createLog(
+      this.authService.currentUser.id,
+      'Add - mission',
+      logMessage
+    ).subscribe(() => {});
+  }
+
+
+
 
 }

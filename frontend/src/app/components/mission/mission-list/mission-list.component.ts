@@ -4,6 +4,8 @@ import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { MissionService } from '../../../services/mission/mission.service';
+import {LogsService} from '../../../services/log/logs.service';
+import {AuthentificationService} from '../../../services/login/authentification.service';
 
 @Component({
   selector: 'app-mission-list',
@@ -20,14 +22,16 @@ export class MissionListComponent implements OnInit {
   @Output() missionUpdated = new EventEmitter<Mission>();
 
 
-  constructor(private missionService: MissionService) {}
+  constructor(private missionService: MissionService,
+              private logsService: LogsService,
+              private authService: AuthentificationService) {}
 
   ngOnInit(): void {
       this.loadMissions();
   }
 
   loadMissions(): void {
-    
+
     this.missionService.getMissions().subscribe((missions: Mission[]) => {
     this.missionsList = missions.map(mission => {
       if (!mission.employees) {
@@ -40,28 +44,28 @@ export class MissionListComponent implements OnInit {
       if (mission.start_date) {
         const missionDate = new Date(mission.start_date).toLocaleDateString();
 
-        
-       
-      
+
+
+
         const today = new Date().toLocaleDateString();
         if (missionDate < today && mission.status !== 'ongoing') {
           mission.status = 'ongoing';
           this.updateMissionStatus(mission);
         }
-      
+
         if (mission.employees.length > 0 && mission.status === 'preparation') {
           mission.status = 'planned';
           this.updateMissionStatus(mission);
         }
-      
+
         const endDate = new Date(missionDate + mission.duration * 24 * 60 * 60 * 1000).toLocaleDateString();
-      
+
         if (endDate < today && mission.status !== 'completed') {
           mission.status = 'completed';
           this.updateMissionStatus(mission);
         }
       }
-      
+
 
 
       return mission;
@@ -69,20 +73,20 @@ export class MissionListComponent implements OnInit {
 
     this.missionsSelected = [...this.missionsList];
   });
-        
 
 
-      
+
+
   }
 
   updateMissionStatus(mission: Mission): void {
-    
-    const updatedMission = { name: mission.name, 
+
+    const updatedMission = { name: mission.name,
                             description: mission.description,
-                            start_date: mission.start_date, 
-                            duration: mission.duration, 
-                            status: mission.status, 
-                            skills: mission.skills, 
+                            start_date: mission.start_date,
+                            duration: mission.duration,
+                            status: mission.status,
+                            skills: mission.skills,
                             employees: mission.employees
      };
 
@@ -98,7 +102,7 @@ export class MissionListComponent implements OnInit {
       });
   }
 
-    
+
   onDelete(mission: Mission): void {
     this.missionService.deleteMission(mission.id).subscribe({
         next: (response) => {
@@ -110,6 +114,13 @@ export class MissionListComponent implements OnInit {
           console.error('Erreur lors de la suppression de la mission:', error);
         }
     });
+    const logMessage = `Mission deleted : ${mission.name}`;
+
+    this.logsService.createLog(
+      this.authService.currentUser.id,
+      'Delete - mission',
+      logMessage
+    ).subscribe(() => {});
   }
 
   getMissionsSelected(): void {
@@ -120,7 +131,7 @@ export class MissionListComponent implements OnInit {
       mission.duration.toString().includes(query) ||
       mission.status.toLowerCase().includes(query) ||
       mission.skills.some(skillObj =>
-        skillObj.skill.code.toLowerCase().includes(query) || 
+        skillObj.skill.code.toLowerCase().includes(query) ||
         skillObj.skill.description.toLowerCase().includes(query)
       ) ||
       mission.employees.some(employee =>

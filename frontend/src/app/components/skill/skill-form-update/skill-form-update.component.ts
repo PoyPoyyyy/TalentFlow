@@ -4,6 +4,8 @@ import {ActivatedRoute, Router, RouterLink, RouterLinkActive} from '@angular/rou
 import { HttpClient } from '@angular/common/http';
 import { SweetMessageService } from '../../../services/sweet-message.service';
 import { catchError, throwError } from 'rxjs';
+import {LogsService} from '../../../services/log/logs.service';
+import {AuthentificationService} from '../../../services/login/authentification.service';
 
 @Component({
   selector: 'app-skill-form-update',
@@ -24,7 +26,9 @@ export class SkillFormUpdateComponent implements OnInit {
     private route: ActivatedRoute,
     private http: HttpClient,
     private sweetMessageService: SweetMessageService,
-    private router: Router
+    private router: Router,
+    private logsService: LogsService,
+    private authService: AuthentificationService
   ) {
     this.skillForm = this.formBuilder.group({
       /*code: '',
@@ -69,5 +73,12 @@ export class SkillFormUpdateComponent implements OnInit {
             this.router.navigateByUrl('/skill-page'); // Redirection après mise à jour
         }
       });
+    const logMessage = `Skill updated : ${skillData.description}`;
+
+    this.logsService.createLog(
+      this.authService.currentUser.id,
+      'Update - skill',
+      logMessage
+    ).subscribe(() => {});
   }
 }

@@ -39,7 +39,7 @@ export class LogsService {
   *
   */
   createLog(userId: number, title: string, content: string): Observable<any> {
-    const logData = { user_id: userId, title, content };
+    const logData = { user_id: userId, title, content};
     return this.http.post(`${this.apiUrl}`, logData);
   }
 }

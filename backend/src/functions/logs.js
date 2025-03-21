@@ -39,7 +39,7 @@ router.post('/logs', (req, res) => {
     }
     const query = `
         INSERT INTO LOGS (user_id, title, content, date) 
-        VALUES ($1, $2, $3, NOW()) RETURNING *;
+        VALUES ($1, $2, $3, LOCALTIMESTAMP);
     `;
     pool.query(query, [user_id, title, content])
         .then((result) => res.status(201).json(result.rows[0]))

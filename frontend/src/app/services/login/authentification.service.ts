@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Observable, tap, catchError } from 'rxjs';
 import { throwError } from 'rxjs';
 import { SweetMessageService} from '../sweet-message.service';
+import {LogsService} from '../log/logs.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,8 @@ export class AuthentificationService {
   constructor(
       private http: HttpClient,
       private router: Router,
-      private sweetMessageService: SweetMessageService
+      private sweetMessageService: SweetMessageService,
+      private logsService: LogsService,
   ) {
     const storedUser = localStorage.getItem('currentUser');
     if (storedUser) {
@@ -51,6 +53,13 @@ export class AuthentificationService {
   * @output : aucun
   */
   logout(): void {
+    const logMessage = `User ${this.currentUser.email} logged out`;
+
+    this.logsService.createLog(
+      this.currentUser.id,
+      'Logout - ' + this.currentUser.type,
+      logMessage
+    ).subscribe(() => {});
     this.authenticated = false;
     this.currentUser = null;
     localStorage.removeItem('currentUser');
