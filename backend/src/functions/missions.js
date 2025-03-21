@@ -101,7 +101,51 @@ router.post('/missions', async (req, res) => {
     }
 });
 
-
+router.get('/employees/:id/missions', async (req, res) => {
+    const employeeId = req.params.id;
+    try {
+        const client = await pool.connect();
+        const query = `
+            SELECT 
+                m.id, 
+                m.name, 
+                m.description, 
+                m.start_date, 
+                m.duration, 
+                m.status,
+                (SELECT json_agg(json_build_object(
+                    'skill', json_build_object(
+                        'code', s.code,
+                        'description', s.description
+                    ),
+                    'quantity', ms.quantity
+                ))
+                FROM MISSION_SKILL ms
+                LEFT JOIN SKILL s ON ms.skill_code = s.code
+                WHERE ms.mission_id = m.id
+                ) AS skills,
+                (SELECT json_agg(json_build_object(
+                    'id', e.id,
+                    'first_name', e.first_name,
+                    'last_name', e.last_name,
+                    'hire_date', e.hire_date
+                ))
+                FROM MISSION_EMPLOYEE me
+                LEFT JOIN EMPLOYEE e ON me.employee_id = e.id
+                WHERE me.mission_id = m.id
+                ) AS employees
+            FROM MISSION m
+            JOIN MISSION_EMPLOYEE me ON m.id = me.mission_id
+            WHERE me.employee_id = $1;
+        `;
+        const result = await client.query(query, [employeeId]);
+        client.release();
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Erreur lors de la récupération des missions pour employé:', err);
+        res.status(500).send('Erreur serveur');
+    }
+});
 
 router.delete('/missions/:id', async (req, res) => {
     const missionId = req.params.id;

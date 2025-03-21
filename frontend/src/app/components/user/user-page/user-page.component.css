@@ -1,0 +1,82 @@
+.container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 10px 40px 40px;
+  background-color: rgb(245, 245, 245);
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  display: block;
+}
+
+.user-info,
+.missions {
+  width: 100%;
+  max-width: 800px;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 20px auto 30px auto;
+  min-height: 120px;
+}
+
+.missions h3 {
+  font-size: 1.6rem;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.missions ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.missions li {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: background-color 0.3s;
+}
+
+.missions li:hover {
+  background-color: #f9f9f9;
+}
+
+.missions li h4 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  color: #222;
+}
+
+.missions li p {
+  font-size: 1rem;
+  margin: 5px 0;
+  color: #444;
+}
+
+.missions li div {
+  margin-top: 10px;
+}
+
+.missions li div h5 {
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.missions li div ul {
+  list-style: disc;
+  margin-left: 20px;
+  padding: 0;
+}
+
+.missions li div ul li {
+  font-size: 0.95rem;
+  margin: 3px 0;
+  color: #555;
+}

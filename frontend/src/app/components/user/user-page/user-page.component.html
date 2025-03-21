@@ -1,1 +1,30 @@
-<p>user-page works!</p>
+<div class="user-info">
+  <h2>Bienvenue, {{ currentEmployee.first_name }} {{ currentEmployee.last_name }}</h2>
+  <p>Email : {{ currentEmployee.email }}</p>
+  <p>Date d'embauche : {{ currentEmployee.hire_date | date }}</p>
+</div>
+
+<div class="missions">
+  <h3>Mission :</h3>
+  <ul>
+    @for (mission of missions; track mission.id) {
+      <li>
+        <h4>{{ mission.name }}</h4>
+        <p>{{ mission.description }}</p>
+        <p>Début : {{ mission.start_date | date }}</p>
+        <p>Durée : {{ mission.duration }} jours</p>
+        <p>Statut : {{ mission.status }}</p>
+        @if (mission.skills && mission.skills.length > 0) {
+          <div>
+            <h5>Compétences requises</h5>
+            <ul>
+              @for (skill of mission.skills; track skill.skill.code) {
+                <li>{{ skill.skill.description }} (Quantité : {{ skill.quantity }})</li>
+              }
+            </ul>
+          </div>
+        }
+      </li>
+    }
+  </ul>
+</div>

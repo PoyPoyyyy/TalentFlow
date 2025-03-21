@@ -20,6 +20,10 @@ export class MissionService {
     return this.http.get<Mission>(this.missionUrl + `/${id}`);
   }
 
+  getMissionsByEmployeeId(employeeId: number): Observable<Mission[]> {
+    return this.http.get<Mission[]>(`http://localhost:3000/api/employees/${employeeId}/missions`);
+  }
+
   addMission(mission: FormData): Observable<any> {
     return this.http.post<Mission>(this.missionUrl, mission);
   }

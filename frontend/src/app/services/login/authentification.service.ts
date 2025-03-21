@@ -24,7 +24,12 @@ export class AuthentificationService {
       this.authenticated = true;
     }
   }
-
+  /*
+  * Effectue une requête de connexion avec l'email et le mot de passe fournis.
+  * @input email L'email de l'utilisateur.
+  * @input password Le mot de passe de l'utilisateur.
+  * @output Un Observable contenant la réponse de la requête de connexion.
+  */
   login(email: string, password: string): Observable<any> {
     return this.http.post(this.loginUrl, {email, password}).pipe(
         tap((response: any) => {
@@ -40,7 +45,11 @@ export class AuthentificationService {
         })
     );
   }
-
+  /*
+  * Déconnecte l'utilisateur en cours en réinitialisant l'état d'authentification et en supprimant les informations de l'utilisateur du stockage local.
+  * @input : aucun
+  * @output : aucun
+  */
   logout(): void {
     this.authenticated = false;
     this.currentUser = null;
@@ -48,6 +57,11 @@ export class AuthentificationService {
     this.router.navigate(['/login-page']);
   }
 
+  /*
+  * Vérifie si l'utilisateur est actuellement authentifié.
+  * @input : aucun
+  * @output : boolean - true si l'utilisateur est authentifié, false sinon.
+   */
   isAuthenticated(): boolean {
     return this.authenticated;
   }
