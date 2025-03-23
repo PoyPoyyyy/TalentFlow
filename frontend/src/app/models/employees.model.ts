@@ -8,6 +8,9 @@ export interface Employee {
   first_name: string;
   last_name: string;
   hire_date: string;
+  type: string;
+  email: string;
+  password: string;
   profile_picture: string;
   skills: Skill[];
 }
@@ -19,6 +22,6 @@ export interface Mission {
   start_date: Date;
   duration: number;
   status: string;
-  skills: {code: number, description: string, quantity: number}[];
+  skills: {skill: Skill, quantity: number}[];
   employees: Employee[];
 }

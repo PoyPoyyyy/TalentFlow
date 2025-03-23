@@ -1,7 +1,23 @@
 <nav class="menu-bar">
   <h2 routerLink="/index">TalentFlow</h2>
-  <a class="button" routerLink="/welcome-page" routerLinkActive="activebutton">Accueil</a>
-  <a class="button" routerLink="/employee-page" routerLinkActive="activebutton">Employees</a>
-  <a class="button" routerLink="/mission-page" routerLinkActive="activebutton">Missions</a>
-  <a class="button" routerLink="/skill-page" routerLinkActive="activebutton">Skills</a>
+  <h2 routerLink="/welcome-page">TalentFlow</h2>
+
+  @if (authService.currentUser.type === 'employee') {
+    <a class="button" routerLink="/user-page" routerLinkActive="activebutton">Profil</a>
+  }
+
+  @if (authService.currentUser.type === 'employeeRh' || authService.currentUser.type === 'employeeRhResp') {
+    <a class="button" routerLink="/welcome-page" routerLinkActive="activebutton">Accueil</a>
+    <a class="button" routerLink="/employee-page" routerLinkActive="activebutton">Employees</a>
+    <a class="button" routerLink="/mission-page" routerLinkActive="activebutton">Missions</a>
+    <a class="button" routerLink="/skill-page" routerLinkActive="activebutton">Skills</a>
+  }
+
+  @if (authService.currentUser.type === 'employeeRhResp') {
+    <a class="button" routerLink="/welcome-page" routerLinkActive="activebutton">Accueil</a>
+    <a class="button" routerLink="/session-page" routerLinkActive="activebutton">Sessions</a>
+    <a class="button" routerLink="/log-page" routerLinkActive="activebutton">Logs</a>
+  }
+
+  <button class="button" (click)="authService.logout()">Logout</button>
 </nav>

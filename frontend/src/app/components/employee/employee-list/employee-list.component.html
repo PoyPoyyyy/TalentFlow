@@ -12,8 +12,8 @@
     <thead>
     <tr>
       <th>Profile Picture</th>
-      <th  class="button-sort" (click)="sortEmployees('first_name')">First Name</th>
-      <th  class="button-sort" (click)="sortEmployees('last_name')">Last Name</th>
+      <th class="button-sort" (click)="sortEmployees('first_name')">First Name</th>
+      <th class="button-sort" (click)="sortEmployees('last_name')">Last Name</th>
       <th class="button-sort" (click)="sortEmployees('hire_date')">Hire Date</th>
       <th>Skills</th>
       <th>Actions</th>
@@ -21,32 +21,31 @@
     </thead>
     <tbody>
       @for (employee of filteredEmployees; track employee.id) {
-        <tr>
-          <td class="profile-picture-cell">
-            <img
-              [src]="employee.profile_picture ? 'data:image/svg+xml;base64,' + employee.profile_picture : '../user-picture.png'"
-              alt="Profile Picture"
-              class="profile-picture"
-            />
-          </td>
-          <td>{{ employee.first_name }}</td>
-          <td>{{ employee.last_name }}</td>
-          <td>{{ employee.hire_date | date: 'dd/MM/yyyy' }}</td>
-          <td class="skills-cell">
-            @for (skill of employee.skills; track skill.code) {
-              <span
-                class="skill-item"
-                title="{{ skill.description }}"
-              >
-              {{ skill.code }}
-              </span>
-            }
-          </td>
-          <td class="actions-cell">
-            <button class="button-edit" [routerLink]="['/employee/edit', employee.id]">Edit</button>
-            <button class="button-delete" (click)="onDelete(employee)">Delete</button>
-          </td>
-        </tr>
+        @if (employee.type == 'employee') {
+          <tr>
+            <td class="profile-picture-cell">
+              <img
+                [src]="employee.profile_picture ? 'data:image/svg+xml;base64,' + employee.profile_picture : '../user-picture.png'"
+                alt="Profile Picture"
+                class="profile-picture"
+              />
+            </td>
+            <td>{{ employee.first_name }}</td>
+            <td>{{ employee.last_name }}</td>
+            <td>{{ employee.hire_date | date: 'dd/MM/yyyy' }}</td>
+            <td class="skills-cell">
+              @for (skill of employee.skills; track skill.code) {
+                <span class="skill-item" title="{{ skill.description }}">
+                  {{ skill.code }}
+                </span>
+              }
+            </td>
+            <td class="actions-cell">
+              <button class="button-edit" [routerLink]="['/employee/edit', employee.id]">Edit</button>
+              <button class="button-delete" (click)="onDelete(employee)">Delete</button>
+            </td>
+          </tr>
+        }
       }
       @empty {
         <tr>

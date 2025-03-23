@@ -4,7 +4,9 @@ import { HttpClient } from '@angular/common/http';
 import { Skill } from '../../../models/employees.model';
 import { Router } from '@angular/router';
 import { SweetMessageService } from '../../../services/sweet-message.service';
-import {NgClass, NgForOf} from '@angular/common';  // Importer le service
+import {NgClass, NgForOf} from '@angular/common';
+import {LogsService} from '../../../services/log/logs.service';
+import {AuthentificationService} from '../../../services/login/authentification.service';  // Importer le service
 
 @Component({
   selector: 'app-skill-form-add',
@@ -22,7 +24,9 @@ export class SkillFormAddComponent implements OnInit {
   selectedFileName = '';
   categories = ['A', 'B', 'C', 'D', 'E'];
 
-  constructor(private formBuilder: FormBuilder, private http: HttpClient,private router: Router, private sweetMessageService: SweetMessageService) {
+  constructor(private formBuilder: FormBuilder, private http: HttpClient,private router: Router, private sweetMessageService: SweetMessageService,
+              private logsService: LogsService,
+              private authService: AuthentificationService) {
     this.skillForm = this.formBuilder.group({
       category: ['', Validators.required],  // Catégorie obligatoire
       description: ['', Validators.required] // Description obligatoire
@@ -55,5 +59,12 @@ export class SkillFormAddComponent implements OnInit {
           this.isSubmitting = false;
         }
       });
+    const logMessage = `Skill added : ${this.skillForm.value.description}`;
+
+    this.logsService.createLog(
+      this.authService.currentUser.id,
+      'Add - skill',
+      logMessage
+    ).subscribe(() => {});
   }
 }

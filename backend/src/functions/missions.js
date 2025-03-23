@@ -13,8 +13,8 @@ const pool = new Pool({
 router.get('/missions', async (req, res) => {
     try {
         const client = await pool.connect();
-        const query = `
-            SELECT 
+        const query = 
+            `SELECT 
     m.id, 
     m.name, 
     m.description, 
@@ -22,27 +22,37 @@ router.get('/missions', async (req, res) => {
     m.duration, 
     m.status,
 
-    -- Regroupement des compétences associées à la mission
-    json_agg(
-        json_build_object(
-            'code', s.code,
-            'description', s.description,
-            'quantity', ms.quantity
-        )
-    ) AS skills,
+    -- Récupération unique des skills
+    (SELECT json_agg(json_build_object(
+		'skill', json_build_object(
+			'code', sub_s.code,
+        	'description', sub_s.description
+		),
+        'quantity', sub_s.quantity
+    ))
+    FROM (
+        SELECT DISTINCT s.code, s.description, ms.quantity
+        FROM MISSION_SKILL ms
+        LEFT JOIN SKILL s ON ms.skill_code = s.code
+        WHERE ms.mission_id = m.id
+    ) AS sub_s) AS skills,
 
-    -- Regroupement des employés associés à la mission, sans doublons
-    json_agg(
-        DISTINCT e
-    ) AS employees
+    -- Récupération unique des employés
+    (SELECT json_agg(json_build_object(
+        'id', sub_e.id,
+        'first_name', sub_e.first_name,
+        'last_name', sub_e.last_name,
+        'hire_date', sub_e.hire_date
+    ))
+    FROM (
+        SELECT DISTINCT e.id, e.first_name, e.last_name, e.hire_date
+        FROM MISSION_EMPLOYEE me
+        LEFT JOIN EMPLOYEE e ON me.employee_id = e.id
+        WHERE me.mission_id = m.id
+    ) AS sub_e) AS employees
 
-FROM MISSION m
-LEFT JOIN MISSION_SKILL ms ON m.id = ms.mission_id
-LEFT JOIN SKILL s ON ms.skill_code = s.code
-LEFT JOIN MISSION_EMPLOYEE me ON m.id = me.mission_id
-LEFT JOIN EMPLOYEE e ON me.employee_id = e.id
+FROM MISSION m;
 
-GROUP BY m.id;
 
 
         `;
@@ -59,38 +69,29 @@ GROUP BY m.id;
 
 
 router.post('/missions', async (req, res) => {
-    const { name, description, start_date, duration, status, skills, employees } = req.body;
+    const { name, description, start_date, duration, status, skills } = req.body;
 
-    if (!name || !description || !start_date || !duration || !status || !skills || !employees) {
+    if (!name || !description || !start_date || !duration || !status || !skills) {
         return res.status(400).send('Tous les champs sont requis.');
     }
 
     try {
         const client = await pool.connect();
         
-        // Insérer la mission
         const result = await client.query(
             'INSERT INTO MISSION (name, description, start_date, duration, status) VALUES ($1, $2, $3, $4, $5) RETURNING id',
             [name, description, start_date, duration, status]
         );
         const missionId = result.rows[0].id;
 
-        // Insérer les compétences requises
         for (const skill of skills) {
             await client.query(
                 'INSERT INTO MISSION_SKILL (mission_id, skill_code, quantity) VALUES ($1, $2, $3)',
-                [missionId, skill.code, skill.quantity]
+                [missionId, skill.skill.code, skill.quantity]
             );
         }
 
-        // Associer les employés à la mission
-        for (const employee of employees) {
-            await client.query(
-                'INSERT INTO MISSION_EMPLOYEE (mission_id, employee_id) VALUES ($1, $2)',
-                [missionId, employee.id]
-            );
-        }
-
+        
         client.release();
         res.status(201).json({ message: 'Mission créée avec succès', missionId });
 
@@ -100,18 +101,60 @@ router.post('/missions', async (req, res) => {
     }
 });
 
-
+router.get('/employees/:id/missions', async (req, res) => {
+    const employeeId = req.params.id;
+    try {
+        const client = await pool.connect();
+        const query = `
+            SELECT 
+                m.id, 
+                m.name, 
+                m.description, 
+                m.start_date, 
+                m.duration, 
+                m.status,
+                (SELECT json_agg(json_build_object(
+                    'skill', json_build_object(
+                        'code', s.code,
+                        'description', s.description
+                    ),
+                    'quantity', ms.quantity
+                ))
+                FROM MISSION_SKILL ms
+                LEFT JOIN SKILL s ON ms.skill_code = s.code
+                WHERE ms.mission_id = m.id
+                ) AS skills,
+                (SELECT json_agg(json_build_object(
+                    'id', e.id,
+                    'first_name', e.first_name,
+                    'last_name', e.last_name,
+                    'hire_date', e.hire_date
+                ))
+                FROM MISSION_EMPLOYEE me
+                LEFT JOIN EMPLOYEE e ON me.employee_id = e.id
+                WHERE me.mission_id = m.id
+                ) AS employees
+            FROM MISSION m
+            JOIN MISSION_EMPLOYEE me ON m.id = me.mission_id
+            WHERE me.employee_id = $1;
+        `;
+        const result = await client.query(query, [employeeId]);
+        client.release();
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Erreur lors de la récupération des missions pour employé:', err);
+        res.status(500).send('Erreur serveur');
+    }
+});
 
 router.delete('/missions/:id', async (req, res) => {
     const missionId = req.params.id;
     try {
         const client = await pool.connect();
         
-        // Supprimer d'abord les relations dans les tables associatives
         await client.query('DELETE FROM MISSION_SKILL WHERE mission_id = $1', [missionId]);
         await client.query('DELETE FROM MISSION_EMPLOYEE WHERE mission_id = $1', [missionId]);
         
-        // Supprimer ensuite la mission
         await client.query('DELETE FROM MISSION WHERE id = $1', [missionId]);
         
         client.release();
@@ -134,29 +177,32 @@ router.put('/missions/:id', async (req, res) => {
     try {
         const client = await pool.connect();
         
-        // Mise à jour des informations de la mission
         await client.query(
             'UPDATE MISSION SET name = $1, description = $2, start_date = $3, duration = $4, status = $5 WHERE id = $6',
             [name, description, start_date, duration, status, id]
         );
 
-        // Suppression des anciennes compétences et employés liés
-        await client.query('DELETE FROM MISSION_SKILL WHERE mission_id = $1', [id]);
-        await client.query('DELETE FROM MISSION_EMPLOYEE WHERE mission_id = $1', [id]);
+        if (skills.length > 0) {
+            await client.query('DELETE FROM MISSION_SKILL WHERE mission_id = $1', [id]);
 
-        // Ajout des nouvelles compétences
-        for (const skill of skills) {
-            await client.query(
-                'INSERT INTO MISSION_SKILL (mission_id, skill_code, quantity) VALUES ($1, $2, $3)',
-                [id, skill.code, skill.quantity]
-            );
+
+            for (const skill of skills) {
+                await client.query(
+                    'INSERT INTO MISSION_SKILL (mission_id, skill_code, quantity) VALUES ($1, $2, $3)',
+                    [id, skill.skill.code, skill.quantity]
+                );
+            }
         }
-        // Ajout des nouveaux employés
-        for (const employee of employees) {
-            await client.query(
-                'INSERT INTO MISSION_EMPLOYEE (mission_id, employee_id) VALUES ($1, $2)',
-                [id, employee.id]
-            );
+
+        if (employees.length > 0) {
+            await client.query('DELETE FROM MISSION_EMPLOYEE WHERE mission_id = $1', [id]);
+
+            for (const employee of employees) {
+                await client.query(
+                    'INSERT INTO MISSION_EMPLOYEE (mission_id, employee_id) VALUES ($1, $2)',
+                    [id, employee.id]
+                );
+            }
         }
 
         client.release();
@@ -170,39 +216,53 @@ router.put('/missions/:id', async (req, res) => {
 
 
 
+
 router.get('/missions/:id', async (req, res) => {
     const missionId = req.params.id;
     try {
         const client = await pool.connect();
         const query = `
             SELECT 
-                m.id, 
-                m.name, 
-                m.description, 
-                m.start_date, 
-                m.duration, 
-                m.status,
+    m.id, 
+    m.name, 
+    m.description, 
+    m.start_date, 
+    m.duration, 
+    m.status,
 
-                json_agg( json_build_object(
-                    'code', s.code,
-                    'description', s.description,
-                    'quantity', ms.quantity
-                )) AS skills,
+    -- Récupération unique des skills
+    (SELECT json_agg(json_build_object(
+		'skill', json_build_object(
+			'code', sub_s.code,
+        	'description', sub_s.description
+		),
+        'quantity', sub_s.quantity
+    ))
+    FROM (
+        SELECT DISTINCT s.code, s.description, ms.quantity
+        FROM MISSION_SKILL ms
+        LEFT JOIN SKILL s ON ms.skill_code = s.code
+        WHERE ms.mission_id = m.id
+    ) AS sub_s) AS skills,
 
-                json_agg( json_build_object(
-                    'first_name', e.first_name,
-                    'last_name', e.last_name,
-                    'hire_date', e.hire_date
-                )) AS employees
+    -- Récupération unique des employés
+    (SELECT json_agg(json_build_object(
+        'id', sub_e.id,
+        'first_name', sub_e.first_name,
+        'last_name', sub_e.last_name,
+        'hire_date', sub_e.hire_date
+    ))
+    FROM (
+        SELECT DISTINCT e.id, e.first_name, e.last_name, e.hire_date
+        FROM MISSION_EMPLOYEE me
+        LEFT JOIN EMPLOYEE e ON me.employee_id = e.id
+        WHERE me.mission_id = m.id
+    ) AS sub_e) AS employees
 
-            FROM MISSION m
-            LEFT JOIN MISSION_SKILL ms ON m.id = ms.mission_id
-            LEFT JOIN SKILL s ON ms.skill_code = s.code
-            LEFT JOIN MISSION_EMPLOYEE me ON m.id = me.mission_id
-            LEFT JOIN EMPLOYEE e ON me.employee_id = e.id
+FROM MISSION m
 
-            WHERE m.id = $1
-            GROUP BY m.id;
+            WHERE m.id = $1;
+            
         `;
         
         const result = await client.query(query, [missionId]);
@@ -222,4 +282,3 @@ router.get('/missions/:id', async (req, res) => {
 
 
 module.exports = router;
-
