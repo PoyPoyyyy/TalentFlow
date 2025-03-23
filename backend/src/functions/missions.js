@@ -66,6 +66,20 @@ FROM MISSION m;
     }
 });
 
+router.get('/missions-status-stats', async (req, res) => {
+    try {
+        const result = await pool.query(`
+            SELECT status, COUNT(*)::INTEGER AS count
+            FROM MISSION
+            GROUP BY status
+            ORDER BY status;
+        `);
+        res.json(result.rows); // Renvoie un tableau [{status: 'planned', count: 4}, {...}]
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Erreur serveur');
+    }
+});
 
 
 router.post('/missions', async (req, res) => {

@@ -45,7 +45,7 @@ router.get('/employees', async (req, res) => {
     }
 });
 
-// 📌 Route pour récupérer les statistiques des employés en mission
+// Route pour récupérer les statistiques des employés en mission
 router.get('/employees-mission-stats', async (req, res) => {
     try {
         // Connexion à la base de données

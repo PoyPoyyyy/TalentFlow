@@ -20,6 +20,10 @@ export class MissionService {
     return this.http.get<Mission>(this.missionUrl + `/${id}`);
   }
 
+  getMissionStatusStats(): Observable<any> {
+    return this.http.get<any>(this.missionUrl);
+  }
+
   getMissionsByEmployeeId(employeeId: number): Observable<Mission[]> {
     return this.http.get<Mission[]>(`http://localhost:3000/api/employees/${employeeId}/missions`);
   }
@@ -35,8 +39,4 @@ export class MissionService {
   deleteMission(id: number): Observable<any> {
     return this.http.delete(this.missionUrl + `/${id}`, { responseType: 'text' });
   }
-
-
-
-
 }
