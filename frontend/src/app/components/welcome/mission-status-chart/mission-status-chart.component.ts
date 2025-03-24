@@ -40,18 +40,37 @@ export class MissionStatusChartComponent implements OnInit {
   }
 
   createChart(labels: string[], counts: number[]): void {
+    let delayed: boolean;
     new Chart('missionStatusChart', {
       type: 'bar' as ChartType,
       data: {
         labels: labels,
         datasets: [{
-          label: 'Nombre de missions',
+          label: 'Hide',
           data: counts,
-          backgroundColor: ['blue', 'orange', 'green', 'gray']
+          backgroundColor: ['#FFBB4DBF', '#A3FF7CBF', '#FFE749BF', '#C3B9B9BF']
         }]
       },
       options: {
         responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Nombre de mission par statut',
+          }
+        },
+        animation: {
+          onComplete: () => {
+            delayed = true;
+          },
+          delay: (context) => {
+            let delay = 0;
+            if (context.type === 'data' && context.mode === 'default' && !delayed) {
+              delay = context.dataIndex * 300 + context.datasetIndex * 100;
+            }
+            return delay;
+          },
+        },
         scales: {
           y: {
             beginAtZero: true

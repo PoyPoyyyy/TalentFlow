@@ -26,16 +26,22 @@ export class EmployeeMissionChartComponent implements OnInit {
       if (!ctx) return;
 
       new Chart(ctx, {
-        type: 'doughnut',
+        type: 'pie',
         data: {
           labels: ['Avec mission', 'Sans mission'],
           datasets: [{
             data: [data.withMission, data.withoutMission],
-            backgroundColor: ['#4bc0c0', '#ff6384']
+            backgroundColor: ['#4bc0ae', '#f17e64']
           }]
         },
         options: {
-          responsive: true
+          responsive: true,
+          plugins: {
+            title: {
+              display: true,
+              text: 'Statut des employées',
+            }
+          }
         }
       });
     }, error => {

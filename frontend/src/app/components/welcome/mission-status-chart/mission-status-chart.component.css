@@ -30,3 +30,14 @@
   align-items: center;
   width: 2000px;
 }
+
+#diag {
+  width: 700px;
+  margin: auto;
+}
+
+@media screen and (max-width: 600px) {
+  #diag {
+    max-width: 300px;
+  }
+}
