@@ -31,7 +31,7 @@ export class MissionListComponent implements OnInit {
   }
 
   loadMissions(): void {
-
+    
     this.missionService.getMissions().subscribe((missions: Mission[]) => {
     this.missionsList = missions.map(mission => {
       if (!mission.employees) {
@@ -42,30 +42,31 @@ export class MissionListComponent implements OnInit {
       }
 
       if (mission.start_date) {
-        const missionDate = new Date(mission.start_date).toLocaleDateString();
+        const missionDate = new Date(mission.start_date);
 
-
-
-
-        const today = new Date().toLocaleDateString();
+        
+       
+      
+        const today = new Date();
         if (missionDate < today && mission.status !== 'ongoing') {
           mission.status = 'ongoing';
           this.updateMissionStatus(mission);
         }
-
+      
         if (mission.employees.length > 0 && mission.status === 'preparation') {
           mission.status = 'planned';
           this.updateMissionStatus(mission);
         }
-
-        const endDate = new Date(missionDate + mission.duration * 24 * 60 * 60 * 1000).toLocaleDateString();
-
+      
+        const endDate = new Date(missionDate);
+        endDate.setDate(endDate.getDate() + mission.duration);
+      
         if (endDate < today && mission.status !== 'completed') {
           mission.status = 'completed';
           this.updateMissionStatus(mission);
         }
       }
-
+      
 
 
       return mission;
@@ -73,9 +74,6 @@ export class MissionListComponent implements OnInit {
 
     this.missionsSelected = [...this.missionsList];
   });
-
-
-
 
   }
 
@@ -149,3 +147,10 @@ export class MissionListComponent implements OnInit {
   }
 
 }
+
+
+
+
+
+
+

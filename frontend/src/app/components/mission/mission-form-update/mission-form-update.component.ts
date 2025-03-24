@@ -195,6 +195,11 @@ onSkillsChange(skills: { skill: Skill, quantity: number }[]) {
 }
 
 removeUnqualifiedEmployees(): void {
+  const currentMissionStart = new Date(this.missionForm.get('start_date')?.value);
+  const currentMissionDuration = parseInt(this.missionForm.get('duration')?.value, 10);
+  const currentMissionEnd = new Date(currentMissionStart);
+  currentMissionEnd.setDate(currentMissionEnd.getDate() + currentMissionDuration);
+
   this.selectedEmployeesId = this.selectedEmployeesId.filter(employeeId => {
     const employee = this.employees.find(emp => emp.id === employeeId);
     if (!employee) return false;
@@ -203,11 +208,26 @@ removeUnqualifiedEmployees(): void {
       this.skills.some(skill => empSkill.code === skill.skill.code)
     );
 
-    return hasRequiredSkill;
+    if (!hasRequiredSkill) return false;
+
+    const hasDateConflict = this.missions.some(mission => {
+      if (mission.id === this.mission.id || !mission.employees) return false;
+      const isAssigned = mission.employees.some(emp => emp.id === employeeId);
+      if (!isAssigned) return false;
+
+      const otherStart = new Date(mission.start_date);
+      const otherEnd = new Date(otherStart);
+      otherEnd.setDate(otherEnd.getDate() + mission.duration);
+
+      return (currentMissionStart <= otherEnd && currentMissionEnd >= otherStart);
+    });
+
+    return !hasDateConflict;
   });
 
-  console.log('Employés après suppression des non qualifiés:', this.selectedEmployeesId);
+  console.log('Employés après suppression des non qualifiés ou en conflit de dates:', this.selectedEmployeesId);
 }
+
 
 
 
