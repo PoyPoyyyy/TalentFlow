@@ -2,9 +2,17 @@
   <div class="header">
     <h2>Vue globale</h2>
   </div>
-  <div class="diagram">
-    <div id="diag">
-      <canvas id="employeeMissionChart"></canvas>
+  <div class="stats">
+    <div class="stats-container">
+      <div class="stat-box">
+        <h3>Nombre total d'employés</h3>
+        <p>{{ totalEmployees }}</p>
+      </div>
+    </div>
+    <div class="diagram">
+      <div id="diag">
+        <canvas id="employeeMissionChart"></canvas>
+      </div>
     </div>
   </div>
 </div>

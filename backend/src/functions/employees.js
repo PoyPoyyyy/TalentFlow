@@ -81,6 +81,18 @@ router.get('/employees-mission-stats', async (req, res) => {
     }
 });
 
+// Récupérer le nombre total d'employés de type "employee"
+router.get('/employees-mission-stats', async (req, res) => {
+    try {
+        const result = await pool.query(`
+            SELECT COUNT(*) AS total FROM EMPLOYEE WHERE type = 'employee';
+        `);
+        res.json({ totalEmployees: result.rows[0].total });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Erreur serveur');
+    }
+});
 
 /*
  * Ajoute un nouvel employé avec ses compétences et une photo de profil.

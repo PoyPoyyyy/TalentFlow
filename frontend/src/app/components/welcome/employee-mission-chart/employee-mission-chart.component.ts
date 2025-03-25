@@ -14,10 +14,15 @@ Chart.register(...registerables);
   styleUrls: ['./employee-mission-chart.component.css']
 })
 export class EmployeeMissionChartComponent implements OnInit {
+  totalEmployees: number = 0;
+  totalMissions: number = 0;
   constructor(private employeeMissionService: EmployeeMissionService) {}
 
   ngOnInit(): void {
     this.loadChart();
+    this.employeeMissionService.getTotalEmployees().subscribe(data => {
+      this.totalEmployees = data.totalEmployees;
+    });
   }
 
   loadChart(): void {

@@ -13,4 +13,8 @@ export class EmployeeMissionService {
   getEmployeeMissionStats(): Observable<any> {
     return this.http.get<any>(this.apiUrl);
   }
+
+  getTotalEmployees(): Observable<{ totalEmployees: number }> {
+    return this.http.get<{ totalEmployees: number }>(this.apiUrl);
+  }
 }
