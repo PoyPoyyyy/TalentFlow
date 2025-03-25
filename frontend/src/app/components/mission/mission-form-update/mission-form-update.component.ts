@@ -57,8 +57,6 @@ export class MissionFormUpdateComponent implements OnInit {
       this.loadMission(this.missionId);
       this.loadMissions();
 
-
-
     }, error => {
       console.error("Erreur lors du chargement des employés:", error);
     });
@@ -78,15 +76,12 @@ export class MissionFormUpdateComponent implements OnInit {
 
   }
 
-
-
   filterEmployees(): void {
     if (!this.mission) {
       console.log("mission pas chargée !");
       return;
     };
 
-    // Filtrer les employés qui ont les compétences requises
     this.filteredEmployees = this.employees.filter(employee =>
       employee.skills.some(empSkill =>
         this.skills.some(skill => empSkill.code === skill.skill.code)
@@ -94,19 +89,29 @@ export class MissionFormUpdateComponent implements OnInit {
     );
 
     const assignedEmployees: Employee[] = [];
-    this.missions.forEach(mission => {
-      if (mission.employees) {
-        mission.employees.forEach(emp => {
+const currentMissionStart = new Date(this.missionForm.get('start_date')?.value);
+const currentMissionDuration = parseInt(this.missionForm.get('duration')?.value, 10);
+const currentMissionEnd = new Date(currentMissionStart);
+currentMissionEnd.setDate(currentMissionEnd.getDate() + currentMissionDuration);
 
-            if (this.mission.id !== mission.id && this.filteredEmployees.some(e => e.id === emp.id)) {
-              assignedEmployees.push(emp);
-            }
+this.missions.forEach(mission => {
+  if (mission.id === this.mission.id || !mission.employees) return;
 
+  const otherStart = new Date(mission.start_date);
+  const otherEnd = new Date(otherStart);
+  otherEnd.setDate(otherEnd.getDate() + mission.duration);
 
-        })
+  const isDateConflict = currentMissionStart <= otherEnd && currentMissionEnd >= otherStart;
+
+  if (isDateConflict) {
+    mission.employees.forEach(emp => {
+      if (this.filteredEmployees.some(e => e.id === emp.id)) {
+        assignedEmployees.push(emp);
       }
+    });
+  }
+});
 
-    })
 
     console.log("Assigned : ");
     console.log(assignedEmployees);
@@ -114,20 +119,7 @@ export class MissionFormUpdateComponent implements OnInit {
     this.filteredEmployees = this.filteredEmployees.filter(employee =>
       !assignedEmployees.some(assignedEmp => assignedEmp.id === employee.id)
     );
-
-
-
-
-
-
-
-
   }
-
-
-
-
-
 
   onSubmit(): void {
     if (this.skills.length === 0) {

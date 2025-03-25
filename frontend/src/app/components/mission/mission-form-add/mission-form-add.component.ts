@@ -12,8 +12,7 @@ import {AuthentificationService} from '../../../services/login/authentification.
   templateUrl: './mission-form-add.component.html',
   styleUrl: './mission-form-add.component.css'
 })
-export class MissionFormAddComponent implements OnInit {
-
+export class MissionFormAddComponent {
 
   missionForm: FormGroup;
   skills: {skill: Skill, quantity: number}[] = [];
@@ -32,15 +31,23 @@ export class MissionFormAddComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-
-  }
-
-  onSkillsChange(skills: {skill: Skill, quantity: number}[]) {
+  /*
+  * Met à jour la liste des compétences sélectionnées dans le formulaire de mission.
+  * @input : skills ({ skill: Skill, quantity: number }[]) - Liste des compétences sélectionnées, 
+  *         avec leur quantité respective.
+  * @output : Aucun.
+  */
+  onSkillsChange(skills: {skill: Skill, quantity: number}[]): void {
     this.skills = skills;
     this.missionForm.patchValue({ skills: this.skills });
   }
 
+  /*
+  * Soumet le formulaire en envoyant une requête via `MissionService` pour ajouter la mission.
+  * Crée un log via `LogsService` en cas de succès.
+  * @input : Aucun.
+  * @output : Aucun.
+  */
   onSubmit(): void {
     const startDate = new Date(this.missionForm.get('start_date')?.value);
     const today = new Date();
@@ -79,8 +86,5 @@ export class MissionFormAddComponent implements OnInit {
       logMessage
     ).subscribe(() => {});
   }
-
-
-
 
 }
