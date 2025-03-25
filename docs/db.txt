@@ -2,7 +2,11 @@ CREATE TABLE EMPLOYEE (
     id SERIAL PRIMARY KEY,
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
-    hire_date DATE NOT NULL
+    hire_date DATE NOT NULL,
+    profile_picture bytea,
+    email VARCHAR(100) NOT NULL DEFAULT 'default@example.com',
+    password VARCHAR(50) NOT NULL DEFAULT 'defaultpassword',
+    type VARCHAR(20) NOT NULL DEFAULT 'employee'
 );
 
 CREATE TABLE SKILL (
@@ -44,6 +48,13 @@ CREATE TABLE MISSION_EMPLOYEE (
     FOREIGN KEY (employee_id) REFERENCES EMPLOYEE(id) ON DELETE CASCADE
 );
 
+CREATE TABLE LOGS (
+    id SERIAL PRIMARY KEY, user_id INT NOT NULL,
+    title VARCHAR(50) NOT NULL,
+    content VARCHAR NOT NULL,
+    date TIMESTAMP NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES EMPLOYEE(id) ON DELETE CASCADE
+);
 
 INSERT INTO EMPLOYEE (first_name, last_name, hire_date) VALUES
 ('Ollie', 'Galasso', '2006-03-13'),
@@ -186,3 +197,12 @@ INSERT INTO EMPLOYEE_SKILL (employee_id, skill_code) VALUES
 (48, 'A.4.'), (48, 'A.6.'), (48, 'E.7.'),
 (49, 'B.1.'), (49, 'B.3.'), (49, 'D.2.'), (49, 'D.4.'), (49, 'D.10.'), (49, 'E.6.'), (49, 'E.9.'),
 (50, 'A.3.'), (50, 'A.8.'), (50, 'B.1.'), (50, 'B.4.'), (50, 'D.8.'), (50, 'D.9.'), (50, 'E.1.');
+
+INSERT INTO EMPLOYEE (first_name, last_name, hire_date, email, password, type)
+VALUES ('Alex', 'Bielvo', '2022-06-10', 'alex.employee@example.com', 'motdepass', 'employee');
+
+INSERT INTO EMPLOYEE (first_name, last_name, hire_date, email, password, type)
+VALUES ('Alice', 'Martin', '2023-01-15', 'alice.rh@example.com', 'securePass123', 'employeeRh');
+
+INSERT INTO EMPLOYEE (first_name, last_name, hire_date, email, password, type)
+VALUES ('Paul', 'Dupont', '2022-06-20', 'paul.rhresp@example.com', 'strongPass456', 'employeeRhResp');
