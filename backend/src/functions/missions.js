@@ -10,6 +10,11 @@ const pool = new Pool({
     port: 5432,
 });
 
+/*
+ * Récupère la liste complète des missions.
+ * @input : aucun
+ * @output : Observable<Mission[]> - La liste des missions sous forme d'un tableau d'objets Mission.
+ */
 router.get('/missions', async (req, res) => {
     try {
         const client = await pool.connect();
@@ -81,7 +86,11 @@ router.get('/missions-status-stats', async (req, res) => {
     }
 });
 
-
+/*
+ * Ajoute une nouvelle mission.
+ * @input : name, description, start_date, duration, status, skills (JSON Array)
+ * @output : number - ID de la mission créée.
+ */
 router.post('/missions', async (req, res) => {
     const { name, description, start_date, duration, status, skills } = req.body;
 
@@ -115,6 +124,11 @@ router.post('/missions', async (req, res) => {
     }
 });
 
+/*
+ * Récupère les infos des missions liées à un employé spécifique.
+ * @input : employee - ID de l'employé
+ * @output : Mission[] - liste des missions.
+ */
 router.get('/employees/:id/missions', async (req, res) => {
     const employeeId = req.params.id;
     try {
@@ -161,6 +175,11 @@ router.get('/employees/:id/missions', async (req, res) => {
     }
 });
 
+/*
+ * Supprime une mission ainsi que ses compétences et employés associés.
+ * @input : number - ID de la mission.
+ * @output : string - Message de confirmation.
+ */
 router.delete('/missions/:id', async (req, res) => {
     const missionId = req.params.id;
     try {
@@ -179,7 +198,11 @@ router.delete('/missions/:id', async (req, res) => {
     }
 });
 
-
+/*
+ * Met à jour les informations d'une mission ainsi que ses compétences.
+ * @input : number - ID de la mission.
+ * @output : string - Message de confirmation.
+ */
 router.put('/missions/:id', async (req, res) => {
     const { id } = req.params;
     const { name, description, start_date, duration, status, skills, employees } = req.body;
@@ -228,9 +251,11 @@ router.put('/missions/:id', async (req, res) => {
     }
 });
 
-
-
-
+/*
+ * Récupère les infos d'une mission spécifique avec ses compétences requises et les employés affectés à celle-ci.
+ * @input : number - ID de la mission
+ * @output : Mission - Objet Mission sous la forme (id, name, description, start_date, duration, status, skills (JSON Array), employees(JSON Array)).
+ */
 router.get('/missions/:id', async (req, res) => {
     const missionId = req.params.id;
     try {

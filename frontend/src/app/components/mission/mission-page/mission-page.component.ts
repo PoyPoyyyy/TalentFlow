@@ -13,6 +13,11 @@ export class MissionPageComponent {
 
   @ViewChild(MissionListComponent) missionList!: MissionListComponent;
 
+  /*
+  * Charge toutes les missions quand une mission est ajoutée pour actualiser la liste.
+  * @input : Aucun.
+  * @output : Aucun.
+  */
   onMissionAdded(): void {
     this.missionList.loadMissions();
   }

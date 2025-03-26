@@ -30,55 +30,59 @@ export class MissionListComponent implements OnInit {
       this.loadMissions();
   }
 
+  /*
+  * Charge toutes les missions et gère le changement de statut de chaque mission en fonction de la date actuelle.
+  * -> Appelle updateMissionsStatus.
+  * @input : Aucun.
+  * @output : Aucun.
+  */
   loadMissions(): void {
-
+    
     this.missionService.getMissions().subscribe((missions: Mission[]) => {
-    this.missionsList = missions.map(mission => {
-      if (!mission.employees) {
-        mission.employees = [];
-      } else {
-        mission.employees = mission.employees.filter(employee => employee.first_name != null);
+      this.missionsList = missions.map(mission => {
 
-      }
-
-      if (mission.start_date) {
-        const missionDate = new Date(mission.start_date).toLocaleDateString();
-
-
-
-
-        const today = new Date().toLocaleDateString();
-        if (missionDate < today && mission.status !== 'ongoing') {
-          mission.status = 'ongoing';
-          this.updateMissionStatus(mission);
+        if (!mission.employees) {
+          mission.employees = [];
+        } else {
+          mission.employees = mission.employees.filter(employee => employee.first_name != null);
         }
 
-        if (mission.employees.length > 0 && mission.status === 'preparation') {
-          mission.status = 'planned';
-          this.updateMissionStatus(mission);
+        if (mission.start_date) {
+
+          const missionDate = new Date(mission.start_date);
+          const today = new Date();
+          if (missionDate < today && mission.status !== 'ongoing') {
+            mission.status = 'ongoing';
+            this.updateMissionStatus(mission);
+          }
+        
+          if (mission.employees.length > 0 && mission.status === 'preparation') {
+            mission.status = 'planned';
+            this.updateMissionStatus(mission);
+          }
+        
+          const endDate = new Date(missionDate);
+          endDate.setDate(endDate.getDate() + mission.duration);
+        
+          if (endDate < today && mission.status !== 'completed') {
+            mission.status = 'completed';
+            this.updateMissionStatus(mission);
+          }
         }
 
-        const endDate = new Date(missionDate + mission.duration * 24 * 60 * 60 * 1000).toLocaleDateString();
+        return mission;
+      });
 
-        if (endDate < today && mission.status !== 'completed') {
-          mission.status = 'completed';
-          this.updateMissionStatus(mission);
-        }
-      }
-
-
-
-      return mission;
+      this.missionsSelected = [...this.missionsList];
     });
-
-    this.missionsSelected = [...this.missionsList];
-  });
-
-
-
 
   }
 
+  /*
+  * Envoie une requête de mise à jour de la mission au service 'missionService'.
+  * @input : mission (Misson) - objet mission.
+  * @output : Aucun.
+  */
   updateMissionStatus(mission: Mission): void {
 
     const updatedMission = { name: mission.name,
@@ -90,7 +94,6 @@ export class MissionListComponent implements OnInit {
                             employees: mission.employees
      };
 
-
     this.missionService.updateMission(mission.id, updatedMission)
       .subscribe({
         next: () => {
@@ -100,9 +103,14 @@ export class MissionListComponent implements OnInit {
           console.error('Erreur lors de la mise à jour du statut de la mission:', error);
         }
       });
+
   }
 
-
+  /*
+  * Envoie une requête de suppression de la mission au service 'missionService'.
+  * @input : mission (Mission) - objet mission.
+  * @output : Aucun.
+  */
   onDelete(mission: Mission): void {
     this.missionService.deleteMission(mission.id).subscribe({
         next: (response) => {
@@ -115,7 +123,6 @@ export class MissionListComponent implements OnInit {
         }
     });
     const logMessage = `Mission deleted : ${mission.name}`;
-
     this.logsService.createLog(
       this.authService.currentUser.id,
       'Delete - mission',
@@ -123,6 +130,11 @@ export class MissionListComponent implements OnInit {
     ).subscribe(() => {});
   }
 
+  /*
+  * Récupère et stocke dans 'missionsSelected' uniquement les missions filtrées depuis la search bar.
+  * @input : Aucun.
+  * @output : Aucun.
+  */
   getMissionsSelected(): void {
     const query = this.searchQuery.toLowerCase();
     this.missionsSelected = this.missionsList.filter(mission =>
@@ -140,12 +152,22 @@ export class MissionListComponent implements OnInit {
       )
     );
 
-
   }
 
-
+  /*
+  * Émet la mission sélectionnée pour mise à jour.
+  * @input : mission (Mission) - objet mission.
+  * @output : Aucun.
+  */
   onUpdate(mission: Mission): void {
     this.missionUpdated.emit(mission);
   }
 
 }
+
+
+
+
+
+
+
