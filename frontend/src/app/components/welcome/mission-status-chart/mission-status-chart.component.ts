@@ -39,6 +39,14 @@ export class MissionStatusChartComponent implements OnInit {
     });
   }
 
+  /*
+   * Charge et affiche un graphique en bar représentant les mission statut de preparation.
+   * Appelle le service `employeeMissionService` pour récupérer les statistiques des employés en mission.
+   * Utilise la bibliothèque Chart.js pour afficher un graphique de type "bar".
+   * @input  : labels : String - les 4 statut des mission
+   *           counts : number[] - nombre de mission par statut
+   * @output : aucun
+   */
   createChart(labels: string[], counts: number[]): void {
     let delayed: boolean;
     new Chart('missionStatusChart', {
@@ -79,5 +87,4 @@ export class MissionStatusChartComponent implements OnInit {
       }
     });
   }
-
 }

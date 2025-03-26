@@ -25,6 +25,14 @@ export class EmployeeMissionChartComponent implements OnInit {
     });
   }
 
+  /*
+   * Charge et affiche un graphique circulaire représentant la répartition des employés
+   * selon leur statut d'affectation à une mission.
+   * Appelle le service `employeeMissionService` pour récupérer les statistiques des employés en mission.
+   * Utilise la bibliothèque Chart.js pour afficher un graphique de type "pie".
+   * @input  : Aucun
+   * @output : aucun
+   */
   loadChart(): void {
     this.employeeMissionService.getEmployeeMissionStats().subscribe(data => {
       const ctx = document.getElementById('employeeMissionChart') as HTMLCanvasElement;
